@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.getupdated.in/sitemap.xml
+
+# Block unnecessary files
+Disallow: /css/
+Disallow: /js/
+Disallow: /sections/
