@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About GetUpdated - Your one-stop destination for tech news, job opportunities, income ideas, and online offers. Learn about our mission and team.">
+    <meta name="robots" content="index, follow">
+    <title>About Us - GetUpdated</title>
+    <link rel="canonical" href="https://www.getupdated.in/about.html">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .about-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .about-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .about-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+        .about-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        .about-section {
+            margin-bottom: 3rem;
+        }
+        .about-section:last-child {
+            margin-bottom: 0;
+        }
+        .about-section h2 {
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .about-section h2 i {
+            color: var(--primary);
+        }
+        .about-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .mission-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .mv-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .mv-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        .mv-card .icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+        .mv-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        .mv-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .service-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+        }
+        .service-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        .service-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 0.25rem;
+        }
+        .service-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .service-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            border-radius: var(--radius-lg);
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .contact-cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-xl);
+            color: white;
+        }
+        .contact-cta h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        .contact-cta p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .contact-cta .btn {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .contact-cta .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 768px) {
+            .about-content {
+                padding: 1.5rem;
+            }
+            .about-header h1 {
+                font-size: 2rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#tech" class="nav-link">News</a>
+                <a href="index.html#jobs" class="nav-link">Jobs</a>
+                <a href="index.html#income" class="nav-link">Income Ideas</a>
+                <a href="index.html#offers" class="nav-link">Offers</a>
+                <a href="index.html#blogs" class="nav-link">Blogs</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Page -->
+    <section class="about-page">
+        <div class="about-container">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            
+            <div class="about-header">
+                <span class="section-badge">Who We Are</span>
+                <h1>About <span class="gradient-text">GetUpdated</span></h1>
+                <p>Your one-stop destination for staying ahead in the digital world</p>
+            </div>
+
+            <div class="about-content">
+                <div class="about-section">
+                    <h2><i class="fas fa-rocket"></i> Our Story</h2>
+                    <p>
+                        <strong>GetUpdated</strong> was born out of a simple idea – to create a single platform where people can find everything they need to stay informed and grow in the digital age. In a world overflowing with information, we recognized the need for a curated, trustworthy source that brings together tech news, career opportunities, income ideas, and money-saving deals.
+                    </p>
+                    <p>
+                        Founded in 2025 and based in Bangalore, India, we started as a small project and have grown into a platform that helps thousands of users every day. Our team is passionate about technology, career growth, and helping people make smarter financial decisions.
+                    </p>
+                </div>
+
+                <div class="about-section">
+                    <h2><i class="fas fa-bullseye"></i> Our Mission & Vision</h2>
+                    <div class="mission-vision">
+                        <div class="mv-card">
+                            <div class="icon">🎯</div>
+                            <h3>Our Mission</h3>
+                            <p>To empower individuals with timely, accurate, and actionable information that helps them advance in their careers, stay updated with technology, and make smarter financial decisions.</p>
+                        </div>
+                        <div class="mv-card">
+                            <div class="icon">🔭</div>
+                            <h3>Our Vision</h3>
+                            <p>To become India's most trusted platform for job seekers, tech enthusiasts, and anyone looking to grow personally and financially in the digital economy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h2><i class="fas fa-cogs"></i> What We Offer</h2>
+                    <p>We provide comprehensive resources across multiple categories to help you succeed:</p>
+                    <div class="services-list">
+                        <div class="service-item">
+                            <i class="fas fa-microchip"></i>
+                            <div>
+                                <h4>Tech News</h4>
+                                <p>Latest updates from the world of technology, gadgets, AI, and software.</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <h4>Job Opportunities</h4>
+                                <p>Curated job listings from top companies, updated daily.</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-coins"></i>
+                            <div>
+                                <h4>Income Ideas</h4>
+                                <p>Proven ways to earn money online and build passive income.</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-tags"></i>
+                            <div>
+                                <h4>Offers & Deals</h4>
+                                <p>Best discounts and coupons from Amazon, Flipkart, and more.</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-blog"></i>
+                            <div>
+                                <h4>Insightful Blogs</h4>
+                                <p>In-depth articles on career tips, tech guides, and financial advice.</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div>
+                                <h4>Learning Resources</h4>
+                                <p>Tutorials and guides to help you upskill and grow.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h2><i class="fas fa-chart-line"></i> Our Impact</h2>
+                    <p>We're proud of the community we're building and the lives we're helping to improve:</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="number">50K+</div>
+                            <div class="label">Monthly Visitors</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number">1000+</div>
+                            <div class="label">Jobs Posted</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number">500+</div>
+                            <div class="label">Deals Shared</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number">100+</div>
+                            <div class="label">Articles Published</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h2><i class="fas fa-heart"></i> Our Values</h2>
+                    <ul style="color: var(--text-secondary); line-height: 2; list-style: none; padding: 0;">
+                        <li>✅ <strong>Accuracy</strong> – We verify information before publishing</li>
+                        <li>✅ <strong>Timeliness</strong> – We deliver news and updates as they happen</li>
+                        <li>✅ <strong>User-First</strong> – Every decision is made with our users in mind</li>
+                        <li>✅ <strong>Transparency</strong> – We're honest about our content and partnerships</li>
+                        <li>✅ <strong>Accessibility</strong> – Our content is free and available to everyone</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contact-cta">
+                <h3>Want to Connect?</h3>
+                <p>Have questions, suggestions, or want to collaborate? We'd love to hear from you!</p>
+                <a href="index.html#contact" class="btn">
+                    <i class="fas fa-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
