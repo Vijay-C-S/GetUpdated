@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Offers - GetUpdated</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .offers-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        .offers-page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .offers-page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .offers-page-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+        .all-offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .all-offers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#tech" class="nav-link">News</a>
+                <a href="index.html#jobs" class="nav-link">Jobs</a>
+                <a href="index.html#income" class="nav-link">Income Ideas</a>
+                <a href="index.html#offers" class="nav-link active">Offers</a>
+                <a href="index.html#blogs" class="nav-link">Blogs</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Offers Page -->
+    <section class="offers-page">
+        <div class="container">
+            <a href="index.html#offers" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="offers-page-header">
+                <span class="section-badge">Save Money</span>
+                <h1>All <span class="gradient-text">Online Offers</span></h1>
+                <p>Grab the best deals before they expire!</p>
+            </div>
+            
+            <div class="all-offers-grid">
+                <!-- Electronics Sale -->
+                <div class="offer-card hot">
+                    <div class="offer-badge">🔥 HOT DEAL</div>
+                    <div class="offer-discount">80% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200" alt="Electronics">
+                        <h3>Electronics Sale</h3>
+                        <p>Massive discounts on headphones, smartwatches, and gadgets!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown" data-hours="23">23:45:30</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Fashion Week Sale -->
+                <div class="offer-card">
+                    <div class="offer-badge">⚡ LIMITED</div>
+                    <div class="offer-discount">50% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=200" alt="Fashion">
+                        <h3>Fashion Week Sale</h3>
+                        <p>Trending fashion at unbelievable prices. All brands included!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">48:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Premium Courses -->
+                <div class="offer-card">
+                    <div class="offer-badge">🎁 FREE</div>
+                    <div class="offer-discount">FREE</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200" alt="Course">
+                        <h3>Premium Courses</h3>
+                        <p>Get certified courses worth ₹10,000 absolutely free today!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">12:30:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Payment Cashback -->
+                <div class="offer-card">
+                    <div class="offer-badge">💰 CASHBACK</div>
+                    <div class="offer-discount">₹500</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=200" alt="Payment">
+                        <h3>Payment Cashback</h3>
+                        <p>Get ₹500 cashback on your first UPI payment above ₹1000!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">72:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Food Delivery -->
+                <div class="offer-card">
+                    <div class="offer-badge">🍔 FOOD</div>
+                    <div class="offer-discount">60% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200" alt="Food">
+                        <h3>Food Delivery Deals</h3>
+                        <p>Get 60% off on your first 5 orders from Swiggy and Zomato!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">96:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Travel Deals -->
+                <div class="offer-card hot">
+                    <div class="offer-badge">✈️ TRAVEL</div>
+                    <div class="offer-discount">40% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=200" alt="Travel">
+                        <h3>Flight Bookings</h3>
+                        <p>Book domestic flights at 40% off! Limited seats available.</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">24:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Mobile Recharge -->
+                <div class="offer-card">
+                    <div class="offer-badge">📱 MOBILE</div>
+                    <div class="offer-discount">₹100</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=200" alt="Mobile">
+                        <h3>Recharge Bonus</h3>
+                        <p>Get ₹100 extra talktime on recharges above ₹199!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">120:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Gaming -->
+                <div class="offer-card">
+                    <div class="offer-badge">🎮 GAMING</div>
+                    <div class="offer-discount">70% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=200" alt="Gaming">
+                        <h3>Gaming Sale</h3>
+                        <p>Massive discounts on PS5, Xbox games, and gaming accessories!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">36:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Books -->
+                <div class="offer-card">
+                    <div class="offer-badge">📚 BOOKS</div>
+                    <div class="offer-discount">Buy 2 Get 1</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200" alt="Books">
+                        <h3>Book Fair</h3>
+                        <p>Buy any 2 books and get 1 absolutely free! All genres included.</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">168:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Subscription -->
+                <div class="offer-card hot">
+                    <div class="offer-badge">🎬 OTT</div>
+                    <div class="offer-discount">3 Months Free</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=200" alt="Streaming">
+                        <h3>Premium Streaming</h3>
+                        <p>Get 3 months free Netflix, Prime, or Disney+ subscription!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">48:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Fitness -->
+                <div class="offer-card">
+                    <div class="offer-badge">💪 FITNESS</div>
+                    <div class="offer-discount">50% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200" alt="Fitness">
+                        <h3>Gym Membership</h3>
+                        <p>50% off on annual gym memberships at top fitness centers!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">240:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Beauty -->
+                <div class="offer-card">
+                    <div class="offer-badge">💄 BEAUTY</div>
+                    <div class="offer-discount">45% OFF</div>
+                    <div class="offer-content">
+                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200" alt="Beauty">
+                        <h3>Beauty Products</h3>
+                        <p>Flat 45% off on all skincare and makeup products!</p>
+                        <div class="offer-timer">
+                            <i class="fas fa-clock"></i>
+                            <span class="countdown">60:00:00</span>
+                        </div>
+                        <a href="#" class="grab-btn">Grab Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>

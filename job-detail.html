@@ -1,0 +1,3388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - GetUpdated</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .job-detail-page {
+            padding: 100px 0 60px;
+            min-height: 100vh;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ec4899;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+            color: #f472b6;
+        }
+
+        .job-detail-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-detail-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .company-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .company-logo-large {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .company-details h4 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .new-badge {
+            background: #22c55e;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .job-title-large {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .job-meta-item i {
+            opacity: 0.8;
+        }
+
+        .header-actions {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .apply-btn-large {
+            background: white;
+            color: #667eea;
+            padding: 0.9rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .apply-btn-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .share-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .share-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .job-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .job-main {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .info-card i {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .info-card .label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-card .value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-style: italic;
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .job-description {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .job-description p {
+            margin-bottom: 1rem;
+        }
+
+        .job-description ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-description ul li {
+            margin-bottom: 0.6rem;
+            position: relative;
+        }
+
+        .job-description ul li::marker {
+            color: #667eea;
+        }
+
+        .job-description strong {
+            color: var(--text-primary);
+        }
+
+        .skills-section {
+            margin-bottom: 2rem;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .job-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .company-card {
+            text-align: center;
+        }
+
+        .company-card .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .company-card h4 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-card .type {
+            color: #667eea;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .direct-apply-btn {
+            display: block;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .direct-apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .verified-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #22c55e;
+            font-size: 0.8rem;
+            padding-top: 0.5rem;
+        }
+
+        .quick-info {
+            padding: 0;
+        }
+
+        .quick-info-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quick-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .quick-info-item i {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+
+        .quick-info-item .info {
+            flex: 1;
+        }
+
+        .quick-info-item .info .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .quick-info-item .info .value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .similar-jobs {
+            margin-top: 3rem;
+        }
+
+        .similar-jobs h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .similar-jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .job-content {
+                grid-template-columns: 1fr;
+            }
+
+            .job-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-card {
+                flex: 1;
+                min-width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .job-detail-header {
+                padding: 1.5rem;
+            }
+
+            .header-actions {
+                position: static;
+                margin-top: 1.5rem;
+            }
+
+            .job-title-large {
+                font-size: 1.5rem;
+            }
+
+            .job-meta {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#tech" class="nav-link">News</a>
+                <a href="jobs.html" class="nav-link active">Jobs</a>
+                <a href="index.html#income" class="nav-link">Income Ideas</a>
+                <a href="index.html#offers" class="nav-link">Offers</a>
+                <a href="index.html#blogs" class="nav-link">Blogs</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Job Detail Page -->
+    <section class="job-detail-page">
+        <div class="container">
+            <a href="jobs.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> BACK TO JOBS
+            </a>
+
+            <!-- Job Header -->
+            <div class="job-detail-header" id="jobHeader">
+                <div class="company-section">
+                    <div class="company-logo-large" id="companyLogo">H</div>
+                    <div class="company-details">
+                        <h4 id="companyName">Company Name <span class="new-badge">NEW</span></h4>
+                    </div>
+                </div>
+                <h1 class="job-title-large" id="jobTitle">Job Title</h1>
+                <div class="job-meta">
+                    <span class="job-meta-item" id="jobLocation">
+                        <i class="fas fa-map-marker-alt"></i> Location
+                    </span>
+                    <span class="job-meta-item" id="jobExperience">
+                        <i class="fas fa-briefcase"></i> 0-2 Years
+                    </span>
+                    <span class="job-meta-item" id="jobType">
+                        <i class="fas fa-clock"></i> Full-time
+                    </span>
+                </div>
+                <div class="header-actions">
+                    <a href="#" class="apply-btn-large" id="applyBtnHeader" target="_blank">
+                        APPLY NOW
+                    </a>
+                    <button class="share-btn" onclick="shareJob()">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Job Content -->
+            <div class="job-content">
+                <div class="job-main">
+                    <!-- Info Cards -->
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div class="label">SALARY RANGE</div>
+                            <div class="value" id="salaryValue">Not Disclosed</div>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="label">POSTED ON</div>
+                            <div class="value" id="postedDate">Jan 31, 2026</div>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="label">VERIFIED</div>
+                            <div class="value">100% Legit</div>
+                        </div>
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="job-section">
+                        <h3 class="section-title">JOB DESCRIPTION</h3>
+                        <div class="job-description" id="jobDescription">
+                            <p>Loading job details...</p>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="skills-section">
+                        <h3 class="section-title">SKILLS REQUIRED</h3>
+                        <div class="skills-tags" id="skillsTags">
+                            <!-- Skills populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="job-sidebar">
+                    <div class="sidebar-card company-card">
+                        <div class="logo" id="sidebarLogo">H</div>
+                        <h4 id="sidebarCompanyName">Company Name</h4>
+                        <p class="type">Hiring Partner</p>
+                        <a href="#" class="direct-apply-btn" id="applyBtnSidebar" target="_blank">
+                            DIRECT APPLY
+                        </a>
+                        <div class="verified-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            SAFEGUARDED BY GETUPDATED
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card quick-info">
+                        <div class="quick-info-item">
+                            <i class="fas fa-building"></i>
+                            <div class="info">
+                                <div class="label">COMPANY TYPE</div>
+                                <div class="value" id="companyType">Private</div>
+                            </div>
+                        </div>
+                        <div class="quick-info-item">
+                            <i class="fas fa-users"></i>
+                            <div class="info">
+                                <div class="label">OPENINGS</div>
+                                <div class="value" id="openings">Multiple</div>
+                            </div>
+                        </div>
+                        <div class="quick-info-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div class="info">
+                                <div class="label">QUALIFICATION</div>
+                                <div class="value" id="qualification">Any Graduate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Job database
+        const jobsData = {
+            'hungama-ai': {
+                company: 'Hungama Digital Media',
+                logo: 'H',
+                title: 'AI & Gen AI Engineer Intern',
+                location: 'Mumbai / Noida',
+                experience: '0-2 Years',
+                type: 'Internship',
+                salary: '₹25,000 - ₹50,000/month',
+                companyType: 'Entertainment Tech',
+                openings: 'Multiple',
+                qualification: 'B.Tech/M.Tech in CS/AI',
+                skills: ['Python', 'Machine Learning', 'TensorFlow', 'PyTorch', 'GenAI', 'LLMs', 'NLP', 'Deep Learning'],
+                applyUrl: 'https://internshala.com/internship/detail/ai-gen-ai-engineers-to-shape-next-gen-entertainment-internship-in-multiple-locations-at-hungama-digital-media-entertainment-private-limited1769496080',
+                gradient: 'linear-gradient(135deg, #a855f7, #9333ea)',
+                description: `
+                    <p><strong>About Hungama Digital:</strong></p>
+                    <p>Hungama is South Asia's leading digital entertainment company, reaching over 200 million users. We're building next-generation AI-powered entertainment experiences.</p>
+                    
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Architect and deploy generative AI models and pipelines specifically focused on audio, video, and interactive storytelling</li>
+                        <li>Optimize and scale existing AI/ML systems to handle real-world production loads within the Hungama content ecosystem</li>
+                        <li>Integrate intelligent content systems and recommendation engines to enhance user engagement and personalization</li>
+                        <li>Collaborate on "build and break" cycles to stress-test system reliability and performance at scale</li>
+                        <li>Develop and refine workflows using industry-standard GenAI tools for automated audio and video content creation</li>
+                        <li>Bridge the gap between raw AI capabilities and creative output, ensuring high-quality entertainment media</li>
+                        <li>Monitor and iterate on live production models, ensuring AI-assisted content remains accurate and impactful</li>
+                    </ul>
+                    
+                    <p><strong>Qualifications:</strong></p>
+                    <ul>
+                        <li>Strong understanding of Machine Learning and Deep Learning concepts</li>
+                        <li>Hands-on experience with GenAI tools and frameworks</li>
+                        <li>Proficiency in Python and relevant ML libraries (TensorFlow, PyTorch)</li>
+                        <li>Experience with LLMs and NLP is a plus</li>
+                        <li>Passion for entertainment and media technology</li>
+                    </ul>
+                `
+            },
+            'kokuyo-hr': {
+                company: 'Kokuyo Camlin Limited',
+                logo: 'KC',
+                title: 'HR Intern - HRIS & Recruitment',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹12,000/month',
+                companyType: 'FMCG/Stationery',
+                openings: '1-2',
+                qualification: 'MBA/BBA in HR',
+                skills: ['MS Excel', 'HR Operations', 'Recruitment', 'HRIS', 'Communication', 'Documentation', 'Onboarding'],
+                applyUrl: 'https://internshala.com/internship/detail/hr-intern-internship-in-mumbai-at-kokuyo-camlin-limited1769768222',
+                gradient: 'linear-gradient(135deg, #f97316, #ea580c)',
+                description: `
+                    <p><strong>About Kokuyo Camlin:</strong></p>
+                    <p>Kokuyo Camlin is India's leading stationery and art materials company, known for iconic brands like Camlin.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Assist with the implementation and maintenance of HRIS systems</li>
+                        <li>Support recruitment efforts by sourcing candidates, conducting initial screening, and coordinating hiring processes</li>
+                        <li>Contribute to HR branding initiatives to attract top talent</li>
+                        <li>Assist with onboarding and orientation programs for new employees</li>
+                        <li>Help maintain employee records and update HR policies</li>
+                        <li>Collaborate with HR team members on special projects and initiatives</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Currently pursuing or recently completed degree in HR, Business Administration, or related field</li>
+                        <li>Strong proficiency in MS Excel and MS Office</li>
+                        <li>Excellent communication skills in English</li>
+                        <li>Detail-oriented with strong organizational skills</li>
+                        <li>Ability to maintain confidentiality</li>
+                    </ul>
+                `
+            },
+            'amar-ujala-design': {
+                company: 'Amar Ujala',
+                logo: 'AU',
+                title: 'Graphic Design Intern',
+                location: 'Noida',
+                experience: '0-1 Years',
+                type: 'Internship',
+                salary: '₹12,000 - ₹15,000/month',
+                companyType: 'Media/Publishing',
+                openings: '2-3',
+                qualification: 'Design Graduate',
+                skills: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe Premiere Pro', 'Adobe InDesign', 'UI/UX Design', 'After Effects', 'Canva'],
+                applyUrl: 'https://internshala.com/internship/detail/graphic-design-internship-in-noida-at-amar-ujala1769767509',
+                gradient: 'linear-gradient(135deg, #ec4899, #db2777)',
+                description: `
+                    <p><strong>About Amar Ujala:</strong></p>
+                    <p>Amar Ujala is one of India's leading Hindi daily newspapers with a strong digital presence.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Design high-quality digital banners, web ads, social media creatives, mockups, and campaign visuals</li>
+                        <li>Create visually appealing and brand-aligned pitch decks/PowerPoint/Canva presentations for sales teams</li>
+                        <li>Collaborate closely with the brand solutions team to translate campaign ideas into impactful visuals</li>
+                        <li>Develop visual mock-ups or mood boards for brand solutions proposals</li>
+                        <li>Maintain brand consistency across all creative outputs</li>
+                        <li>Adapt designs quickly as per client/team feedback and deadlines</li>
+                    </ul>
+                    
+                    <p><strong>Required Skills:</strong></p>
+                    <ul>
+                        <li>Proficiency in Adobe Creative Suite (Photoshop, Illustrator, InDesign)</li>
+                        <li>Knowledge of video editing software (Premiere Pro, After Effects) is a plus</li>
+                        <li>Strong creative and visual design skills</li>
+                        <li>Ability to work under tight deadlines</li>
+                        <li>Good understanding of social media design trends</li>
+                    </ul>
+                `
+            },
+            'plutonic-flutter': {
+                company: 'Plutonic Services Private Limited',
+                logo: 'P',
+                title: 'Flutter Development Intern',
+                location: 'Noida (Hybrid)',
+                experience: '0-1 Years',
+                type: 'Internship',
+                salary: '₹10,000 - ₹15,000/month',
+                companyType: 'IT Services',
+                openings: '3-5',
+                qualification: 'B.Tech/BCA',
+                skills: ['Flutter', 'Dart', 'Firebase', 'REST API', 'UI Development', 'Git', 'Mobile Development'],
+                applyUrl: 'https://internshala.com/internship/detail/flutter-development-internship-in-noida-at-plutonic-services-private-limited1769762297',
+                gradient: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                description: `
+                    <p><strong>About the Role:</strong></p>
+                    <p>Join our mobile development team and work on exciting Flutter projects for various clients.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and maintain mobile applications using the Flutter framework</li>
+                        <li>Implement user interfaces consistent with design guidelines</li>
+                        <li>Integrate Firebase for data storage and user authentication</li>
+                        <li>Communicate with backend services using REST API</li>
+                        <li>Collaborate with cross-functional teams to define, design, and ship new features</li>
+                        <li>Optimize application performance for maximum speed and scalability</li>
+                        <li>Stay up-to-date with the latest trends and technologies in mobile development</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Strong knowledge of Flutter framework and Dart programming language</li>
+                        <li>Experience with Firebase and RESTful APIs</li>
+                        <li>Understanding of mobile UI/UX principles</li>
+                        <li>Familiarity with version control (Git)</li>
+                        <li>Good problem-solving skills and attention to detail</li>
+                    </ul>
+                `
+            },
+            'nobroker-sales': {
+                company: 'NoBroker',
+                logo: 'NB',
+                title: 'Sales Executive',
+                location: 'Pan India (Remote)',
+                experience: '1-3 Years',
+                type: 'Full-time',
+                salary: '₹2.4 LPA + Incentives',
+                companyType: 'PropTech Unicorn',
+                openings: '50+',
+                qualification: 'Any Graduate',
+                skills: ['Sales', 'Communication', 'Customer Service', 'Negotiation', 'CRM', 'Lead Generation', 'Tele-calling'],
+                applyUrl: 'https://unstop.com/jobs/sales-executive-nobroker-1632765',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About NoBroker:</strong></p>
+                    <p>NoBroker is India's first proptech unicorn that allows property owners and tenants to interact directly without any brokerage. We're revolutionizing real estate in India.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Identify and connect with potential customers looking for property services</li>
+                        <li>Explain NoBroker's services and value proposition to prospects</li>
+                        <li>Convert leads into paying customers through consultative selling</li>
+                        <li>Maintain strong relationships with existing customers for referrals</li>
+                        <li>Achieve monthly and quarterly sales targets</li>
+                        <li>Document all activities and customer interactions in CRM system</li>
+                        <li>Handle customer queries and provide excellent service</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>1-3 years of sales experience preferred (freshers with excellent communication can apply)</li>
+                        <li>Excellent communication skills in English and Hindi</li>
+                        <li>Self-motivated with ability to work remotely</li>
+                        <li>Target-oriented mindset with hunger for success</li>
+                        <li>Basic computer skills and smartphone proficiency</li>
+                    </ul>
+                    
+                    <p><strong>Benefits:</strong></p>
+                    <ul>
+                        <li>Work from home flexibility</li>
+                        <li>Attractive incentive structure</li>
+                        <li>Fast career growth in a unicorn startup</li>
+                    </ul>
+                `
+            },
+            'audi-marketing': {
+                company: 'Audi Mumbai West',
+                logo: 'A',
+                title: 'Digital Marketing Intern',
+                location: 'Mumbai',
+                experience: '0-1 Years',
+                type: 'Internship',
+                salary: '₹15,000/month',
+                companyType: 'Luxury Automotive',
+                openings: '1-2',
+                qualification: 'Marketing Graduate',
+                skills: ['Google Ads', 'Meta Ads', 'LinkedIn Ads', 'Google Analytics', 'SEO', 'Social Media Marketing', 'Content Creation'],
+                applyUrl: 'https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-audi-mumbai-west1769256350',
+                gradient: 'linear-gradient(135deg, #1e3a8a, #1e40af)',
+                description: `
+                    <p><strong>About the Role:</strong></p>
+                    <p>Join the premium automotive brand Audi and gain hands-on experience in digital marketing for luxury automobiles.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Independently manage, optimize and scale Google Ads, Meta Ads and LinkedIn Ads campaigns for optimal ROI</li>
+                        <li>Analyze campaign performance across all group brands and platforms using tools like Google Analytics</li>
+                        <li>Monitor competitors' digital campaigns to identify trends and opportunities</li>
+                        <li>Conceptualize and execute engaging online activities to drive brand interaction and customer engagement</li>
+                        <li>Coordinate with creative agencies for timely delivery of high-quality assets</li>
+                        <li>Track daily campaign metrics and prepare insightful performance reports</li>
+                        <li>Develop and schedule social media content calendars for Instagram and LinkedIn</li>
+                        <li>Conduct A/B testing on ad creatives, copy, and landing pages</li>
+                        <li>Support basic SEO efforts for dealership websites</li>
+                    </ul>
+                    
+                    <p><strong>Important Note:</strong></p>
+                    <p>Minimum 6-month commitment required. This is an excellent opportunity to work with a premium brand.</p>
+                `
+            },
+            'maga-retail': {
+                company: 'Maga Retail',
+                logo: 'MR',
+                title: 'E-Commerce Operations Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹11,000 - ₹15,000/month',
+                companyType: 'Retail/E-Commerce',
+                openings: '2-3',
+                qualification: 'Any Graduate',
+                skills: ['Shopify', 'Amazon Seller Central', 'E-Commerce', 'MS Excel', 'Inventory Management', 'Order Processing'],
+                applyUrl: 'https://internshala.com/internship/detail/e-commerce-operations-internship-in-mumbai-at-maga-retail1769769315',
+                gradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                description: `
+                    <p><strong>About Maga Retail:</strong></p>
+                    <p>Maga Retail is a growing e-commerce company focused on multi-channel retail operations.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Manage product listings on Shopify and Amazon platforms</li>
+                        <li>Handle order processing and inventory management</li>
+                        <li>Coordinate with logistics partners for timely deliveries</li>
+                        <li>Monitor and optimize product performance metrics</li>
+                        <li>Assist in customer service and query resolution</li>
+                        <li>Support marketing campaigns and promotional activities</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Basic understanding of e-commerce platforms</li>
+                        <li>Good communication skills</li>
+                        <li>Proficiency in MS Excel</li>
+                        <li>Attention to detail and organizational skills</li>
+                    </ul>
+                `
+            },
+            'zebronics-hr': {
+                company: 'Zebronics India',
+                logo: 'Z',
+                title: 'Talent Acquisition Intern',
+                location: 'Chennai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹12,000/month',
+                companyType: 'Consumer Electronics',
+                openings: '1-2',
+                qualification: 'MBA/BBA in HR',
+                skills: ['MS Excel', 'Recruitment', 'Sourcing', 'LinkedIn', 'Communication', 'Screening', 'Interview Coordination'],
+                applyUrl: 'https://internshala.com/internship/detail/talent-acquisition-internship-in-chennai-at-zebronics-india-private-limited1769665832',
+                gradient: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                description: `
+                    <p><strong>About Zebronics:</strong></p>
+                    <p>Zebronics is India's leading consumer electronics company known for quality audio products, peripherals, and accessories.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Source and screen candidates through various channels</li>
+                        <li>Schedule interviews and coordinate with hiring managers</li>
+                        <li>Maintain candidate database and track recruitment metrics</li>
+                        <li>Assist in campus recruitment drives</li>
+                        <li>Support onboarding processes for new hires</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Currently pursuing or completed HR/Business degree</li>
+                        <li>Strong communication and interpersonal skills</li>
+                        <li>Proficiency in MS Office, especially Excel</li>
+                        <li>Ability to work in a fast-paced environment</li>
+                    </ul>
+                `
+            },
+            'mbd-hr': {
+                company: 'MBD Group',
+                logo: 'MBD',
+                title: 'HR Trainee',
+                location: 'Delhi',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹10,000 - ₹12,000/month',
+                companyType: 'Education/Publishing',
+                openings: '2-3',
+                qualification: 'MBA/BBA in HR',
+                skills: ['Onboarding', 'Employee Engagement', 'HR Operations', 'MS Office', 'Communication', 'Documentation'],
+                applyUrl: 'https://internshala.com/internship/detail/hr-trainee-internship-in-delhi-at-mbd-group1769758640',
+                gradient: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+                description: `
+                    <p><strong>About MBD Group:</strong></p>
+                    <p>MBD Group is one of India's largest educational publishing companies with diversified interests in education, hospitality, and real estate.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Support onboarding and orientation of new employees</li>
+                        <li>Assist in employee engagement activities and events</li>
+                        <li>Maintain HR documentation and employee records</li>
+                        <li>Help with attendance tracking and leave management</li>
+                        <li>Coordinate with various departments for HR initiatives</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing or completed MBA/BBA in HR</li>
+                        <li>Good communication skills in English and Hindi</li>
+                        <li>Proficiency in MS Office</li>
+                        <li>Positive attitude and willingness to learn</li>
+                    </ul>
+                `
+            },
+            'hungama-marketing': {
+                company: 'Hungama Digital Media',
+                logo: 'H',
+                title: 'Performance Marketing Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹5,000 - ₹10,000/month',
+                companyType: 'Entertainment Tech',
+                openings: '2-3',
+                qualification: 'Marketing Graduate',
+                skills: ['Meta Ads', 'Google Ads', 'Analytics', 'Campaign Management', 'A/B Testing', 'Excel', 'Data Analysis'],
+                applyUrl: 'https://internshala.com/internship/detail/performance-marketing-internship-in-mumbai-at-hungama-digital-media-entertainment-private-limited1769586162',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                description: `
+                    <p><strong>About Hungama Digital:</strong></p>
+                    <p>Hungama is South Asia's leading digital entertainment company with a massive user base across music, video, and gaming.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Assist in managing Meta and Google ad campaigns</li>
+                        <li>Monitor campaign performance and prepare reports</li>
+                        <li>Help optimize campaigns for better ROI</li>
+                        <li>Conduct A/B testing for ad creatives and copy</li>
+                        <li>Research competitor strategies and market trends</li>
+                        <li>Support the marketing team with data analysis</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Basic understanding of digital marketing</li>
+                        <li>Familiarity with Meta and Google Ads platforms</li>
+                        <li>Strong analytical skills</li>
+                        <li>Proficiency in Excel</li>
+                    </ul>
+                `
+            },
+            'cipla-sales': {
+                company: 'CIPLA Limited',
+                logo: 'C',
+                title: 'Freshers & Experienced - Sales',
+                location: 'Pan India',
+                experience: '0-2 Years',
+                type: 'Full-time',
+                salary: 'Competitive',
+                companyType: 'Pharmaceutical',
+                openings: 'Multiple',
+                qualification: 'Pharma/Science Graduate',
+                skills: ['Sales', 'Pharma Knowledge', 'Communication', 'Field Work', 'Customer Relations', 'Medical Representatives'],
+                applyUrl: 'https://www.naukri.com/job-listings-cipla-limited-hiring-for-freshers-experienced-candidates-pan-india-cipla-bengaluru-delhi-ncr-mumbai-all-areas-0-to-2-years-290126023667',
+                gradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                description: `
+                    <p><strong>About CIPLA:</strong></p>
+                    <p>CIPLA is one of India's leading pharmaceutical companies, known for affordable medicines and healthcare solutions worldwide.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Promote and sell pharmaceutical products to healthcare professionals</li>
+                        <li>Build and maintain relationships with doctors and pharmacies</li>
+                        <li>Achieve sales targets in assigned territory</li>
+                        <li>Provide product information and samples to medical practitioners</li>
+                        <li>Report market intelligence and competitor activities</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>B.Pharma/M.Pharma/BSc in Life Sciences</li>
+                        <li>Excellent communication and presentation skills</li>
+                        <li>Willingness to travel within assigned territory</li>
+                        <li>Women candidates are encouraged to apply</li>
+                    </ul>
+                    
+                    <p><strong>Note:</strong> This is a special hiring drive for women candidates.</p>
+                `
+            },
+            'goldman-sachs-analyst': {
+                company: 'Goldman Sachs',
+                logo: 'GS',
+                title: 'Treasury IRR Analytics Analyst',
+                location: 'Bengaluru',
+                experience: '0-2 Years',
+                type: 'Full-time',
+                salary: '₹15-25 LPA',
+                companyType: 'Investment Banking',
+                openings: 'Multiple',
+                qualification: 'B.Tech/MBA Finance',
+                skills: ['Finance', 'Investment Banking', 'Analytics', 'Excel', 'SQL', 'Risk Management', 'Treasury Operations'],
+                applyUrl: 'https://www.naukri.com/job-listings-corporate-treasury-irr-analytics-analyst-goldman-sachs-bengaluru-0-to-2-years-290126504850',
+                gradient: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                description: `
+                    <p><strong>About Goldman Sachs:</strong></p>
+                    <p>Goldman Sachs is a leading global investment banking, securities, and investment management firm with a history spanning over 150 years.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Support Corporate Treasury team with IRR analytics and reporting</li>
+                        <li>Develop and maintain financial models for treasury operations</li>
+                        <li>Analyze interest rate risk and prepare risk reports</li>
+                        <li>Collaborate with global teams on treasury initiatives</li>
+                        <li>Automate reporting processes using Excel and SQL</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Bachelor's degree in Finance, Economics, or Engineering</li>
+                        <li>Strong analytical and quantitative skills</li>
+                        <li>Proficiency in Excel and SQL</li>
+                        <li>Knowledge of treasury and risk management concepts</li>
+                        <li>Excellent communication skills</li>
+                    </ul>
+                `
+            },
+            'scaler-talent': {
+                company: 'Scaler',
+                logo: 'S',
+                title: 'Talent Acquisition Intern',
+                location: 'Bangalore',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹20K-25K/month + ₹6 LPA PPO',
+                companyType: 'EdTech',
+                openings: '3-5',
+                qualification: 'Any Graduate',
+                skills: ['Recruitment', 'Sourcing', 'LinkedIn', 'Communication', 'HR Operations', 'Screening', 'MS Office'],
+                applyUrl: 'https://internshala.com/internship/detail/talent-acquisition-internship-in-bangalore-at-scaler1769584884',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                description: `
+                    <p><strong>About Scaler:</strong></p>
+                    <p>Scaler is a tech-focussed upskilling platform that helps professionals accelerate their careers through industry-relevant programs.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Source candidates through various channels including LinkedIn and job portals</li>
+                        <li>Screen resumes and conduct initial phone interviews</li>
+                        <li>Coordinate interviews with hiring managers</li>
+                        <li>Maintain candidate database in ATS</li>
+                        <li>Support employer branding initiatives</li>
+                        <li>Assist in campus recruitment activities</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Currently pursuing or completed graduation</li>
+                        <li>Excellent communication skills in English</li>
+                        <li>Strong organizational and multitasking abilities</li>
+                        <li>Proficiency in MS Office</li>
+                        <li>Interest in HR and recruitment</li>
+                    </ul>
+                    
+                    <p><strong>Perks:</strong> PPO of ₹6 LPA based on performance!</p>
+                `
+            },
+            'amazon-investigation': {
+                company: 'Amazon',
+                logo: 'A',
+                title: 'Investigation Specialist - PQ Ops',
+                location: 'Bengaluru',
+                experience: '0-6 Years',
+                type: 'Full-time',
+                salary: '₹8-15 LPA',
+                companyType: 'E-Commerce/Tech',
+                openings: 'Multiple',
+                qualification: 'Any Graduate',
+                skills: ['Analytics', 'Risk Management', 'Investigation', 'Data Analysis', 'Excel', 'Problem Solving', 'Communication'],
+                applyUrl: 'https://www.naukri.com/job-listings-investigation-specialist-investigation-specialist-pq-ops-amazon-development-centre-india-pvt-ltd-bengaluru-0-to-6-years-290126506643',
+                gradient: 'linear-gradient(135deg, #ff9900, #f59e0b)',
+                description: `
+                    <p><strong>About Amazon:</strong></p>
+                    <p>Amazon is guided by four principles: customer obsession, passion for invention, commitment to operational excellence, and long-term thinking.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Investigate quality issues in product listings and operations</li>
+                        <li>Analyze data to identify patterns and root causes of issues</li>
+                        <li>Work with cross-functional teams to implement solutions</li>
+                        <li>Develop and document investigation processes</li>
+                        <li>Prepare reports and presentations for stakeholders</li>
+                        <li>Ensure compliance with Amazon policies and guidelines</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Bachelor's degree in any discipline</li>
+                        <li>Strong analytical and problem-solving skills</li>
+                        <li>Excellent written and verbal communication</li>
+                        <li>Proficiency in MS Excel and data analysis</li>
+                        <li>Ability to work in a fast-paced environment</li>
+                    </ul>
+                `
+            },
+            'salesforce-security': {
+                company: 'Salesforce',
+                logo: 'SF',
+                title: 'DDoS Network Security Engineer',
+                location: 'Bengaluru',
+                experience: '0-5 Years',
+                type: 'Full-time',
+                salary: '₹20-35 LPA',
+                companyType: 'Cloud Computing',
+                openings: '2-3',
+                qualification: 'B.Tech in CS/IT',
+                skills: ['Security', 'TCP/HTTP', 'DDoS Mitigation', 'Network Protocols', 'Linux', 'Python', 'Cloud Security'],
+                applyUrl: 'https://www.naukri.com/job-listings-ddos-network-security-engineer-mts-lmts-bangalore-salesforce-bengaluru-0-to-5-years-270126501340',
+                gradient: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                description: `
+                    <p><strong>About Salesforce:</strong></p>
+                    <p>Salesforce is the world's #1 CRM platform, helping companies connect with customers in a whole new way using cloud, mobile, social, and AI technologies.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Design and implement DDoS mitigation strategies</li>
+                        <li>Monitor network traffic for security threats</li>
+                        <li>Respond to security incidents and conduct forensic analysis</li>
+                        <li>Develop automation tools for security operations</li>
+                        <li>Collaborate with global security teams</li>
+                        <li>Stay updated with latest security threats and countermeasures</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>B.Tech/M.Tech in Computer Science or related field</li>
+                        <li>Understanding of TCP/IP, HTTP protocols</li>
+                        <li>Experience with network security tools</li>
+                        <li>Knowledge of DDoS attack vectors and mitigation</li>
+                        <li>Proficiency in Python or similar scripting language</li>
+                        <li>Linux administration skills</li>
+                    </ul>
+                `
+            },
+            'puma-retail': {
+                company: 'PUMA',
+                logo: 'P',
+                title: 'Retail Sales Associate & Supervisor',
+                location: 'Bengaluru',
+                experience: '0-4 Years',
+                type: 'Full-time',
+                salary: '₹2.5-5.5 LPA',
+                companyType: 'Sports/Retail',
+                openings: 'Multiple',
+                qualification: 'Any Graduate',
+                skills: ['Retail', 'Sales', 'Customer Service', 'Communication', 'Team Management', 'Visual Merchandising'],
+                applyUrl: 'https://www.naukri.com/job-listings-retail-sales-associate-supervisor-puma-bengaluru-0-to-4-years-290126029351',
+                gradient: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                description: `
+                    <p><strong>About PUMA:</strong></p>
+                    <p>PUMA is one of the world's leading sports brands, designing, developing, selling, and marketing footwear, apparel, and accessories.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Provide exceptional customer service and product knowledge</li>
+                        <li>Meet and exceed individual and store sales targets</li>
+                        <li>Maintain store presentation and visual merchandising standards</li>
+                        <li>Process transactions and handle cash/card payments</li>
+                        <li>Assist with inventory management and stock replenishment</li>
+                        <li>For Supervisors: Lead and motivate the sales team</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>High school diploma or equivalent (Graduate preferred)</li>
+                        <li>Passion for sports and fitness</li>
+                        <li>Excellent communication and interpersonal skills</li>
+                        <li>Ability to work flexible hours including weekends</li>
+                        <li>Previous retail experience preferred for Supervisor role</li>
+                    </ul>
+                `
+            },
+            'deloitte-aml': {
+                company: 'Deloitte Consulting',
+                logo: 'D',
+                title: 'AML/KYC Analyst - Fresher',
+                location: 'Bangalore/Mumbai',
+                experience: 'Fresher',
+                type: 'Full-time (Contract)',
+                salary: '₹4-6 LPA',
+                companyType: 'Consulting',
+                openings: 'Multiple',
+                qualification: 'PG Fresher',
+                skills: ['AML', 'KYC', 'Finance', 'Compliance', 'MS Office', 'Analytical Skills', 'Communication'],
+                applyUrl: 'https://www.naukri.com/job-listings-aml-kyc-fresher-pg-fresher-bangalore-mumbai-1-year-contract-deloitte-consulting-bengaluru-mumbai-all-areas-0-to-0-years-190126020128',
+                gradient: 'linear-gradient(135deg, #84cc16, #65a30d)',
+                description: `
+                    <p><strong>About Deloitte:</strong></p>
+                    <p>Deloitte is a leading global provider of audit and assurance, consulting, financial advisory, risk advisory, tax and related services with presence in more than 150 countries.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Perform Anti-Money Laundering (AML) and Know Your Customer (KYC) checks</li>
+                        <li>Review and analyze customer documentation for compliance</li>
+                        <li>Identify suspicious transactions and escalate as needed</li>
+                        <li>Maintain accurate records and prepare reports</li>
+                        <li>Stay updated with regulatory requirements</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Post Graduate degree (MBA/M.Com/MS preferred)</li>
+                        <li>Strong analytical and attention to detail</li>
+                        <li>Excellent communication skills</li>
+                        <li>Proficiency in MS Office</li>
+                        <li>Willingness to work in shifts if required</li>
+                    </ul>
+                    
+                    <p><strong>Note:</strong> This is a 1-year contract position with Deloitte.</p>
+                `
+            },
+            'urban-company-bd': {
+                company: 'Urban Company',
+                logo: 'UC',
+                title: 'Business Development Intern',
+                location: 'Nagpur',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹18K-23K/month',
+                companyType: 'Tech Startup (Unicorn)',
+                openings: '2-4',
+                qualification: 'Any Graduate',
+                skills: ['Business Development', 'Sales', 'Operations', 'Communication', 'Negotiation', 'MS Excel'],
+                applyUrl: 'https://www.naukri.com/job-listings-business-development-sales-internship-in-nagpur-at-urban-company1769158279',
+                gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                description: `
+                    <p><strong>About Urban Company:</strong></p>
+                    <p>Urban Company is Asia's largest home services platform, connecting customers with trained professionals for services like beauty, appliance repair, cleaning, and more.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Onboard and manage service partners in assigned territory</li>
+                        <li>Drive partner acquisition and activation</li>
+                        <li>Build relationships with local businesses and partners</li>
+                        <li>Analyze market data and competitor activities</li>
+                        <li>Achieve weekly and monthly business targets</li>
+                        <li>Coordinate with operations team for smooth service delivery</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Currently pursuing or completed graduation</li>
+                        <li>Strong communication and interpersonal skills</li>
+                        <li>Self-motivated with target-driven mindset</li>
+                        <li>Willingness to work in field operations</li>
+                        <li>Basic knowledge of MS Excel</li>
+                    </ul>
+                `
+            },
+            'sportvot-video': {
+                company: 'SportVot',
+                logo: 'SV',
+                title: 'Video Editing Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹10K-15K/month',
+                companyType: 'Sports Tech',
+                openings: '2-3',
+                qualification: 'Any Graduate',
+                skills: ['Premiere Pro', 'After Effects', 'Video Editing', 'Motion Graphics', 'Color Grading', 'Storytelling'],
+                applyUrl: 'https://internshala.com/internship/detail/video-editing-making-internship-in-mumbai-at-sportvot1769668869',
+                gradient: 'linear-gradient(135deg, #ec4899, #db2777)',
+                description: `
+                    <p><strong>About SportVot:</strong></p>
+                    <p>SportVot is a sports technology platform that provides live streaming, video production, and content solutions for sports events across India.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Edit and produce engaging sports video content</li>
+                        <li>Create highlight reels and match summaries</li>
+                        <li>Add graphics, transitions, and effects to videos</li>
+                        <li>Collaborate with content team on creative ideas</li>
+                        <li>Maintain consistency in branding and style</li>
+                        <li>Meet tight deadlines for quick turnaround content</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Proficiency in Adobe Premiere Pro and After Effects</li>
+                        <li>Understanding of video editing principles</li>
+                        <li>Interest in sports and sports content</li>
+                        <li>Creative mindset with attention to detail</li>
+                        <li>Portfolio of previous video work preferred</li>
+                    </ul>
+                `
+            },
+            'fractal-imagineer': {
+                company: 'Fractal Analytics',
+                logo: 'FA',
+                title: 'Imagineer Professional',
+                location: 'Multiple Cities',
+                experience: '0-5 Years',
+                type: 'Full-time',
+                salary: '₹12-20 LPA',
+                companyType: 'Data Analytics',
+                openings: 'Multiple',
+                qualification: 'B.Tech/MCA',
+                skills: ['Python', 'C#', 'Azure', 'Cloud Computing', 'AI/ML', 'Problem Solving', 'Data Analytics'],
+                applyUrl: 'https://www.naukri.com/job-listings-imagineer-professional-fractal-analytics-ltd-noida-mumbai-pune-gurugram-chennai-bengaluru-0-to-5-years-290126505210',
+                gradient: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+                description: `
+                    <p><strong>About Fractal Analytics:</strong></p>
+                    <p>Fractal is a strategic AI partner to Fortune 500 companies, helping them power every human decision with AI through advanced analytics and AI solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and deploy AI/ML solutions for clients</li>
+                        <li>Work on cloud-based data platforms using Azure</li>
+                        <li>Build scalable applications using Python and C#</li>
+                        <li>Collaborate with cross-functional teams</li>
+                        <li>Participate in client discussions and solution design</li>
+                        <li>Stay updated with latest AI/ML technologies</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>B.Tech/MCA in Computer Science or related field</li>
+                        <li>Proficiency in Python or C#</li>
+                        <li>Experience with cloud platforms (Azure preferred)</li>
+                        <li>Understanding of data structures and algorithms</li>
+                        <li>Strong problem-solving abilities</li>
+                        <li>Good communication skills</li>
+                    </ul>
+                `
+            },
+            'airindia-hr': {
+                company: 'Air India SATS',
+                logo: 'AI',
+                title: 'HR Operations Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹10K-15K/month',
+                companyType: 'Aviation',
+                openings: '1-2',
+                qualification: 'MBA/BBA in HR',
+                skills: ['HR Operations', 'MS Office', 'Employee Records', 'Onboarding', 'Communication', 'Documentation'],
+                applyUrl: 'https://internshala.com/internship/detail/human-resources-hr-internship-in-mumbai-at-air-india-sats-airport-services-private-limited1769672237',
+                gradient: 'linear-gradient(135deg, #f97316, #ea580c)',
+                description: `
+                    <p><strong>About Air India SATS:</strong></p>
+                    <p>Air India SATS Airport Services is a joint venture providing ground handling services at major airports across India, serving numerous domestic and international airlines.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Support HR team in day-to-day operations</li>
+                        <li>Maintain employee records and databases</li>
+                        <li>Assist with onboarding and orientation processes</li>
+                        <li>Help with attendance and leave management</li>
+                        <li>Prepare HR reports and documentation</li>
+                        <li>Coordinate employee engagement activities</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing or completed MBA/BBA in HR</li>
+                        <li>Strong proficiency in MS Office (Excel, Word, PowerPoint)</li>
+                        <li>Good communication skills in English and Hindi</li>
+                        <li>Attention to detail and organizational skills</li>
+                        <li>Interest in aviation industry is a plus</li>
+                    </ul>
+                `
+            },
+            'marriott-guest': {
+                company: 'Marriott',
+                logo: 'M',
+                title: 'Guest Service Associate',
+                location: 'Multiple Cities',
+                experience: '0-3 Years',
+                type: 'Full-time',
+                salary: '₹2.5-4 LPA',
+                companyType: 'Hospitality',
+                openings: 'Multiple',
+                qualification: 'Any Graduate',
+                skills: ['Hospitality', 'Housekeeping', 'Customer Service', 'Communication', 'Team Work', 'Attention to Detail'],
+                applyUrl: 'https://www.naukri.com/job-listings-guest-service-associate-housekeeping-marriott-mumbai-indore-new-delhi-pune-chennai-ahmedabad-bengaluru-0-to-3-years-280126502256',
+                gradient: 'linear-gradient(135deg, #a855f7, #9333ea)',
+                description: `
+                    <p><strong>About Marriott:</strong></p>
+                    <p>Marriott International is the world's largest hotel company with a portfolio of more than 8,000 properties across 139 countries and territories.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Ensure guest rooms and public areas are clean and well-maintained</li>
+                        <li>Respond promptly to guest requests and inquiries</li>
+                        <li>Follow Marriott's standards for cleanliness and service excellence</li>
+                        <li>Report maintenance issues and guest feedback</li>
+                        <li>Collaborate with team members to ensure smooth operations</li>
+                        <li>Maintain inventory of supplies and equipment</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>High school diploma or equivalent</li>
+                        <li>Previous experience in hospitality preferred</li>
+                        <li>Good communication skills</li>
+                        <li>Physical stamina for active work</li>
+                        <li>Positive attitude and guest-focused mindset</li>
+                    </ul>
+                `
+            },
+            'amazon-sde': {
+                company: 'Amazon',
+                logo: 'A',
+                title: 'Software Dev Engineer I',
+                location: 'India',
+                experience: 'Fresher (2026 Batch)',
+                type: 'Full-time',
+                salary: '₹20-30 LPA',
+                companyType: 'E-Commerce/Tech',
+                openings: 'Multiple',
+                qualification: 'B.Tech/B.E.',
+                skills: ['DSA', 'AWS', 'Java', 'Python', 'System Design', 'Problem Solving', 'OOP'],
+                applyUrl: 'https://www.amazon.jobs/en/jobs/3100855/software-dev-engineer-i-amazon-university-talent-acquisition?cmpid=SPLICX0248M&ss=paid',
+                gradient: 'linear-gradient(135deg, #ff9900, #f59e0b)',
+                description: `
+                    <p><strong>About Amazon:</strong></p>
+                    <p>Amazon is guided by four principles: customer obsession rather than competitor focus, passion for invention, commitment to operational excellence, and long-term thinking.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Design and develop scalable software solutions</li>
+                        <li>Write clean, maintainable, and efficient code</li>
+                        <li>Collaborate with cross-functional teams</li>
+                        <li>Participate in code reviews and design discussions</li>
+                        <li>Debug and troubleshoot production issues</li>
+                        <li>Work with AWS services and cloud technologies</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>B.Tech/B.E. in Computer Science or related field (2026 batch)</li>
+                        <li>Strong proficiency in Data Structures and Algorithms</li>
+                        <li>Experience with one or more programming languages (Java, Python, C++)</li>
+                        <li>Understanding of Object-Oriented Programming</li>
+                        <li>Excellent problem-solving skills</li>
+                    </ul>
+                `
+            },
+            'bynd-ai': {
+                company: 'Bynd',
+                logo: 'B',
+                title: 'AI Engineering Intern',
+                location: 'Gurugram',
+                experience: 'Fresher (2024-2026)',
+                type: 'Internship',
+                salary: 'Competitive Stipend',
+                companyType: 'AI/Tech Startup',
+                openings: '2-4',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['AI/ML', 'Python', 'Deep Learning', 'TensorFlow', 'PyTorch', 'NLP', 'Computer Vision'],
+                applyUrl: 'https://www.linkedin.com/jobs/view/4354764843',
+                gradient: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                description: `
+                    <p><strong>About Bynd:</strong></p>
+                    <p>Bynd is an innovative AI company focused on building cutting-edge artificial intelligence solutions for businesses.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and implement AI/ML models</li>
+                        <li>Work on NLP and Computer Vision projects</li>
+                        <li>Collaborate with senior engineers on research</li>
+                        <li>Optimize models for production deployment</li>
+                        <li>Document experiments and results</li>
+                        <li>Stay updated with latest AI research</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing B.Tech/M.Tech in CS/IT/AI/ML</li>
+                        <li>Strong Python programming skills</li>
+                        <li>Experience with ML frameworks (TensorFlow/PyTorch)</li>
+                        <li>Understanding of Deep Learning concepts</li>
+                        <li>Good mathematical foundation</li>
+                    </ul>
+                `
+            },
+            'tower-research': {
+                company: 'Tower Research Capital',
+                logo: 'T',
+                title: 'Core Engineering Intern',
+                location: 'Gurugram',
+                experience: 'Fresher (2025-2026)',
+                type: 'Internship',
+                salary: 'Competitive Stipend',
+                companyType: 'Quantitative Trading',
+                openings: '2-3',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['C++', 'Low Latency', 'Finance', 'System Programming', 'Linux', 'Data Structures', 'Algorithms'],
+                applyUrl: 'https://app.greenhouse.io/embed/job_app?token=6903711&gh_src=be8ebc4b1&source=LinkedIn',
+                gradient: 'linear-gradient(135deg, #1e3a8a, #1e40af)',
+                description: `
+                    <p><strong>About Tower Research Capital:</strong></p>
+                    <p>Tower Research Capital is a leading quantitative trading firm that develops proprietary trading algorithms and systems.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop high-performance, low-latency systems</li>
+                        <li>Work on core trading infrastructure</li>
+                        <li>Optimize code for speed and efficiency</li>
+                        <li>Collaborate with quantitative researchers</li>
+                        <li>Debug and troubleshoot complex systems</li>
+                        <li>Write clean, well-documented code</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing B.Tech/M.Tech in CS/IT (2025-2026 batch)</li>
+                        <li>Strong C++ programming skills</li>
+                        <li>Excellent understanding of data structures and algorithms</li>
+                        <li>Knowledge of Linux/Unix systems</li>
+                        <li>Interest in quantitative finance</li>
+                    </ul>
+                `
+            },
+            'pipeshub-sdet': {
+                company: 'Pipeshub',
+                logo: 'P',
+                title: 'Python SDET Intern',
+                location: 'Bangalore',
+                experience: 'Fresher (2025-2026)',
+                type: 'Internship',
+                salary: 'Competitive Stipend',
+                companyType: 'Tech Startup',
+                openings: '2-3',
+                qualification: 'B.Tech/MCA',
+                skills: ['Python', 'Testing', 'Selenium', 'API Testing', 'Automation', 'Git', 'CI/CD'],
+                applyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScff3sPFB01e95N89XjBqYnfcZYpEAZtOGy6nr_ZPuwHGujug/viewform',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Pipeshub:</strong></p>
+                    <p>Pipeshub is a technology startup focused on building innovative software solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Write and maintain automated test scripts in Python</li>
+                        <li>Develop test frameworks and automation tools</li>
+                        <li>Perform API testing and validation</li>
+                        <li>Collaborate with developers on quality assurance</li>
+                        <li>Report and track bugs effectively</li>
+                        <li>Participate in code reviews for test code</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing B.Tech/MCA (2025-2026 batch)</li>
+                        <li>Strong Python programming skills</li>
+                        <li>Knowledge of testing frameworks (Selenium, pytest)</li>
+                        <li>Understanding of software testing concepts</li>
+                        <li>Familiarity with Git and CI/CD</li>
+                    </ul>
+                `
+            },
+            'agule-ai': {
+                company: 'Agule AI',
+                logo: 'A',
+                title: 'Software Engineer Intern',
+                location: 'Pune',
+                experience: 'Fresher (2025-2026)',
+                type: 'Internship',
+                salary: 'Competitive Stipend',
+                companyType: 'AI Startup',
+                openings: '2-3',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['AI', 'Software Development', 'Python', 'Machine Learning', 'Problem Solving'],
+                applyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdRX0gOrQRtBrAFp_Po3gSOhKNUuooTgx9FoPO62mgB2pkhFA/viewform?usp=dialog',
+                gradient: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                description: `
+                    <p><strong>About Agule AI:</strong></p>
+                    <p>Agule AI is an innovative AI startup focused on developing cutting-edge artificial intelligence solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and maintain software applications</li>
+                        <li>Work on AI/ML integration projects</li>
+                        <li>Collaborate with the engineering team</li>
+                        <li>Write clean and efficient code</li>
+                        <li>Participate in code reviews</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing B.Tech/M.Tech in CS/IT (2025-2026)</li>
+                        <li>Strong programming fundamentals</li>
+                        <li>Interest in AI and machine learning</li>
+                        <li>Good problem-solving skills</li>
+                    </ul>
+                `
+            },
+            'kriate-uiux': {
+                company: 'Kriate',
+                logo: 'K',
+                title: 'UI/UX Designer Intern',
+                location: 'Remote',
+                experience: 'Fresher (2025-2027)',
+                type: 'Internship',
+                salary: '₹20K/month',
+                companyType: 'Design Agency',
+                openings: '2-3',
+                qualification: 'Any Graduate',
+                skills: ['Figma', 'UI/UX', 'Adobe XD', 'Prototyping', 'User Research', 'Wireframing'],
+                applyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdpycjC9pfBf9L-yFrGrFU5lnrq30e-HFP69LRmrpQlXCDsQg/viewform',
+                gradient: 'linear-gradient(135deg, #ec4899, #db2777)',
+                description: `
+                    <p><strong>About Kriate:</strong></p>
+                    <p>Kriate is a creative design agency specializing in UI/UX design and digital experiences.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Create user-centered designs and prototypes</li>
+                        <li>Develop wireframes and mockups</li>
+                        <li>Conduct user research and testing</li>
+                        <li>Collaborate with development team</li>
+                        <li>Maintain design consistency across products</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Proficiency in Figma and Adobe XD</li>
+                        <li>Understanding of UI/UX principles</li>
+                        <li>Portfolio of design work</li>
+                        <li>Creative mindset</li>
+                    </ul>
+                `
+            },
+            'csat-backend': {
+                company: 'CSAT Systems',
+                logo: 'C',
+                title: 'Backend Engineering Intern',
+                location: 'Remote',
+                experience: 'Fresher (2025-2027)',
+                type: 'Internship',
+                salary: '₹30K/month',
+                companyType: 'Tech Company',
+                openings: '1-2',
+                qualification: 'B.Tech/MCA',
+                skills: ['Node.js', 'TypeScript', 'Backend Development', 'APIs', 'Databases', 'Git'],
+                applyUrl: 'mailto:abhaya@csatcloud.com?subject=Application for Backend Engineering Intern',
+                gradient: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                description: `
+                    <p><strong>About CSAT Systems:</strong></p>
+                    <p>CSAT Systems is a technology company providing cloud-based solutions and services.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop backend services using Node.js and TypeScript</li>
+                        <li>Design and implement RESTful APIs</li>
+                        <li>Work with databases and data models</li>
+                        <li>Write clean, maintainable code</li>
+                        <li>Collaborate with frontend developers</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Knowledge of Node.js and TypeScript</li>
+                        <li>Understanding of backend architecture</li>
+                        <li>Familiarity with databases (SQL/NoSQL)</li>
+                        <li>Problem-solving abilities</li>
+                    </ul>
+                `
+            },
+            'universal-tech': {
+                company: 'Universal Tech',
+                logo: 'UT',
+                title: 'Software Developer - Full Stack',
+                location: 'Remote (WFH)',
+                experience: '2+ Years',
+                type: 'Full-time',
+                salary: 'Competitive',
+                companyType: 'IT Services',
+                openings: 'Multiple',
+                qualification: 'B.Tech/MCA',
+                skills: ['PHP', 'React.js', 'Full Stack', 'MySQL', 'JavaScript', 'HTML/CSS'],
+                applyUrl: 'https://in.indeed.com/jobs?q=software+developer&l=Remote',
+                gradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                description: `
+                    <p><strong>About Universal Tech:</strong></p>
+                    <p>Universal Tech is an IT services company providing software development solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop full-stack web applications</li>
+                        <li>Work with PHP backend and React.js frontend</li>
+                        <li>Design and implement database schemas</li>
+                        <li>Collaborate with cross-functional teams</li>
+                        <li>Maintain and improve existing applications</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>2+ years of experience in full-stack development</li>
+                        <li>Proficiency in PHP and React.js</li>
+                        <li>Experience with MySQL databases</li>
+                        <li>Strong JavaScript skills</li>
+                    </ul>
+                `
+            },
+            'sfj-frontend': {
+                company: 'SFJ Business Solutions',
+                logo: 'SFJ',
+                title: 'Frontend Developer',
+                location: 'Remote',
+                experience: 'Experienced',
+                type: 'Full-time',
+                salary: '₹80K/month',
+                companyType: 'IT Solutions',
+                openings: '1-2',
+                qualification: 'B.Tech/MCA',
+                skills: ['React', 'Angular', 'Node.js', 'JavaScript', 'TypeScript', 'CSS'],
+                applyUrl: 'https://in.indeed.com/jobs?q=frontend+developer&l=Remote',
+                gradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                description: `
+                    <p><strong>About SFJ Business Solutions:</strong></p>
+                    <p>SFJ Business Solutions provides IT solutions and consulting services to businesses.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Build responsive frontend applications</li>
+                        <li>Work with React or Angular frameworks</li>
+                        <li>Integrate with backend APIs</li>
+                        <li>Optimize performance and user experience</li>
+                        <li>Collaborate with design and backend teams</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Strong experience in React or Angular</li>
+                        <li>Proficiency in JavaScript/TypeScript</li>
+                        <li>Knowledge of Node.js</li>
+                        <li>Understanding of responsive design</li>
+                    </ul>
+                `
+            },
+            'branch-intern': {
+                company: 'Branch International',
+                logo: 'B',
+                title: 'Software Engineer Intern',
+                location: 'Remote',
+                experience: 'Fresher (2025-2026)',
+                type: 'Internship',
+                salary: 'Competitive Stipend',
+                companyType: 'FinTech',
+                openings: '2-4',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['FinTech', 'Software Development', 'Python', 'Java', 'APIs', 'Problem Solving'],
+                applyUrl: 'https://in.indeed.com/jobs?q=software+engineer+intern&l=Remote',
+                gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                description: `
+                    <p><strong>About Branch International:</strong></p>
+                    <p>Branch is a mobile-first financial services company providing loans and banking services to emerging markets.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop software solutions for fintech products</li>
+                        <li>Work on backend services and APIs</li>
+                        <li>Collaborate with engineering team</li>
+                        <li>Participate in agile development</li>
+                        <li>Write tests and documentation</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Pursuing B.Tech/M.Tech in CS/IT</li>
+                        <li>Strong programming skills in Python or Java</li>
+                        <li>Interest in fintech industry</li>
+                        <li>Good communication skills</li>
+                    </ul>
+                `
+            },
+            'mindmach-fullstack': {
+                company: 'MindMach Technologies',
+                logo: 'MM',
+                title: 'Full Stack Developer Intern',
+                location: 'Remote',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹2K-5K/month',
+                companyType: 'Tech Startup',
+                openings: '2-3',
+                qualification: 'Any Graduate',
+                skills: ['Full Stack', 'React', 'Node.js', 'JavaScript', 'MongoDB', 'HTML/CSS'],
+                applyUrl: 'https://unstop.com/internships/full-stack-developer-internship-mindmach-technologies-pvt-ltd-1631180',
+                gradient: 'linear-gradient(135deg, #ec4899, #db2777)',
+                description: `
+                    <p><strong>About MindMach Technologies:</strong></p>
+                    <p>MindMach Technologies is a startup focused on building innovative tech solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop full-stack web applications</li>
+                        <li>Work with React frontend and Node.js backend</li>
+                        <li>Integrate with MongoDB database</li>
+                        <li>Build responsive user interfaces</li>
+                        <li>Collaborate with the development team</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Basic knowledge of full-stack development</li>
+                        <li>Familiarity with React and Node.js</li>
+                        <li>Understanding of databases</li>
+                        <li>Eagerness to learn</li>
+                    </ul>
+                `
+            },
+            'hungama-genai': {
+                company: 'Hungama Digital Media',
+                logo: 'H',
+                title: 'AI & Gen AI Engineers Intern',
+                location: 'Mumbai/Noida',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹25K-50K/month',
+                companyType: 'Entertainment Tech',
+                openings: '3-5',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['AI/ML', 'Python', 'Gen AI', 'Deep Learning', 'NLP', 'TensorFlow', 'PyTorch'],
+                applyUrl: 'https://internshala.com/internship/detail/ai-gen-ai-engineers-to-shape-next-gen-entertainment-internship-in-multiple-locations-at-hungama-digital-media-entertainment-private-limited1769496080',
+                gradient: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                description: `
+                    <p><strong>About Hungama Digital Media:</strong></p>
+                    <p>Hungama is South Asia's leading digital entertainment company working on next-gen AI-powered entertainment experiences.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Work on Gen AI projects for entertainment</li>
+                        <li>Develop AI/ML models for content personalization</li>
+                        <li>Implement NLP solutions for content analysis</li>
+                        <li>Collaborate with product teams</li>
+                        <li>Research latest AI technologies</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Strong Python programming skills</li>
+                        <li>Experience with TensorFlow or PyTorch</li>
+                        <li>Knowledge of Gen AI and LLMs</li>
+                        <li>Understanding of deep learning</li>
+                    </ul>
+                `
+            },
+            'dicetek-fullstack': {
+                company: 'Dicetek LLC',
+                logo: 'D',
+                title: 'Full Stack Developer',
+                location: 'Remote',
+                experience: 'Experienced',
+                type: 'Full-time',
+                salary: 'Competitive',
+                companyType: 'IT Company',
+                openings: '1-2',
+                qualification: 'B.Tech/MCA',
+                skills: ['React', 'Node.js', 'Full Stack', 'JavaScript', 'MongoDB', 'REST APIs'],
+                applyUrl: 'https://in.indeed.com/jobs?q=full+stack+developer&l=Remote',
+                gradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                description: `
+                    <p><strong>About Dicetek LLC:</strong></p>
+                    <p>Dicetek is an IT company providing software development and consulting services.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop and maintain full-stack applications</li>
+                        <li>Build RESTful APIs and services</li>
+                        <li>Work with React and Node.js</li>
+                        <li>Collaborate with remote teams</li>
+                        <li>Ensure code quality and performance</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Experience in full-stack development</li>
+                        <li>Proficiency in React and Node.js</li>
+                        <li>Knowledge of MongoDB or similar databases</li>
+                        <li>Strong problem-solving skills</li>
+                    </ul>
+                `
+            },
+            'calipers-backend': {
+                company: 'Calipers Consulting',
+                logo: 'CC',
+                title: 'Backend Development Intern',
+                location: 'Hyderabad (Hybrid)',
+                experience: 'Fresher',
+                type: 'Internship (Part Time)',
+                salary: '₹30K-40K/month',
+                companyType: 'Consulting',
+                openings: '1-2',
+                qualification: 'B.Tech/MCA',
+                skills: ['Node.js', 'HTML/CSS', 'JavaScript', 'Backend Development', 'APIs', 'Git'],
+                applyUrl: 'https://internshala.com/internship/detail/part-time-front-end-development-internship-in-multiple-locations-at-calipers-consulting-private-limited1769503259',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Calipers Consulting:</strong></p>
+                    <p>Calipers Consulting is a consulting firm providing technology solutions to businesses.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Develop backend services using Node.js</li>
+                        <li>Create and maintain APIs</li>
+                        <li>Work on web development projects</li>
+                        <li>Collaborate with the development team</li>
+                        <li>Support frontend integration</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Knowledge of Node.js and JavaScript</li>
+                        <li>Basic understanding of HTML/CSS</li>
+                        <li>Willingness to work part-time</li>
+                        <li>Available for hybrid work in Hyderabad</li>
+                    </ul>
+                `
+            },
+            'cars24-sales': {
+                company: 'Cars24',
+                logo: 'C24',
+                title: 'Inside Sales Intern',
+                location: 'Multiple Cities',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹15K-20K/month + ₹3.5 LPA PPO',
+                companyType: 'Automotive Tech',
+                openings: 'Multiple',
+                qualification: 'Any Graduate',
+                skills: ['Sales', 'Communication', 'Customer Service', 'Negotiation', 'CRM', 'Target Achievement'],
+                applyUrl: 'https://internshala.com/internship/detail/inside-sales-internship-in-multiple-locations-at-cars24-services-private-limited1768569955',
+                gradient: 'linear-gradient(135deg, #f97316, #ea580c)',
+                description: `
+                    <p><strong>About Cars24:</strong></p>
+                    <p>Cars24 is India's leading tech-enabled used car platform, making car buying and selling simple and transparent.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Handle inbound and outbound sales calls</li>
+                        <li>Convert leads into successful sales</li>
+                        <li>Maintain customer relationships</li>
+                        <li>Achieve monthly sales targets</li>
+                        <li>Update CRM with customer interactions</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Excellent communication skills</li>
+                        <li>Passion for sales and customer service</li>
+                        <li>Target-oriented mindset</li>
+                        <li>Basic computer skills</li>
+                    </ul>
+                    
+                    <p><strong>Perks:</strong> PPO of ₹3.5 LPA based on performance!</p>
+                `
+            },
+            'turtlemint-marketing': {
+                company: 'Turtlemint',
+                logo: 'TM',
+                title: 'Digital Marketing Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹10K-15K/month + ₹6 LPA PPO',
+                companyType: 'InsurTech',
+                openings: '2-3',
+                qualification: 'Any Graduate',
+                skills: ['Digital Marketing', 'A/B Testing', 'Analytics', 'Content Marketing', 'Social Media', 'SEO'],
+                applyUrl: 'https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-turtlemint1768563908',
+                gradient: 'linear-gradient(135deg, #f97316, #ea580c)',
+                description: `
+                    <p><strong>About Turtlemint:</strong></p>
+                    <p>Turtlemint is India's largest insurtech platform helping people find the right insurance policies.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Plan and execute digital marketing campaigns</li>
+                        <li>Conduct A/B testing for optimization</li>
+                        <li>Analyze campaign performance metrics</li>
+                        <li>Create content for social media</li>
+                        <li>Support SEO and SEM initiatives</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Understanding of digital marketing concepts</li>
+                        <li>Analytical mindset</li>
+                        <li>Good communication skills</li>
+                        <li>Familiarity with marketing tools</li>
+                    </ul>
+                    
+                    <p><strong>Perks:</strong> PPO of ₹6 LPA based on performance!</p>
+                `
+            },
+            'audi-marketing': {
+                company: 'Audi Mumbai West',
+                logo: 'A',
+                title: 'Digital Marketing Intern',
+                location: 'Mumbai',
+                experience: 'Fresher',
+                type: 'Internship',
+                salary: '₹15K/month',
+                companyType: 'Automotive (Luxury)',
+                openings: '1-2',
+                qualification: 'Any Graduate',
+                skills: ['Google Ads', 'SEO/SEM', 'Digital Marketing', 'Social Media', 'Content Creation', 'Analytics'],
+                applyUrl: 'https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-audi-mumbai-west1769256350',
+                gradient: 'linear-gradient(135deg, #1e40af, #1e3a8a)',
+                description: `
+                    <p><strong>About Audi Mumbai West:</strong></p>
+                    <p>Audi is a premium German automobile brand known for luxury vehicles and cutting-edge technology.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Manage Google Ads campaigns</li>
+                        <li>Implement SEO/SEM strategies</li>
+                        <li>Create engaging social media content</li>
+                        <li>Track and analyze campaign performance</li>
+                        <li>Support digital marketing initiatives</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Knowledge of Google Ads and Analytics</li>
+                        <li>Understanding of SEO/SEM</li>
+                        <li>Creative content creation skills</li>
+                        <li>Interest in automotive industry</li>
+                    </ul>
+                `
+            },
+            'google-tse': {
+                company: 'Google',
+                logo: 'G',
+                title: 'Technical Solutions Engineer',
+                location: 'Pune, India',
+                experience: 'Experienced',
+                type: 'Full-time',
+                salary: '₹25-40 LPA',
+                companyType: 'Technology',
+                openings: 'Multiple',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['Databases', 'Cloud', 'Technical Support', 'Problem Solving', 'Communication', 'SQL'],
+                applyUrl: 'https://www.google.com/about/careers/applications/jobs/results/?location=India',
+                gradient: 'linear-gradient(135deg, #4285f4, #34a853)',
+                description: `
+                    <p><strong>About Google:</strong></p>
+                    <p>Google's mission is to organize the world's information and make it universally accessible and useful.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Provide technical solutions to enterprise clients</li>
+                        <li>Troubleshoot complex database and cloud issues</li>
+                        <li>Collaborate with engineering teams</li>
+                        <li>Create technical documentation</li>
+                        <li>Drive customer success initiatives</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Strong technical background in databases and cloud</li>
+                        <li>Excellent problem-solving skills</li>
+                        <li>Strong communication abilities</li>
+                        <li>Experience with SQL and data analysis</li>
+                    </ul>
+                `
+            },
+            'amazon-sde2': {
+                company: 'Amazon',
+                logo: 'A',
+                title: 'Software Dev Engineer II',
+                location: 'Bengaluru/Hyderabad',
+                experience: '3+ Years',
+                type: 'Full-time',
+                salary: '₹30-50 LPA',
+                companyType: 'E-Commerce/Tech',
+                openings: 'Multiple',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['Java', 'C++', 'AWS', 'System Design', 'Data Structures', 'Algorithms', 'Distributed Systems'],
+                applyUrl: 'https://www.amazon.jobs/en/search?offset=0&result_limit=10&sort=recent&country%5B%5D=IND&category%5B%5D=software-development',
+                gradient: 'linear-gradient(135deg, #ff9900, #f59e0b)',
+                description: `
+                    <p><strong>About Amazon:</strong></p>
+                    <p>Amazon is the world's largest e-commerce company, also leading in cloud computing with AWS.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Design and build scalable distributed systems</li>
+                        <li>Lead technical projects and mentor junior engineers</li>
+                        <li>Write high-quality, maintainable code</li>
+                        <li>Participate in system design and architecture</li>
+                        <li>Drive operational excellence</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>3+ years of software development experience</li>
+                        <li>Strong proficiency in Java or C++</li>
+                        <li>Experience with AWS services</li>
+                        <li>Strong system design skills</li>
+                        <li>Excellent problem-solving abilities</li>
+                    </ul>
+                `
+            },
+            'microsoft-engineering': {
+                company: 'Microsoft',
+                logo: 'M',
+                title: 'Multiple Positions - Engineering',
+                location: 'India',
+                experience: 'Various',
+                type: 'Full-time',
+                salary: '₹25-60 LPA',
+                companyType: 'Technology',
+                openings: 'Multiple',
+                qualification: 'B.Tech/M.Tech',
+                skills: ['Software Engineering', 'Cloud', 'Azure', 'C#', '.NET', 'Problem Solving', 'System Design'],
+                applyUrl: 'https://jobs.careers.microsoft.com/global/en/search?l=en_us&pg=1&pgSz=20&o=Recent&flt=true&ref=cms',
+                gradient: 'linear-gradient(135deg, #00a4ef, #7fba00)',
+                description: `
+                    <p><strong>About Microsoft:</strong></p>
+                    <p>Microsoft empowers every person and organization on the planet to achieve more through innovative technology solutions.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Design and develop software solutions</li>
+                        <li>Work on Azure cloud services</li>
+                        <li>Collaborate with global teams</li>
+                        <li>Drive innovation and technical excellence</li>
+                        <li>Mentor team members</li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Strong software engineering background</li>
+                        <li>Experience with cloud technologies</li>
+                        <li>Proficiency in C# or similar languages</li>
+                        <li>Problem-solving mindset</li>
+                    </ul>
+                `
+            },
+            'rrb-groupd': {
+                company: 'Railway Recruitment Board',
+                logo: 'RRB',
+                title: 'Group D - 22,000 Posts',
+                location: 'All India',
+                experience: '10th Pass',
+                type: 'Government',
+                salary: '₹18,000 - 56,900',
+                companyType: 'Government - Railways',
+                openings: '22,000+',
+                qualification: '10th Pass + ITI',
+                skills: ['Physical Fitness', 'Basic Education', 'ITI Trade', 'Aptitude', 'General Knowledge'],
+                applyUrl: 'https://www.rrbapply.gov.in/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Railway Recruitment Board:</strong></p>
+                    <p>Indian Railways is one of the world's largest rail networks, offering stable government careers.</p>
+                    
+                    <p><strong>Vacancies:</strong> 22,000+ posts across various railway zones</p>
+                    
+                    <p><strong>Job Roles:</strong></p>
+                    <ul>
+                        <li>Track Maintainer</li>
+                        <li>Helper/Assistant in various departments</li>
+                        <li>Pointsman</li>
+                        <li>Leverman</li>
+                        <li>Other Group D positions</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th Pass from recognized board</li>
+                        <li>ITI certificate in relevant trade</li>
+                        <li>Age: 18-33 years (relaxation for reserved categories)</li>
+                        <li>Physical fitness standards as per rules</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> March 02, 2026</p>
+                `
+            },
+            'rbi-attendant': {
+                company: 'Reserve Bank of India',
+                logo: 'RBI',
+                title: 'Office Attendant - 572 Posts',
+                location: 'All India',
+                experience: '10th Pass',
+                type: 'Government',
+                salary: '₹19,950 - 47,600',
+                companyType: 'Government - Banking',
+                openings: '572',
+                qualification: '10th Pass',
+                skills: ['Basic Computer', 'General Knowledge', 'Aptitude', 'Communication'],
+                applyUrl: 'https://ibpsonline.ibps.in/rbioajan26/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About RBI:</strong></p>
+                    <p>The Reserve Bank of India is India's central bank, responsible for monetary policy and currency management.</p>
+                    
+                    <p><strong>Vacancies:</strong> 572 posts across various RBI offices</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Office support and assistance</li>
+                        <li>Document handling and filing</li>
+                        <li>General office maintenance</li>
+                        <li>Assisting officers in routine tasks</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th Pass from recognized board</li>
+                        <li>Age: 18-25 years (relaxation for reserved categories)</li>
+                        <li>Local language proficiency</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 04, 2026</p>
+                `
+            },
+            'nabard-assistant': {
+                company: 'NABARD',
+                logo: 'NAB',
+                title: 'Development Assistant - 162 Posts',
+                location: 'All India',
+                experience: 'Graduate',
+                type: 'Government',
+                salary: '₹26,000 - 54,000',
+                companyType: 'Government - Banking',
+                openings: '162',
+                qualification: 'Graduate',
+                skills: ['Banking Knowledge', 'Computer Skills', 'Communication', 'Analytical Skills'],
+                applyUrl: 'https://ibpsonline.ibps.in/nabardajan26/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About NABARD:</strong></p>
+                    <p>NABARD is India's apex development bank for agriculture and rural development.</p>
+                    
+                    <p><strong>Vacancies:</strong> 162 posts across India</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Support rural development initiatives</li>
+                        <li>Assist in banking operations</li>
+                        <li>Documentation and reporting</li>
+                        <li>Field visits and surveys</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Bachelor's degree from recognized university</li>
+                        <li>Age: 21-28 years (relaxation for reserved categories)</li>
+                        <li>Computer proficiency</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 03, 2026</p>
+                `
+            },
+            'up-police': {
+                company: 'UP Police',
+                logo: 'UPP',
+                title: 'Constable - 32,679 Posts',
+                location: 'Uttar Pradesh',
+                experience: '12th Pass',
+                type: 'Government',
+                salary: '₹21,700 - 69,100',
+                companyType: 'Government - Police',
+                openings: '32,679',
+                qualification: '12th Pass',
+                skills: ['Physical Fitness', 'Basic Education', 'General Knowledge', 'Aptitude'],
+                applyUrl: 'https://uppbpb.gov.in/Aborneform/Home.aspx',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About UP Police:</strong></p>
+                    <p>Uttar Pradesh Police is one of India's largest state police forces, maintaining law and order in the most populous state.</p>
+                    
+                    <p><strong>Vacancies:</strong> 32,679 posts</p>
+                    
+                    <p><strong>Job Role:</strong></p>
+                    <ul>
+                        <li>Maintain law and order</li>
+                        <li>Patrol assigned areas</li>
+                        <li>Respond to emergency calls</li>
+                        <li>Investigate crimes</li>
+                        <li>Community policing</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>12th Pass from recognized board</li>
+                        <li>Age: 18-25 years (relaxation for reserved categories)</li>
+                        <li>Physical: Height, Chest, Running requirements</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> January 30, 2026</p>
+                `
+            },
+            'hssc-police': {
+                company: 'Haryana SSC',
+                logo: 'HSSC',
+                title: 'Police Constable - 5,500 Posts',
+                location: 'Haryana',
+                experience: '12th Pass',
+                type: 'Government',
+                salary: '₹21,700 - 69,100',
+                companyType: 'Government - Police',
+                openings: '5,500',
+                qualification: '12th Pass',
+                skills: ['Physical Fitness', 'Basic Education', 'General Knowledge', 'Aptitude'],
+                applyUrl: 'https://adv012026.hryssc.in/',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About HSSC:</strong></p>
+                    <p>Haryana Staff Selection Commission conducts recruitment for various state government positions.</p>
+                    
+                    <p><strong>Vacancies:</strong> 5,500 posts for Police Constable</p>
+                    
+                    <p><strong>Job Role:</strong></p>
+                    <ul>
+                        <li>Maintain law and order in Haryana</li>
+                        <li>Patrol assigned areas</li>
+                        <li>Respond to emergency situations</li>
+                        <li>Assist in crime investigation</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>12th Pass from recognized board</li>
+                        <li>Age: 18-25 years</li>
+                        <li>Physical fitness requirements</li>
+                        <li>Haryana domicile</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> January 31, 2026</p>
+                `
+            },
+            'isro-scientist': {
+                company: 'ISRO SAC',
+                logo: 'ISRO',
+                title: 'Scientist/Engineer - 49 Posts',
+                location: 'Gujarat',
+                experience: 'B.E./B.Tech/M.Sc/M.Tech',
+                type: 'Government',
+                salary: '₹56,100 - 1,77,500',
+                companyType: 'Government - Space Research',
+                openings: '49',
+                qualification: 'B.E./B.Tech/M.Sc/M.Tech',
+                skills: ['Engineering', 'Research', 'Scientific Analysis', 'Problem Solving', 'Innovation'],
+                applyUrl: 'https://www.sac.gov.in/Vyom/applicationform/apply',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About ISRO SAC:</strong></p>
+                    <p>Space Applications Centre (SAC) is a major research and development centre of ISRO located in Ahmedabad.</p>
+                    
+                    <p><strong>Vacancies:</strong> 49 posts for Scientist/Engineer</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Research and development in space technology</li>
+                        <li>Design and develop satellite systems</li>
+                        <li>Work on communication and navigation systems</li>
+                        <li>Conduct scientific experiments</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>B.E./B.Tech or M.Sc/M.Tech in relevant disciplines</li>
+                        <li>First class with minimum 65% marks</li>
+                        <li>Age limit as per ISRO norms</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 12, 2026</p>
+                `
+            },
+            'esic-imo': {
+                company: 'ESIC',
+                logo: 'ESIC',
+                title: 'Insurance Medical Officer - 225 Posts',
+                location: 'All India',
+                experience: 'MBBS',
+                type: 'Government',
+                salary: '₹56,100 - 1,77,500',
+                companyType: 'Government - Medical',
+                openings: '225',
+                qualification: 'MBBS',
+                skills: ['Medical Practice', 'Patient Care', 'Clinical Skills', 'Communication'],
+                applyUrl: 'https://www.esic.gov.in/esic-imo-recruitment-2026',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About ESIC:</strong></p>
+                    <p>Employees' State Insurance Corporation provides medical and cash benefits to insured workers.</p>
+                    
+                    <p><strong>Vacancies:</strong> 225 posts for Insurance Medical Officer</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Provide medical care to ESIC beneficiaries</li>
+                        <li>Conduct OPD and IPD services</li>
+                        <li>Issue medical certificates</li>
+                        <li>Participate in health awareness programs</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>MBBS degree from recognized institution</li>
+                        <li>Valid registration with Medical Council</li>
+                        <li>Age: Up to 35 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 17, 2026</p>
+                `
+            },
+            'navy-ssc': {
+                company: 'Indian Navy',
+                logo: 'NAVY',
+                title: 'SSC Officer - 260 Posts',
+                location: 'All India',
+                experience: 'B.E./B.Tech',
+                type: 'Government',
+                salary: '₹56,100 - 1,77,500',
+                companyType: 'Defence',
+                openings: '260',
+                qualification: 'B.E./B.Tech',
+                skills: ['Leadership', 'Technical Skills', 'Physical Fitness', 'Team Management'],
+                applyUrl: 'https://www.joinindiannavy.gov.in/en/apply-online.html',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Indian Navy:</strong></p>
+                    <p>The Indian Navy is the maritime branch of Indian Armed Forces, responsible for safeguarding India's maritime borders.</p>
+                    
+                    <p><strong>Vacancies:</strong> 260 posts for SSC Officers in various branches</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Lead naval operations and missions</li>
+                        <li>Technical management of naval systems</li>
+                        <li>Strategic planning and execution</li>
+                        <li>Training and mentoring subordinates</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>B.E./B.Tech in relevant engineering streams</li>
+                        <li>Age: 19-25 years (varies by entry)</li>
+                        <li>Physical and medical fitness</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 24, 2026</p>
+                `
+            },
+            'iaf-agniveer': {
+                company: 'Indian Air Force',
+                logo: 'IAF',
+                title: 'Agniveervayu Intake 01/2027',
+                location: 'All India',
+                experience: '10th/12th Pass',
+                type: 'Government',
+                salary: '₹30,000 - 40,000',
+                companyType: 'Defence',
+                openings: 'Multiple',
+                qualification: '10th/12th Pass',
+                skills: ['Physical Fitness', 'Technical Aptitude', 'Discipline', 'Team Work'],
+                applyUrl: 'https://agnipathvayu.cdac.in/AV/#/candidate-register',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About Indian Air Force:</strong></p>
+                    <p>The Indian Air Force is the air arm of Indian Armed Forces, providing air defence and aerial warfare capability.</p>
+                    
+                    <p><strong>Agniveer Scheme:</strong></p>
+                    <p>Agniveervayu is a recruitment scheme for young Indians to serve in the Air Force for 4 years.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Technical maintenance of aircraft</li>
+                        <li>Ground support operations</li>
+                        <li>Administrative duties</li>
+                        <li>Combat support roles</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th/12th Pass (depending on trade)</li>
+                        <li>Age: 17.5-21 years</li>
+                        <li>Physical and medical fitness</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 01, 2026</p>
+                `
+            },
+            'mp-apex-bank': {
+                company: 'MP Apex Bank',
+                logo: 'MPB',
+                title: 'Clerk, Officer - 2,076 Posts',
+                location: 'Madhya Pradesh',
+                experience: 'Graduate',
+                type: 'Government',
+                salary: '₹20,000 - 50,000',
+                companyType: 'Government - Banking',
+                openings: '2,076',
+                qualification: 'Graduate',
+                skills: ['Banking Operations', 'Computer Skills', 'Customer Service', 'Accounting'],
+                applyUrl: 'https://mponline.gov.in/Portal/Examinations/samvida/MPAB/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About MP Apex Bank:</strong></p>
+                    <p>Madhya Pradesh State Cooperative Bank (Apex Bank) provides banking services across Madhya Pradesh.</p>
+                    
+                    <p><strong>Vacancies:</strong> 2,076 posts for Clerk and Officer positions</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Handle banking transactions</li>
+                        <li>Customer service and support</li>
+                        <li>Maintain records and documentation</li>
+                        <li>Process loan applications</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate from recognized university</li>
+                        <li>Computer knowledge essential</li>
+                        <li>MP domicile required</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 05, 2026</p>
+                `
+            },
+            'supreme-court-clerk': {
+                company: 'Supreme Court of India',
+                logo: 'SCI',
+                title: 'Law Clerk - 90 Posts',
+                location: 'New Delhi',
+                experience: 'LLB',
+                type: 'Government',
+                salary: '₹70,000/month',
+                companyType: 'Government - Judiciary',
+                openings: '90',
+                qualification: 'LLB',
+                skills: ['Legal Research', 'Case Analysis', 'Legal Writing', 'Constitutional Law'],
+                applyUrl: 'https://main.sci.gov.in/recruitment',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Supreme Court:</strong></p>
+                    <p>The Supreme Court of India is the highest judicial forum and final court of appeal under the Constitution.</p>
+                    
+                    <p><strong>Vacancies:</strong> 90 posts for Law Clerks</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Assist Judges in legal research</li>
+                        <li>Prepare case summaries and briefs</li>
+                        <li>Analyze legal precedents</li>
+                        <li>Draft legal documents</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>LLB from recognized law school</li>
+                        <li>Strong academic record</li>
+                        <li>Excellent legal research skills</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 07, 2026</p>
+                `
+            },
+            'bssc-inter': {
+                company: 'Bihar SSC',
+                logo: 'BSSC',
+                title: 'Inter Level - 24,492 Posts',
+                location: 'Bihar',
+                experience: '12th Pass',
+                type: 'Government',
+                salary: '₹20,000 - 45,000',
+                companyType: 'Government - State',
+                openings: '24,492',
+                qualification: '12th Pass',
+                skills: ['Basic Computer', 'Typing', 'General Knowledge', 'Aptitude'],
+                applyUrl: 'https://bssc.bihar.gov.in/Vacancies',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About BSSC:</strong></p>
+                    <p>Bihar Staff Selection Commission conducts recruitment for various state government positions in Bihar.</p>
+                    
+                    <p><strong>Vacancies:</strong> 24,492 posts for various positions</p>
+                    
+                    <p><strong>Posts Include:</strong></p>
+                    <ul>
+                        <li>Lower Division Clerk (LDC)</li>
+                        <li>Stenographer</li>
+                        <li>Revenue Clerk</li>
+                        <li>Various ministerial posts</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>12th Pass from recognized board</li>
+                        <li>Age: 18-37 years</li>
+                        <li>Bihar domicile required</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> January 31, 2026</p>
+                `
+            },
+            'nhai-manager': {
+                company: 'NHAI',
+                logo: 'NHAI',
+                title: 'Deputy Manager - 40 Posts',
+                location: 'All India',
+                experience: 'B.E./B.Tech Civil',
+                type: 'Government',
+                salary: '₹56,100 - 1,77,500',
+                companyType: 'Government - Infrastructure',
+                openings: '40',
+                qualification: 'B.E./B.Tech Civil',
+                skills: ['Civil Engineering', 'Project Management', 'Highway Design', 'Construction Management'],
+                applyUrl: 'https://recruitment.nhai.gov.in/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About NHAI:</strong></p>
+                    <p>National Highways Authority of India is responsible for development, maintenance of national highways.</p>
+                    
+                    <p><strong>Vacancies:</strong> 40 posts for Deputy Manager (Technical)</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Supervise highway construction projects</li>
+                        <li>Quality control and assurance</li>
+                        <li>Project planning and monitoring</li>
+                        <li>Contract management</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>B.E./B.Tech in Civil Engineering</li>
+                        <li>Minimum 60% marks</li>
+                        <li>Age: Up to 30 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 09, 2026</p>
+                `
+            },
+            'sai-coach': {
+                company: 'Sports Authority of India',
+                logo: 'SAI',
+                title: 'Assistant Coach - 323 Posts',
+                location: 'All India',
+                experience: 'Diploma in Sports',
+                type: 'Government',
+                salary: '₹35,400 - 1,12,400',
+                companyType: 'Government - Sports',
+                openings: '323',
+                qualification: 'Diploma in Physical Education',
+                skills: ['Sports Coaching', 'Physical Training', 'Athlete Development', 'Sports Management'],
+                applyUrl: 'https://recruitment.sai.gov.in/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About SAI:</strong></p>
+                    <p>Sports Authority of India is the apex national body for sports promotion in India.</p>
+                    
+                    <p><strong>Vacancies:</strong> 323 posts for Assistant Coach in various sports</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Train and coach athletes</li>
+                        <li>Develop training programs</li>
+                        <li>Identify and nurture talent</li>
+                        <li>Prepare athletes for competitions</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Diploma in Sports Coaching</li>
+                        <li>Sports achievements at national/state level</li>
+                        <li>Age: Up to 40 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 15, 2026</p>
+                `
+            },
+            'uco-bank': {
+                company: 'UCO Bank',
+                logo: 'UCO',
+                title: 'Generalist & Specialist Officers - 173 Posts',
+                location: 'All India',
+                experience: 'Graduate',
+                type: 'Government',
+                salary: '₹48,170 - 85,920',
+                companyType: 'Government - Banking',
+                openings: '173',
+                qualification: 'Graduate',
+                skills: ['Banking Operations', 'Financial Analysis', 'Customer Service', 'Credit Assessment'],
+                applyUrl: 'https://www.ucobank.com/careers',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About UCO Bank:</strong></p>
+                    <p>UCO Bank is one of India's leading public sector banks with a strong presence across the country.</p>
+                    
+                    <p><strong>Vacancies:</strong> 173 posts for Generalist and Specialist Officers</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Handle banking operations and customer service</li>
+                        <li>Credit assessment and loan processing</li>
+                        <li>Financial analysis and reporting</li>
+                        <li>Branch management activities</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate from recognized university</li>
+                        <li>Valid IBPS Score for SO posts</li>
+                        <li>Age: 20-30 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 02, 2026</p>
+                `
+            },
+            'exim-bank-mt': {
+                company: 'Exim Bank of India',
+                logo: 'EXIM',
+                title: 'Management Trainee - 40 Posts',
+                location: 'All India',
+                experience: 'Graduate/MBA',
+                type: 'Government',
+                salary: '₹48,000 - 70,000',
+                companyType: 'Government - Banking',
+                openings: '40',
+                qualification: 'Graduate/MBA',
+                skills: ['Banking', 'Finance', 'International Trade', 'Analytical Skills'],
+                applyUrl: 'https://www.eximbankindia.in/careers',
+                gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                description: `
+                    <p><strong>About Exim Bank:</strong></p>
+                    <p>Export-Import Bank of India is a specialized financial institution for promoting foreign trade.</p>
+                    
+                    <p><strong>Vacancies:</strong> 40 posts for Management Trainee</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Trade finance and export credit</li>
+                        <li>International banking operations</li>
+                        <li>Credit analysis and appraisal</li>
+                        <li>Business development</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate/MBA in Finance/Banking</li>
+                        <li>Minimum 60% marks</li>
+                        <li>Age: Up to 28 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 01, 2026</p>
+                `
+            },
+            'central-bank': {
+                company: 'Central Bank of India',
+                logo: 'CBI',
+                title: 'FX & Marketing Officers - 350 Posts',
+                location: 'All India',
+                experience: 'Graduate/MBA',
+                type: 'Government',
+                salary: '₹48,170 - 85,920',
+                companyType: 'Government - Banking',
+                openings: '350',
+                qualification: 'Graduate/MBA',
+                skills: ['Forex Operations', 'Marketing', 'Sales', 'Customer Relations'],
+                applyUrl: 'https://www.centralbankofindia.co.in/en/Careers',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Central Bank of India:</strong></p>
+                    <p>Central Bank of India is a public sector bank with nationwide network serving millions of customers.</p>
+                    
+                    <p><strong>Vacancies:</strong> 350 posts for FX and Marketing Officers</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Handle foreign exchange operations</li>
+                        <li>Marketing bank products and services</li>
+                        <li>Customer acquisition and retention</li>
+                        <li>Trade finance documentation</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate/MBA in relevant field</li>
+                        <li>Age: 20-30 years</li>
+                        <li>Experience in banking preferred</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 03, 2026</p>
+                `
+            },
+            'sbi-specialist': {
+                company: 'State Bank of India',
+                logo: 'SBI',
+                title: 'Specialist Cadre Officers - 12 Posts',
+                location: 'All India',
+                experience: 'B.Tech/MCA',
+                type: 'Government',
+                salary: '₹63,840 - 1,00,920',
+                companyType: 'Government - Banking',
+                openings: '12',
+                qualification: 'B.Tech/MCA',
+                skills: ['IT Skills', 'System Administration', 'Database Management', 'Cybersecurity'],
+                applyUrl: 'https://bank.sbi/web/careers/current-openings',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About SBI:</strong></p>
+                    <p>State Bank of India is the largest public sector bank in India with global presence.</p>
+                    
+                    <p><strong>Vacancies:</strong> 12 posts for Specialist Cadre Officers (IT)</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>IT infrastructure management</li>
+                        <li>System security and compliance</li>
+                        <li>Database administration</li>
+                        <li>Technical project implementation</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>B.Tech/MCA in Computer Science/IT</li>
+                        <li>Relevant IT certifications</li>
+                        <li>Experience in IT domain</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 05, 2026</p>
+                `
+            },
+            'osssc-posts': {
+                company: 'Odisha SSSC',
+                logo: 'OSSSC',
+                title: 'RI, ARI, ICDS Supervisor - 3,250 Posts',
+                location: 'Odisha',
+                experience: 'Graduate/Diploma',
+                type: 'Government',
+                salary: '₹25,500 - 81,100',
+                companyType: 'Government - State',
+                openings: '3,250',
+                qualification: 'Graduate/Diploma',
+                skills: ['Administration', 'Revenue Management', 'Child Development', 'Public Relations'],
+                applyUrl: 'https://www.osssc.gov.in/Publicpages/Apply_Online.aspx',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About OSSSC:</strong></p>
+                    <p>Odisha Sub-ordinate Staff Selection Commission conducts recruitment for state government positions.</p>
+                    
+                    <p><strong>Vacancies:</strong> 3,250 posts for RI, ARI, and ICDS Supervisor</p>
+                    
+                    <p><strong>Posts Include:</strong></p>
+                    <ul>
+                        <li>Revenue Inspector (RI)</li>
+                        <li>Assistant Revenue Inspector (ARI)</li>
+                        <li>ICDS Supervisor</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate/Diploma from recognized institution</li>
+                        <li>Age: 21-38 years</li>
+                        <li>Odisha domicile required</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 07, 2026</p>
+                `
+            },
+            'bpssc-si': {
+                company: 'Bihar PSSC',
+                logo: 'BPSSC',
+                title: 'Sub Inspector (Prohibition) - 78 Posts',
+                location: 'Bihar',
+                experience: 'Graduate',
+                type: 'Government',
+                salary: '₹35,400 - 1,12,400',
+                companyType: 'Government - Police',
+                openings: '78',
+                qualification: 'Graduate',
+                skills: ['Law Enforcement', 'Investigation', 'Physical Fitness', 'Communication'],
+                applyUrl: 'https://www.bpssc.bih.nic.in/',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About BPSSC:</strong></p>
+                    <p>Bihar Police Sub-ordinate Services Commission recruits for police positions in Bihar.</p>
+                    
+                    <p><strong>Vacancies:</strong> 78 posts for Sub Inspector (Prohibition)</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Enforce prohibition laws in Bihar</li>
+                        <li>Conduct raids and investigations</li>
+                        <li>Maintain law and order</li>
+                        <li>Prepare legal documentation</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate from recognized university</li>
+                        <li>Age: 21-37 years</li>
+                        <li>Physical and medical fitness</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 27, 2026</p>
+                `
+            },
+            'hvf-technician': {
+                company: 'Heavy Vehicles Factory',
+                logo: 'HVF',
+                title: 'Junior Technician - 220 Posts',
+                location: 'Avadi, Tamil Nadu',
+                experience: 'ITI/Diploma',
+                type: 'Government',
+                salary: '₹19,900 - 63,200',
+                companyType: 'Government - Defence',
+                openings: '220',
+                qualification: 'ITI/Diploma',
+                skills: ['Technical Skills', 'Mechanical Work', 'Quality Control', 'Manufacturing'],
+                applyUrl: 'https://www.hvf.nic.in/Recruitment.aspx',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About HVF:</strong></p>
+                    <p>Heavy Vehicles Factory Avadi manufactures tanks and armoured vehicles for Indian Armed Forces.</p>
+                    
+                    <p><strong>Vacancies:</strong> 220 posts for Junior Technician</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Manufacturing and assembly work</li>
+                        <li>Quality inspection and testing</li>
+                        <li>Maintenance of equipment</li>
+                        <li>Technical documentation</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>ITI/Diploma in relevant trade</li>
+                        <li>Age: 18-27 years</li>
+                        <li>NCVT/SCVT certificate</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 13, 2026</p>
+                `
+            },
+            'yantra-apprentice': {
+                company: 'Yantra India Limited',
+                logo: 'YIL',
+                title: 'Trade Apprentices - 3,979 Posts',
+                location: 'All India',
+                experience: 'ITI/10th Pass',
+                type: 'Government',
+                salary: '₹8,000 - 12,000 (Stipend)',
+                companyType: 'Government - PSU',
+                openings: '3,979',
+                qualification: 'ITI/10th Pass',
+                skills: ['Technical Training', 'Manufacturing', 'Trade Skills', 'Industrial Work'],
+                applyUrl: 'https://yantraindialtd.co.in/career.php',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Yantra India Limited:</strong></p>
+                    <p>Yantra India Limited is a Defence PSU engaged in manufacturing of ammunition and defense equipment.</p>
+                    
+                    <p><strong>Vacancies:</strong> 3,979 posts for Trade Apprentices</p>
+                    
+                    <p><strong>Trades Available:</strong></p>
+                    <ul>
+                        <li>Fitter, Turner, Machinist</li>
+                        <li>Welder, Electrician</li>
+                        <li>COPA, Draughtsman</li>
+                        <li>Various other ITI trades</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th Pass / ITI in relevant trade</li>
+                        <li>Age: 18-25 years</li>
+                        <li>Registered on NAPS portal</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> March 03, 2026</p>
+                `
+            },
+            'exim-bank-dm': {
+                company: 'Exim Bank of India',
+                logo: 'EXIM',
+                title: 'Deputy Managers - 20 Posts',
+                location: 'All India',
+                experience: 'Post Graduate',
+                type: 'Government',
+                salary: '₹64,820 - 93,960',
+                companyType: 'Government - Banking',
+                openings: '20',
+                qualification: 'Post Graduate',
+                skills: ['Banking', 'Trade Finance', 'Credit Analysis', 'Risk Management'],
+                applyUrl: 'https://www.eximbankindia.in/careers',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Exim Bank:</strong></p>
+                    <p>Export-Import Bank of India facilitates and promotes India's international trade and investment.</p>
+                    
+                    <p><strong>Vacancies:</strong> 20 posts for Deputy Managers</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Project and trade finance</li>
+                        <li>Credit appraisal and risk assessment</li>
+                        <li>Policy research and analysis</li>
+                        <li>Business development</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Post Graduate in Finance/Economics/MBA</li>
+                        <li>Minimum 2 years experience</li>
+                        <li>Age: Up to 32 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 15, 2026</p>
+                `
+            },
+            'iocl-apprentice': {
+                company: 'IOCL Pipelines Division',
+                logo: 'IOCL',
+                title: 'Apprentices - 394 Posts',
+                location: 'All India',
+                experience: '10th/ITI',
+                type: 'Government',
+                salary: '₹9,000 - 12,000 (Stipend)',
+                companyType: 'Government - PSU',
+                openings: '394',
+                qualification: '10th/ITI',
+                skills: ['Technical Training', 'Pipeline Operations', 'Industrial Safety', 'Mechanical Work'],
+                applyUrl: 'https://iocl.com/pages/careers',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About IOCL:</strong></p>
+                    <p>Indian Oil Corporation Limited is India's largest oil refining and marketing company.</p>
+                    
+                    <p><strong>Vacancies:</strong> 394 posts for Apprentices in Pipelines Division</p>
+                    
+                    <p><strong>Trades Available:</strong></p>
+                    <ul>
+                        <li>Fitter, Electrician, Welder</li>
+                        <li>Instrument Mechanic</li>
+                        <li>Electronic Mechanic</li>
+                        <li>Computer Operator</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th Pass / ITI in relevant trade</li>
+                        <li>Age: 18-24 years</li>
+                        <li>Registered on NAPS portal</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 08, 2026</p>
+                `
+            },
+            'central-bank-fx': {
+                company: 'Central Bank of India',
+                logo: 'CBI',
+                title: 'Foreign Exchange Officer & Marketing Officer - 350 Posts',
+                location: 'All India',
+                experience: 'Graduate/MBA',
+                type: 'Government',
+                salary: '₹32,795 - 72,490',
+                companyType: 'Government - Banking',
+                openings: '350',
+                qualification: 'Graduate/MBA',
+                skills: ['Forex Trading', 'Marketing', 'Customer Relations', 'Banking Operations'],
+                applyUrl: 'https://centralbank.bank.in/en/career',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                description: `
+                    <p><strong>About Central Bank of India:</strong></p>
+                    <p>Central Bank of India is one of the oldest and largest commercial banks in India.</p>
+                    
+                    <p><strong>Vacancies:</strong> 350 posts for FX and Marketing Officers</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Foreign exchange operations</li>
+                        <li>Treasury and forex trading</li>
+                        <li>Marketing bank products</li>
+                        <li>Customer acquisition</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>Graduate/MBA in relevant field</li>
+                        <li>Age: 20-30 years</li>
+                        <li>Banking experience preferred</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 10, 2026</p>
+                `
+            },
+            'iaf-agniveer-2': {
+                company: 'Indian Air Force',
+                logo: 'IAF',
+                title: 'Agniveer Intake 01/2027',
+                location: 'All India',
+                experience: '10+2 PCM',
+                type: 'Government',
+                salary: '₹30,000 - 40,000',
+                companyType: 'Defence',
+                openings: 'Multiple',
+                qualification: '10+2 with PCM',
+                skills: ['Physical Fitness', 'Technical Aptitude', 'Discipline', 'Adaptability'],
+                applyUrl: 'https://iafrecruitment.edcil.co.in/',
+                gradient: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                description: `
+                    <p><strong>About Indian Air Force:</strong></p>
+                    <p>The Indian Air Force is the air arm of Indian Armed Forces, responsible for aerial warfare and air defense.</p>
+                    
+                    <p><strong>Agniveer Scheme:</strong></p>
+                    <p>Agniveer is a transformative initiative for youth to serve in Armed Forces for 4 years.</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Technical maintenance of aircraft</li>
+                        <li>Ground support operations</li>
+                        <li>Administrative and logistics support</li>
+                        <li>Combat and non-combat roles</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10+2 with Physics, Chemistry, Maths</li>
+                        <li>Age: 17.5-21 years</li>
+                        <li>Physical and medical fitness</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 20, 2026</p>
+                `
+            },
+            'yantra-apprentice-2': {
+                company: 'Yantra India Limited',
+                logo: 'YIL',
+                title: 'Trade Apprentices - 3,979 Posts',
+                location: 'All India',
+                experience: '10th/ITI',
+                type: 'Government',
+                salary: '₹9,000 - 15,000 (Stipend)',
+                companyType: 'Government - PSU',
+                openings: '3,979',
+                qualification: '10th/ITI',
+                skills: ['Technical Skills', 'Manufacturing', 'Trade Work', 'Industrial Training'],
+                applyUrl: 'https://www.apprenticeshipindia.gov.in/',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                description: `
+                    <p><strong>About Yantra India Limited:</strong></p>
+                    <p>Yantra India Limited is a Defence PSU manufacturing ammunition and defense equipment.</p>
+                    
+                    <p><strong>Vacancies:</strong> 3,979 posts for Trade Apprentices across India</p>
+                    
+                    <p><strong>Trades Available:</strong></p>
+                    <ul>
+                        <li>Fitter, Turner, Machinist</li>
+                        <li>Welder, Electrician</li>
+                        <li>COPA, Draughtsman</li>
+                        <li>Various ITI trades</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>10th Pass / ITI in relevant trade</li>
+                        <li>Age: 18-25 years</li>
+                        <li>Registered on Apprenticeship India portal</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 14, 2026</p>
+                `
+            },
+            'cochin-shipyard': {
+                company: 'Cochin Shipyard',
+                logo: 'CSL',
+                title: 'Workmen - 260 Posts',
+                location: 'Kerala',
+                experience: 'ITI/Diploma',
+                type: 'Government',
+                salary: '₹18,000 - 42,000',
+                companyType: 'Government - PSU',
+                openings: '260',
+                qualification: 'ITI/Diploma',
+                skills: ['Shipbuilding', 'Welding', 'Electrical Work', 'Mechanical Skills'],
+                applyUrl: 'https://cochinshipyard.in/careers',
+                gradient: 'linear-gradient(135deg, #059669, #047857)',
+                description: `
+                    <p><strong>About Cochin Shipyard:</strong></p>
+                    <p>Cochin Shipyard Limited is India's largest shipbuilding and maintenance facility.</p>
+                    
+                    <p><strong>Vacancies:</strong> 260 posts for Workmen in various trades</p>
+                    
+                    <p><strong>Trades Available:</strong></p>
+                    <ul>
+                        <li>Welder, Fitter, Electrician</li>
+                        <li>Machinist, Painter</li>
+                        <li>Pipe Fitter, Rigger</li>
+                        <li>Electronics Mechanic</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>ITI/Diploma in relevant trade</li>
+                        <li>NCVT/SCVT certificate</li>
+                        <li>Age: 18-30 years</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 06, 2026</p>
+                `
+            },
+            'assam-forest-guard': {
+                company: 'Assam Police',
+                logo: 'AP',
+                title: 'Forest Guard - 2,972 Posts',
+                location: 'Assam',
+                experience: '12th Pass',
+                type: 'Government',
+                salary: '₹22,000 - 70,000',
+                companyType: 'Government - Police',
+                openings: '2,972',
+                qualification: '12th Pass',
+                skills: ['Physical Fitness', 'Forest Knowledge', 'Wildlife Protection', 'Patrolling'],
+                applyUrl: 'https://slprbassam.in/',
+                gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                description: `
+                    <p><strong>About Assam Police:</strong></p>
+                    <p>Assam Police is responsible for law enforcement in the state of Assam, including forest protection.</p>
+                    
+                    <p><strong>Vacancies:</strong> 2,972 posts for Forest Guard</p>
+                    
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Patrol and protect forest areas</li>
+                        <li>Wildlife conservation</li>
+                        <li>Prevent illegal activities in forests</li>
+                        <li>Assist in forest management</li>
+                    </ul>
+                    
+                    <p><strong>Eligibility:</strong></p>
+                    <ul>
+                        <li>12th Pass from recognized board</li>
+                        <li>Age: 18-25 years</li>
+                        <li>Physical fitness requirements</li>
+                        <li>Assam domicile</li>
+                    </ul>
+                    
+                    <p><strong>Apply by:</strong> February 16, 2026</p>
+                `
+            }
+        };
+
+        // Get job ID from URL
+        function getJobId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || 'hungama-ai';
+        }
+
+        // Load job details
+        function loadJobDetails() {
+            const jobId = getJobId();
+            const job = jobsData[jobId];
+
+            if (!job) {
+                document.getElementById('jobTitle').textContent = 'Job Not Found';
+                document.getElementById('jobDescription').innerHTML = '<p>Sorry, this job listing could not be found. Please go back and try again.</p>';
+                return;
+            }
+
+            // Update header
+            document.getElementById('jobHeader').style.background = job.gradient;
+            document.getElementById('companyLogo').textContent = job.logo;
+            document.getElementById('companyName').innerHTML = `${job.company} <span class="new-badge">NEW</span>`;
+            document.getElementById('jobTitle').textContent = job.title;
+            document.getElementById('jobLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${job.location}`;
+            document.getElementById('jobExperience').innerHTML = `<i class="fas fa-briefcase"></i> ${job.experience}`;
+            document.getElementById('jobType').innerHTML = `<i class="fas fa-clock"></i> ${job.type}`;
+
+            // Update info cards
+            document.getElementById('salaryValue').textContent = job.salary;
+            const today = new Date();
+            document.getElementById('postedDate').textContent = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            // Update description
+            document.getElementById('jobDescription').innerHTML = job.description;
+
+            // Update skills
+            document.getElementById('skillsTags').innerHTML = job.skills.map(skill => 
+                `<span class="skill-tag">${skill}</span>`
+            ).join('');
+
+            // Update sidebar
+            document.getElementById('sidebarLogo').textContent = job.logo;
+            document.getElementById('sidebarLogo').style.background = job.gradient;
+            document.getElementById('sidebarCompanyName').textContent = job.company;
+            document.getElementById('companyType').textContent = job.companyType;
+            document.getElementById('openings').textContent = job.openings;
+            document.getElementById('qualification').textContent = job.qualification;
+
+            // Update apply buttons
+            document.getElementById('applyBtnHeader').href = job.applyUrl;
+            document.getElementById('applyBtnSidebar').href = job.applyUrl;
+
+            // Update page title
+            document.title = `${job.title} at ${job.company} - GetUpdated`;
+        }
+
+        // Share job
+        function shareJob() {
+            const jobId = getJobId();
+            const job = jobsData[jobId];
+            const url = window.location.href;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: `${job.title} at ${job.company}`,
+                    text: `Check out this job opportunity: ${job.title} at ${job.company}`,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Job link copied to clipboard!');
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadJobDetails);
+    </script>
+</body>
+</html>

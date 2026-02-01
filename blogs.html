@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blogs - GetUpdated</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .blogs-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        .blogs-page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .blogs-page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .blogs-page-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+        .all-blogs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .all-blogs-grid .blog-card {
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 768px) {
+            .all-blogs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#tech" class="nav-link">News</a>
+                <a href="index.html#jobs" class="nav-link">Jobs</a>
+                <a href="index.html#income" class="nav-link">Income Ideas</a>
+                <a href="index.html#offers" class="nav-link">Offers</a>
+                <a href="index.html#blogs" class="nav-link active">Blogs</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blogs Page -->
+    <section class="blogs-page">
+        <div class="container">
+            <a href="index.html#blogs" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="blogs-page-header">
+                <span class="section-badge">Read & Learn</span>
+                <h1>All <span class="gradient-text">Blogs</span></h1>
+                <p>Insights, tutorials, and stories to help you grow</p>
+            </div>
+            
+            <div class="all-blogs-grid">
+                <!-- ChatGPT vs Gemini vs Claude Blog - HOT -->
+                <a href="blogs/chatgpt-vs-gemini-vs-claude-2026.html" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600" alt="ChatGPT vs Gemini vs Claude AI Comparison" style="object-fit: cover;">
+                        <span class="blog-category" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">🤖 AI GUIDE</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 31, 2026</span>
+                            <span><i class="fas fa-fire" style="color: var(--danger);"></i> 78K+ Views!</span>
+                        </div>
+                        <h3>🤖 ChatGPT vs Gemini vs Claude 2026 - Which AI is Actually Best?</h3>
+                        <p>Honest comparison of the top 3 AI chatbots for coding, writing & research. Find out which one wins for YOUR use case!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- Union Budget 2026 Blog - TRENDING -->
+                <a href="blogs/union-budget-2026-india.html" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600" alt="Union Budget 2026 India" style="object-fit: cover;">
+                        <span class="blog-category" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🔥 TRENDING</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 31, 2026</span>
+                            <span><i class="fas fa-fire" style="color: var(--danger);"></i> HOT TOPIC!</span>
+                        </div>
+                        <h3>💰 Union Budget 2026 India - New Tax Slabs & Complete Analysis</h3>
+                        <p>Everything you need to know about Budget 2026 - new income tax slabs, relief for middle class, Section 80C changes, and what it means for YOU!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- VTU Results Blog -->
+                <a href="blogs/vtu-5th-sem-results.html" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="images/vtu-logo.png" alt="VTU Results" style="object-fit: contain; background: white; padding: 1rem;">
+                        <span class="blog-category">VTU Results</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 26, 2026</span>
+                            <span><i class="fas fa-fire" style="color: var(--danger);"></i> Just Released!</span>
+                        </div>
+                        <h3>🎓 VTU 5th Semester Results Dec 2025/Jan 2026 - Out Now!</h3>
+                        <p>Visvesvaraya Technological University has officially released the B.E/B.Tech 5th semester examination results. Check your results and calculate SGPA instantly!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- How to Crack Tech Interviews -->
+                <a href="#" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" alt="Tech Interview">
+                        <span class="blog-category">Career Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 24, 2026</span>
+                            <span><i class="far fa-clock"></i> 8 min read</span>
+                        </div>
+                        <h3>💼 How to Crack Tech Interviews at FAANG Companies</h3>
+                        <p>A comprehensive guide to preparing for technical interviews at top tech companies. From DSA to system design, we cover it all!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- Freelancing Guide -->
+                <a href="#" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400" alt="Freelancing">
+                        <span class="blog-category">Income Ideas</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 22, 2026</span>
+                            <span><i class="far fa-clock"></i> 10 min read</span>
+                        </div>
+                        <h3>💰 Complete Guide to Freelancing in 2026</h3>
+                        <p>Start your freelancing journey today! Learn how to find clients, set rates, and build a sustainable income stream.</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- AI Tools for Students -->
+                <a href="#" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400" alt="AI Tools">
+                        <span class="blog-category">Tech</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 20, 2026</span>
+                            <span><i class="far fa-clock"></i> 6 min read</span>
+                        </div>
+                        <h3>🤖 Top 10 AI Tools Every Student Should Use in 2026</h3>
+                        <p>Boost your productivity with these amazing AI tools for research, writing, coding, and learning.</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- Resume Tips -->
+                <a href="#" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400" alt="Resume">
+                        <span class="blog-category">Career Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 18, 2026</span>
+                            <span><i class="far fa-clock"></i> 7 min read</span>
+                        </div>
+                        <h3>📝 Build a Resume That Gets You Interviews</h3>
+                        <p>Learn the secrets of creating an ATS-friendly resume that stands out and gets you shortlisted!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- Side Hustles -->
+                <a href="#" class="blog-card clickable-card">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400" alt="Side Hustle">
+                        <span class="blog-category">Income Ideas</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> Jan 15, 2026</span>
+                            <span><i class="far fa-clock"></i> 9 min read</span>
+                        </div>
+                        <h3>🚀 15 Side Hustles You Can Start This Weekend</h3>
+                        <p>Looking for extra income? These side hustles require minimal investment and can be started immediately!</p>
+                        <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>

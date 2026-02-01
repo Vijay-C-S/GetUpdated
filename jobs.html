@@ -1,0 +1,2200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Jobs - GetUpdated</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .jobs-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        .jobs-page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .jobs-page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .jobs-page-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+        .all-jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .all-jobs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Clickable Job Cards */
+        .job-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        .job-card .apply-btn,
+        .job-card .view-job-btn {
+            position: relative;
+            z-index: 10;
+        }
+        .job-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .job-buttons .apply-btn {
+            flex: 1;
+        }
+        .view-job-btn {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            cursor: pointer;
+        }
+        .view-job-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#services" class="nav-link">Services</a>
+                <a href="index.html#tech" class="nav-link">News</a>
+                <a href="index.html#jobs" class="nav-link active">Jobs</a>
+                <a href="index.html#income" class="nav-link">Income Ideas</a>
+                <a href="index.html#offers" class="nav-link">Offers</a>
+                <a href="index.html#blogs" class="nav-link">Blogs</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Jobs Page -->
+    <section class="jobs-page">
+        <div class="container">
+            <a href="index.html#jobs" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="jobs-page-header">
+                <span class="section-badge">Career Growth</span>
+                <h1>All <span class="gradient-text">Job Opportunities</span></h1>
+                <p>Find your dream job from top companies worldwide</p>
+            </div>
+            
+            <div class="jobs-filter">
+                <button class="filter-btn active" data-filter="all">All Jobs</button>
+                <button class="filter-btn" data-filter="remote">Remote</button>
+                <button class="filter-btn" data-filter="fulltime">Full Time</button>
+                <button class="filter-btn" data-filter="internship">Internship</button>
+                <button class="filter-btn" data-filter="government">🏛️ Government</button>
+            </div>
+
+            <div class="all-jobs-grid">
+                <!-- ========== NEW JOBS - JAN 31, 2026 ========== -->
+                
+                <!-- Hungama AI/GenAI Engineers -->
+                <div class="job-card hot-job" data-type="internship" data-job="hungama-ai" style="border-color: #a855f7;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #a855f7, #9333ea);">🤖 AI/GenAI</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #9333ea;">H</div>
+                        <div class="job-info">
+                            <h4>Hungama Digital</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai/Noida</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">AI & Gen AI Engineer Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag" style="background: #f3e8ff; color: #9333ea;">₹25K-50K/month</span>
+                        <span class="tag">ML/AI</span>
+                        <span class="tag">6 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25K-50K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hungama-ai" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/ai-gen-ai-engineers-to-shape-next-gen-entertainment-internship-in-multiple-locations-at-hungama-digital-media-entertainment-private-limited1769496080" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #a855f7, #9333ea);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Kokuyo Camlin HR Intern -->
+                <div class="job-card hot-job" data-type="internship" data-job="kokuyo-hr" style="border-color: #f97316;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">🆕 TODAY</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #f97316;">KC</div>
+                        <div class="job-info">
+                            <h4>Kokuyo Camlin</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">HR Intern - HRIS & Recruitment</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">HR</span>
+                        <span class="tag">MS Excel</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=kokuyo-hr" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/hr-intern-internship-in-mumbai-at-kokuyo-camlin-limited1769768222" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f97316, #ea580c);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Amar Ujala Graphic Design -->
+                <div class="job-card hot-job" data-type="internship" data-job="amar-ujala-design" style="border-color: #ec4899;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ec4899, #db2777);">🎨 CREATIVE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #db2777;">AU</div>
+                        <div class="job-info">
+                            <h4>Amar Ujala</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Noida</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Graphic Design Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Photoshop</span>
+                        <span class="tag">Illustrator</span>
+                        <span class="tag">6 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=amar-ujala-design" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/graphic-design-internship-in-noida-at-amar-ujala1769767509" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ec4899, #db2777);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Plutonic Flutter Developer -->
+                <div class="job-card hot-job" data-type="internship" data-job="plutonic-flutter" style="border-color: #0ea5e9;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">📱 MOBILE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0284c7;">P</div>
+                        <div class="job-info">
+                            <h4>Plutonic Services</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Noida (Hybrid)</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Flutter Development Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Flutter/Dart</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">REST API</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 10K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=plutonic-flutter" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/flutter-development-internship-in-noida-at-plutonic-services-private-limited1769762297" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Maga Retail E-Commerce -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #22c55e;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">🛒 E-COM</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #16a34a;">MR</div>
+                        <div class="job-info">
+                            <h4>Maga Retail</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">E-Commerce Operations Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Shopify</span>
+                        <span class="tag">Amazon</span>
+                        <span class="tag">6 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 11K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=maga-retail" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/e-commerce-operations-internship-in-mumbai-at-maga-retail1769769315" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Audi Mumbai Digital Marketing -->
+                <div class="job-card hot-job" data-type="internship" data-job="audi-marketing" style="border-color: #1e3a8a;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #1e3a8a, #1e40af);">🚗 AUDI</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a8a;">A</div>
+                        <div class="job-info">
+                            <h4>Audi Mumbai West</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Digital Marketing Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Google Ads</span>
+                        <span class="tag">Meta Ads</span>
+                        <span class="tag">6 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=audi-marketing" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-audi-mumbai-west1769256350" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #1e3a8a, #1e40af);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- NoBroker Sales Executive -->
+                <div class="job-card hot-job" data-type="fulltime" data-job="nobroker-sales" style="border-color: #ef4444;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🏠 STARTUP</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #dc2626;">NB</div>
+                        <div class="job-info">
+                            <h4>NoBroker</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Pan India (Remote)</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Sales Executive</h3>
+                    <div class="job-tags">
+                        <span class="tag">1-3 Yrs</span>
+                        <span class="tag">Sales</span>
+                        <span class="tag">Remote</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 2.4 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=nobroker-sales" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://unstop.com/jobs/sales-executive-nobroker-1632765" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Zebronics Talent Acquisition -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #6366f1;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">🎧 TECH</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #4f46e5;">Z</div>
+                        <div class="job-info">
+                            <h4>Zebronics India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Chennai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Talent Acquisition Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2 Months</span>
+                        <span class="tag">HR/Recruitment</span>
+                        <span class="tag">MS Excel</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=zebronics-hr" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/talent-acquisition-internship-in-chennai-at-zebronics-india-private-limited1769665832" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- MBD Group HR Trainee -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #14b8a6;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">🆕 TODAY</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0d9488;">MBD</div>
+                        <div class="job-info">
+                            <h4>MBD Group</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Delhi</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">HR Trainee</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">Onboarding</span>
+                        <span class="tag">Employee Engagement</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 10K-12K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=mbd-hr" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/hr-trainee-internship-in-delhi-at-mbd-group1769758640" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Hungama Performance Marketing -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #f59e0b;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📈 MARKETING</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #d97706;">H</div>
+                        <div class="job-info">
+                            <h4>Hungama Digital</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Performance Marketing Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Meta Ads</span>
+                        <span class="tag">Google Ads</span>
+                        <span class="tag">3 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 5K-10K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hungama-marketing" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/performance-marketing-internship-in-mumbai-at-hungama-digital-media-entertainment-private-limited1769586162" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ========== PREVIOUS JOBS - JAN 29, 2026 ========== -->
+                
+                <!-- CIPLA Freshers Hiring -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #22c55e;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0d9488;">C</div>
+                        <div class="job-info">
+                            <h4>CIPLA Limited</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Pan India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Freshers & Experienced - Sales</h3>
+                    <div class="job-tags">
+                        <span class="tag" style="background: #ecfdf5; color: #059669;">For Women</span>
+                        <span class="tag">Pharma/Science</span>
+                        <span class="tag">0-2 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> Competitive</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=cipla-sales" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-cipla-limited-hiring-for-freshers-experienced-candidates-pan-india-cipla-bengaluru-delhi-ncr-mumbai-all-areas-0-to-2-years-290126023667" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Goldman Sachs Analyst -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #6366f1;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">⭐ MNC</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a8a;">GS</div>
+                        <div class="job-info">
+                            <h4>Goldman Sachs</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bengaluru</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Treasury IRR Analytics Analyst</h3>
+                    <div class="job-tags">
+                        <span class="tag">Finance</span>
+                        <span class="tag">Investment Banking</span>
+                        <span class="tag">0-2 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 15-25 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=goldman-sachs-analyst" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-corporate-treasury-irr-analytics-analyst-goldman-sachs-bengaluru-0-to-2-years-290126504850" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Scaler Talent Acquisition -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #f59e0b;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">💼 PPO ₹6LPA</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #f97316;">S</div>
+                        <div class="job-info">
+                            <h4>Scaler</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bangalore</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Talent Acquisition Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag" style="background: #fef3c7; color: #d97706;">₹6 LPA PPO</span>
+                        <span class="tag">Recruitment</span>
+                        <span class="tag">3 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20K-25K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=scaler-talent" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/talent-acquisition-internship-in-bangalore-at-scaler1769584884" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Amazon Investigation Specialist -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #ff9900;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ff9900, #f59e0b);">🔥 AMAZON</div>
+                    <div class="job-header">
+                        <div class="company-logo amazon">A</div>
+                        <div class="job-info">
+                            <h4>Amazon</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bengaluru</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Investigation Specialist - PQ Ops</h3>
+                    <div class="job-tags">
+                        <span class="tag">Analytics</span>
+                        <span class="tag">Risk Management</span>
+                        <span class="tag">0-6 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 8-15 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=amazon-investigation" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-investigation-specialist-investigation-specialist-pq-ops-amazon-development-centre-india-pvt-ltd-bengaluru-0-to-6-years-290126506643" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ff9900, #f59e0b);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Salesforce Network Security Engineer -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #0ea5e9;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">☁️ CLOUD</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0ea5e9;">SF</div>
+                        <div class="job-info">
+                            <h4>Salesforce</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bengaluru</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">DDoS Network Security Engineer</h3>
+                    <div class="job-tags">
+                        <span class="tag">Security</span>
+                        <span class="tag">TCP/HTTP</span>
+                        <span class="tag">0-5 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20-35 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=salesforce-security" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-ddos-network-security-engineer-mts-lmts-bangalore-salesforce-bengaluru-0-to-5-years-270126501340" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- PUMA Retail Sales -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #dc2626;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">👟 PUMA</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #dc2626;">P</div>
+                        <div class="job-info">
+                            <h4>PUMA</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bengaluru</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Retail Sales Associate & Supervisor</h3>
+                    <div class="job-tags">
+                        <span class="tag">Retail</span>
+                        <span class="tag">Sales</span>
+                        <span class="tag">0-4 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 2.5-5.5 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=puma-retail" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-retail-sales-associate-supervisor-puma-bengaluru-0-to-4-years-290126029351" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Deloitte AML/KYC Fresher -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #84cc16;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #84cc16, #65a30d);">🎓 FRESHER</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #16a34a;">D</div>
+                        <div class="job-info">
+                            <h4>Deloitte Consulting</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bangalore/Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">AML/KYC Analyst - Fresher</h3>
+                    <div class="job-tags">
+                        <span class="tag" style="background: #ecfdf5; color: #16a34a;">Contract</span>
+                        <span class="tag">Finance</span>
+                        <span class="tag">0 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 4-6 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=deloitte-aml" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-aml-kyc-fresher-pg-fresher-bangalore-mumbai-1-year-contract-deloitte-consulting-bengaluru-mumbai-all-areas-0-to-0-years-190126020128" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #84cc16, #65a30d);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Urban Company BD Sales -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #8b5cf6;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">🦄 UNICORN</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c3aed;">UC</div>
+                        <div class="job-info">
+                            <h4>Urban Company</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Nagpur</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Business Development Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">Operations</span>
+                        <span class="tag">Sales</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 18K-23K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=urban-company-bd" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-business-development-sales-internship-in-nagpur-at-urban-company1769158279" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- SportVot Video Editor -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #ec4899;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ec4899, #db2777);">🎬 CREATIVE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ec4899;">SV</div>
+                        <div class="job-info">
+                            <h4>SportVot</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Video Editing Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">Premiere Pro</span>
+                        <span class="tag">After Effects</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 10K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=sportvot-video" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/video-editing-making-internship-in-mumbai-at-sportvot1769668869" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ec4899, #db2777);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Fractal Analytics Imagineer -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #14b8a6;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">📊 DATA</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0d9488;">FA</div>
+                        <div class="job-info">
+                            <h4>Fractal Analytics</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Multiple Cities</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Imagineer Professional</h3>
+                    <div class="job-tags">
+                        <span class="tag">Python/C#</span>
+                        <span class="tag">Azure/Cloud</span>
+                        <span class="tag">0-5 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12-20 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=fractal-imagineer" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-imagineer-professional-fractal-analytics-ltd-noida-mumbai-pune-gurugram-chennai-bengaluru-0-to-5-years-290126505210" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Air India SATS HR Intern -->
+                <div class="job-card hot-job" data-type="internship" style="border-color: #f97316;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">✈️ AVIATION</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ea580c;">AI</div>
+                        <div class="job-info">
+                            <h4>Air India SATS</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">HR Operations Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">HR</span>
+                        <span class="tag">MS Office</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 10K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=airindia-hr" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/human-resources-hr-internship-in-mumbai-at-air-india-sats-airport-services-private-limited1769672237" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f97316, #ea580c);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Marriott Guest Service -->
+                <div class="job-card hot-job" data-type="fulltime" style="border-color: #a855f7;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #a855f7, #9333ea);">🏨 HOTEL</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #9333ea;">M</div>
+                        <div class="job-info">
+                            <h4>Marriott</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Multiple Cities</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Guest Service Associate</h3>
+                    <div class="job-tags">
+                        <span class="tag">Hospitality</span>
+                        <span class="tag">Housekeeping</span>
+                        <span class="tag">0-3 Yrs</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 2.5-4 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=marriott-guest" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.naukri.com/job-listings-guest-service-associate-housekeeping-marriott-mumbai-indore-new-delhi-pune-chennai-ahmedabad-bengaluru-0-to-3-years-280126502256" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #a855f7, #9333ea);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ========== END NEW JOBS ========== -->
+
+                <!-- VuNet Systems (Previous - Expired) -->
+                <div class="job-card" data-type="fulltime" style="opacity: 0.7;">
+                    <div class="job-badge" style="background: #9ca3af;">EXPIRED</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #16a34a;">V</div>
+                        <div class="job-info">
+                            <h4>VuNet Systems</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Virtual Drive</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Intern → Full Time</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #f3f4f6; color: #6b7280;">⏰ Closed Jan 26</span>
+                        <span class="tag">Batch 2026</span>
+                        <span class="tag">CS/IS/IT/EC/EEE</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 5 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <span class="apply-btn" style="background: #9ca3af; cursor: not-allowed;">Closed <i class="fas fa-times"></i></span>
+                </div>
+
+                <!-- Amazon SDE I -->
+                <div class="job-card hot-job" data-type="fulltime">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo amazon">A</div>
+                        <div class="job-info">
+                            <h4>Amazon</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Dev Engineer I</h3>
+                    <div class="job-tags">
+                        <span class="tag">Batch 2026</span>
+                        <span class="tag">DSA</span>
+                        <span class="tag">AWS</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20-30 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=amazon-sde" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://www.amazon.jobs/en/jobs/3100855/software-dev-engineer-i-amazon-university-talent-acquisition?cmpid=SPLICX0248M&ss=paid" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Bynd AI Engineering Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #6366f1;">B</div>
+                        <div class="job-info">
+                            <h4>Bynd</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Gurugram</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">AI Engineering Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2024-2026</span>
+                        <span class="tag">AI/ML</span>
+                        <span class="tag">Python</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-briefcase"></i> Internship</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=bynd-ai" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://www.linkedin.com/jobs/view/4354764843" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Tower Research Capital -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a8a;">T</div>
+                        <div class="job-info">
+                            <h4>Tower Research Capital</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Gurugram</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Core Engineering Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2026</span>
+                        <span class="tag">C++</span>
+                        <span class="tag">Finance</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-briefcase"></i> Internship</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=tower-research" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://app.greenhouse.io/embed/job_app?token=6903711&gh_src=be8ebc4b1&source=LinkedIn" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Pipeshub Python SDET Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #059669;">P</div>
+                        <div class="job-info">
+                            <h4>Pipeshub</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bangalore</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Python SDET Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2026</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">Testing</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-briefcase"></i> Internship</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=pipeshub-sdet" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScff3sPFB01e95N89XjBqYnfcZYpEAZtOGy6nr_ZPuwHGujug/viewform" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Agule AI Software Engineer Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c3aed;">A</div>
+                        <div class="job-info">
+                            <h4>Agule AI</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Pune</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Engineer Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2026</span>
+                        <span class="tag">AI</span>
+                        <span class="tag">Software Dev</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-briefcase"></i> Internship</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=agule-ai" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdRX0gOrQRtBrAFp_Po3gSOhKNUuooTgx9FoPO62mgB2pkhFA/viewform?usp=dialog" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Kriate UI/UX Designer Intern -->
+                <div class="job-card hot-job" data-type="remote">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ec4899;">K</div>
+                        <div class="job-info">
+                            <h4>Kriate</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">UI/UX Designer Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2027</span>
+                        <span class="tag">Figma</span>
+                        <span class="tag">UI/UX</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20K/month</span>
+                        <span class="job-type remote">Remote</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=kriate-uiux" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdpycjC9pfBf9L-yFrGrFU5lnrq30e-HFP69LRmrpQlXCDsQg/viewform" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- CSAT Systems Backend Engineering Intern -->
+                <div class="job-card hot-job" data-type="remote">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0ea5e9;">C</div>
+                        <div class="job-info">
+                            <h4>CSAT Systems</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Backend Engineering Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2027</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">TypeScript</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 30K/month</span>
+                        <span class="job-type remote">Remote</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=csat-backend" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="mailto:abhaya@csatcloud.com?subject=Application for Backend Engineering Intern" class="apply-btn">Apply Now <i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- ========== NEW REMOTE/FULLTIME/INTERNSHIP JOBS ========== -->
+                
+                <!-- Universal Tech Remote Software Developer -->
+                <div class="job-card hot-job" data-type="remote">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">💼 REMOTE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #4f46e5;">UT</div>
+                        <div class="job-info">
+                            <h4>Universal Tech</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote (WFH)</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Developer - Full Stack</h3>
+                    <div class="job-tags">
+                        <span class="tag">2+ Years Exp</span>
+                        <span class="tag">PHP</span>
+                        <span class="tag">React.js</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> Competitive</span>
+                        <span class="job-type remote">Remote</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=universal-tech" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://in.indeed.com/jobs?q=software+developer&l=Remote" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- SFJ Business Solutions Frontend Developer -->
+                <div class="job-card hot-job" data-type="remote">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">💼 REMOTE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0891b2;">SFJ</div>
+                        <div class="job-info">
+                            <h4>SFJ Business Solutions</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Frontend Developer</h3>
+                    <div class="job-tags">
+                        <span class="tag">React/Angular</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">Full Time</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 80K/month</span>
+                        <span class="job-type remote">Remote</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=sfj-frontend" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://in.indeed.com/jobs?q=frontend+developer&l=Remote" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Branch International Software Engineer Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #8b5cf6;">B</div>
+                        <div class="job-info">
+                            <h4>Branch International</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Engineer Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">2025-2026</span>
+                        <span class="tag">FinTech</span>
+                        <span class="tag">Remote</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-briefcase"></i> Internship</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=branch-intern" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://in.indeed.com/jobs?q=software+engineer+intern&l=Remote" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- MindMach Full Stack Developer Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ec4899;">MM</div>
+                        <div class="job-info">
+                            <h4>MindMach Technologies</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Full Stack Developer Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Freshers</span>
+                        <span class="tag">Full Stack</span>
+                        <span class="tag">13 days left</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 2K-5K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=mindmach-fullstack" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://unstop.com/internships/full-stack-developer-internship-mindmach-technologies-pvt-ltd-1631180" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Hungama AI Gen AI Engineers -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">🤖 AI</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #f59e0b;">H</div>
+                        <div class="job-info">
+                            <h4>Hungama Digital Media</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai/Noida</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">AI & Gen AI Engineers Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">AI/ML</span>
+                        <span class="tag">Python</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25K-50K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hungama-genai" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/ai-gen-ai-engineers-to-shape-next-gen-entertainment-internship-in-multiple-locations-at-hungama-digital-media-entertainment-private-limited1769496080" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Dicetek Full Stack Developer -->
+                <div class="job-card hot-job" data-type="remote">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">💼 REMOTE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0f766e;">D</div>
+                        <div class="job-info">
+                            <h4>Dicetek LLC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Full Stack Developer</h3>
+                    <div class="job-tags">
+                        <span class="tag">Permanent</span>
+                        <span class="tag">React</span>
+                        <span class="tag">Node.js</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> Competitive</span>
+                        <span class="job-type remote">Remote</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=dicetek-fullstack" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://in.indeed.com/jobs?q=full+stack+developer&l=Remote" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #22c55e, #16a34a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Calipers Consulting Backend Development -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge">🔥 NEW</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #059669;">CC</div>
+                        <div class="job-info">
+                            <h4>Calipers Consulting</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Hyderabad (Hybrid)</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Backend Development Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Part Time</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">HTML/CSS</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 30K-40K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons"><a href="job-detail.html?id=calipers-backend" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a><a href="https://internshala.com/internship/detail/part-time-front-end-development-internship-in-multiple-locations-at-calipers-consulting-private-limited1769503259" target="_blank" class="apply-btn">Apply Now <i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+
+                <!-- Cars24 Inside Sales Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">⭐ TOP</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">C24</div>
+                        <div class="job-info">
+                            <h4>Cars24</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Multiple Cities</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Inside Sales Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">Freshers</span>
+                        <span class="tag">₹3.5 LPA PPO</span>
+                        <span class="tag">2 Months</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 15K-20K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=cars24-sales" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/inside-sales-internship-in-multiple-locations-at-cars24-services-private-limited1768569955" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f97316, #ea580c);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Turtlemint Digital Marketing Intern -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">⭐ ₹6 LPA PPO</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #16a34a;">TM</div>
+                        <div class="job-info">
+                            <h4>Turtlemint</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Digital Marketing Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">Marketing</span>
+                        <span class="tag">A/B Testing</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 10K-15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=turtlemint-marketing" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-turtlemint1768563908" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f97316, #ea580c);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Audi Mumbai West Digital Marketing -->
+                <div class="job-card hot-job" data-type="internship">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #1e40af, #1e3a8a);">🚗 AUDI</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1f2937;">A</div>
+                        <div class="job-info">
+                            <h4>Audi Mumbai West</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Digital Marketing Intern</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">Google Ads</span>
+                        <span class="tag">SEO/SEM</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 15K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=audi-marketing" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://internshala.com/internship/detail/digital-marketing-internship-in-mumbai-at-audi-mumbai-west1769256350" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #1e40af, #1e3a8a);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Google Technical Solutions Engineer India -->
+                <div class="job-card hot-job" data-type="fulltime">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #4285f4, #34a853);">🔥 GOOGLE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #4285f4;">G</div>
+                        <div class="job-info">
+                            <h4>Google</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Pune, India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Technical Solutions Engineer</h3>
+                    <div class="job-tags">
+                        <span class="tag">Databases</span>
+                        <span class="tag">Cloud</span>
+                        <span class="tag">English</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25-40 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=google-tse" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.google.com/about/careers/applications/jobs/results/?location=India" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #4285f4, #34a853);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Amazon SDE II India -->
+                <div class="job-card hot-job" data-type="fulltime">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ff9900, #f59e0b);">🔥 AMAZON</div>
+                    <div class="job-header">
+                        <div class="company-logo amazon">A</div>
+                        <div class="job-info">
+                            <h4>Amazon</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bengaluru/Hyderabad</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Software Dev Engineer II</h3>
+                    <div class="job-tags">
+                        <span class="tag">3+ Years</span>
+                        <span class="tag">Java/C++</span>
+                        <span class="tag">AWS</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 30-50 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=amazon-sde2" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.amazon.jobs/en/search?offset=0&result_limit=10&sort=recent&country%5B%5D=IND&category%5B%5D=software-development" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ff9900, #f59e0b);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Microsoft Careers -->
+                <div class="job-card hot-job" data-type="fulltime">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #00a4ef, #7fba00);">🔥 MICROSOFT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #00a4ef;">M</div>
+                        <div class="job-info">
+                            <h4>Microsoft</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Multiple Positions - Engineering</h3>
+                    <div class="job-tags">
+                        <span class="tag">Software Eng</span>
+                        <span class="tag">Cloud</span>
+                        <span class="tag">Azure</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25-60 LPA</span>
+                        <span class="job-type fulltime">Full Time</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=microsoft-engineering" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://jobs.careers.microsoft.com/global/en/search?l=en_us&pg=1&pgSz=20&o=Recent&flt=true&ref=cms" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #00a4ef, #7fba00);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ========== GOVERNMENT JOBS ========== -->
+                
+                <!-- RRB Group D -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-03-02T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">RRB</div>
+                        <div class="job-info">
+                            <h4>Railway Recruitment Board</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Group D - 22,000 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Mar 02</span>
+                        <span class="tag">10th Pass</span>
+                        <span class="tag">ITI</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 18,000 - 56,900</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=rrb-groupd" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.rrbapply.gov.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- RBI Office Attendant -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-04T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a5f;">RBI</div>
+                        <div class="job-info">
+                            <h4>Reserve Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Office Attendant - 572 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 04</span>
+                        <span class="tag">10th Pass</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 19,950 - 47,600</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=rbi-attendant" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://ibpsonline.ibps.in/rbioajan26/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- NABARD Development Assistant -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-03T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #15803d;">NAB</div>
+                        <div class="job-info">
+                            <h4>NABARD</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Development Assistant - 162 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 03</span>
+                        <span class="tag">Graduate</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 26,000 - 54,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=nabard-assistant" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://ibpsonline.ibps.in/nabardajan26/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- UP Police Constable -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-01-30T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c2d12;">UPP</div>
+                        <div class="job-info">
+                            <h4>UP Police</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Uttar Pradesh</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Constable - 32,679 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Jan 30</span>
+                        <span class="tag">12th Pass</span>
+                        <span class="tag">Police</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 21,700 - 69,100</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=up-police" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://uppbpb.gov.in/Aborneform/Home.aspx" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- HSSC Haryana Police Constable -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-01-31T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #4338ca;">HSSC</div>
+                        <div class="job-info">
+                            <h4>Haryana SSC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Haryana</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Police Constable - 5,500 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Jan 31</span>
+                        <span class="tag">12th Pass</span>
+                        <span class="tag">Police</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 21,700 - 69,100</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hssc-police" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://adv012026.hryssc.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ISRO Scientist/Engineer -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-12T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0369a1;">ISRO</div>
+                        <div class="job-info">
+                            <h4>ISRO SAC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Gujarat</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Scientist/Engineer - 49 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 12</span>
+                        <span class="tag">B.E./B.Tech</span>
+                        <span class="tag">M.Sc/M.Tech</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=isro-scientist" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.sac.gov.in/Vyom/applicationform/apply" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ESIC Insurance Medical Officer -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-17T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #b91c1c;">ESIC</div>
+                        <div class="job-info">
+                            <h4>ESIC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Insurance Medical Officer - 225 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 17</span>
+                        <span class="tag">MBBS</span>
+                        <span class="tag">Medical</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=esic-imo" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.esic.gov.in/esic-imo-recruitment-2026" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Indian Navy SSC Officer -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-24T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ DEFENCE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a5f;">NAVY</div>
+                        <div class="job-info">
+                            <h4>Indian Navy</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">SSC Officer - 260 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 24</span>
+                        <span class="tag">B.E./B.Tech</span>
+                        <span class="tag">Defence</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=navy-ssc" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.joinindiannavy.gov.in/en/apply-online.html" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- IAF Agniveervayu -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-01T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0284c7;">IAF</div>
+                        <div class="job-info">
+                            <h4>Indian Air Force</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Agniveervayu Intake 01/2027</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 01</span>
+                        <span class="tag">10th/12th Pass</span>
+                        <span class="tag">Defence</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 30,000 - 40,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=iaf-agniveer" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://agnipathvayu.cdac.in/AV/#/candidate-register" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- MP Apex Bank Clerk/Officer -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-05T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c3aed;">MPB</div>
+                        <div class="job-info">
+                            <h4>MP Apex Bank</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Madhya Pradesh</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Clerk, Officer - 2,076 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 05</span>
+                        <span class="tag">Graduate</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20,000 - 50,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=mp-apex-bank" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://mponline.gov.in/Portal/Examinations/samvida/MPAB/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Supreme Court Law Clerk -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-07T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1f2937;">SCI</div>
+                        <div class="job-info">
+                            <h4>Supreme Court of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> New Delhi</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Law Clerk - 90 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 07</span>
+                        <span class="tag">LLB</span>
+                        <span class="tag">Legal</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 70,000/month</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=supreme-court-clerk" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://main.sci.gov.in/recruitment" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- BSSC Inter Level -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-01-31T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #dc2626;">BSSC</div>
+                        <div class="job-info">
+                            <h4>Bihar SSC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bihar</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Inter Level - 24,492 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Jan 31</span>
+                        <span class="tag">12th Pass</span>
+                        <span class="tag">Clerk/Steno</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 20,000 - 45,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=bssc-inter" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://bssc.bihar.gov.in/Vacancies" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- NHAI Deputy Manager -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-09T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ea580c;">NHAI</div>
+                        <div class="job-info">
+                            <h4>NHAI</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Deputy Manager - 40 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 09</span>
+                        <span class="tag">B.E./B.Tech</span>
+                        <span class="tag">Civil</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=nhai-manager" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://recruitment.nhai.gov.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Sports Authority of India Assistant Coach -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-15T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0891b2;">SAI</div>
+                        <div class="job-info">
+                            <h4>Sports Authority of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Assistant Coach - 323 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 15</span>
+                        <span class="tag">Diploma</span>
+                        <span class="tag">Sports</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 35,400 - 1,12,400</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=sai-coach" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://recruitment.sai.gov.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- UCO Bank Officers - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-02T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ BANK</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">UCO</div>
+                        <div class="job-info">
+                            <h4>UCO Bank</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Generalist & Specialist Officers - 173 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 02</span>
+                        <span class="tag">Graduate</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 48,170 - 85,920</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=uco-bank" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.ucobank.com/careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- HSSC Haryana Police Constable - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-01-31T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a8a;">HSSC</div>
+                        <div class="job-info">
+                            <h4>HSSC Haryana</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Haryana</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Police Constable - 5,500 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Jan 31</span>
+                        <span class="tag">12th Pass</span>
+                        <span class="tag">Police</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 21,700 - 69,100</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hssc-police" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://adv012026.hryssc.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Exim Bank Management Trainee - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-01T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🚨 URGENT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0369a1;">EXIM</div>
+                        <div class="job-info">
+                            <h4>Exim Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Management Trainee - 40 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 01</span>
+                        <span class="tag">Graduate/MBA</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 48,000 - 70,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=exim-bank-mt" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.eximbankindia.in/careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Central Bank of India Officers - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-03T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ BANK</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #dc2626;">CBI</div>
+                        <div class="job-info">
+                            <h4>Central Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">FX & Marketing Officers - 350 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 03</span>
+                        <span class="tag">Graduate/MBA</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 48,170 - 85,920</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=central-bank" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.centralbankofindia.co.in/en/Careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- SBI Specialist Officers - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-05T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ BANK</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">SBI</div>
+                        <div class="job-info">
+                            <h4>State Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Specialist Cadre Officers - 12 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 05</span>
+                        <span class="tag">B.Tech/MCA</span>
+                        <span class="tag">IT Specialist</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 63,840 - 1,00,920</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=sbi-specialist" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://bank.sbi/web/careers/current-openings" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- OSSSC Various Posts - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-07T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #ea580c;">OSSSC</div>
+                        <div class="job-info">
+                            <h4>Odisha SSSC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Odisha</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">RI, ARI, ICDS Supervisor - 3,250 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 07</span>
+                        <span class="tag">Graduate/Diploma</span>
+                        <span class="tag">State Govt</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25,500 - 81,100</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=osssc-posts" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.osssc.gov.in/Publicpages/Apply_Online.aspx" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- BPSSC Sub Inspector - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-27T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ POLICE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c2d12;">BPSSC</div>
+                        <div class="job-info">
+                            <h4>Bihar PSSC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Bihar</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Sub Inspector (Prohibition) - 78 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 27</span>
+                        <span class="tag">Graduate</span>
+                        <span class="tag">Police</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 35,400 - 1,12,400</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=bpssc-si" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.bpssc.bih.nic.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Heavy Vehicles Factory Avadi - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-13T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ DEFENCE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #166534;">HVF</div>
+                        <div class="job-info">
+                            <h4>Heavy Vehicles Factory</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Avadi, Tamil Nadu</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Junior Technician - 220 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 13</span>
+                        <span class="tag">ITI/Diploma</span>
+                        <span class="tag">Defence</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 19,900 - 63,200</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=hvf-technician" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.hvf.nic.in/Recruitment.aspx" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Yantra India Limited (YIL) - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-03-03T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ PSU</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0f766e;">YIL</div>
+                        <div class="job-info">
+                            <h4>Yantra India Limited</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Trade Apprentices - 3,979 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Mar 03</span>
+                        <span class="tag">ITI/10th Pass</span>
+                        <span class="tag">Apprentice</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 8,000 - 12,000 (Stipend)</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=yantra-apprentice" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://yantraindialtd.co.in/career.php" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- ISRO SAC Scientists - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-12T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ ISRO</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0ea5e9;">ISRO</div>
+                        <div class="job-info">
+                            <h4>ISRO SAC</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Ahmedabad</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Scientist/Engineer - 49 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 12</span>
+                        <span class="tag">B.Tech/M.Tech</span>
+                        <span class="tag">Space Research</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=isro-scientist" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.sac.gov.in/Vyom/applicationform/apply" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Exim Bank Deputy Managers - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-15T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ BANK</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0369a1;">EXIM</div>
+                        <div class="job-info">
+                            <h4>Exim Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Deputy Managers - 20 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 15</span>
+                        <span class="tag">Post Graduate</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 64,820 - 93,960</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=exim-bank-dm" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.eximbankindia.in/careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Central Bank of India Officers - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-10T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🔥 HOT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">CBI</div>
+                        <div class="job-info">
+                            <h4>Central Bank of India</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Foreign Exchange Officer & Marketing Officer - 350 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 10</span>
+                        <span class="tag">Graduate/MBA</span>
+                        <span class="tag">Banking</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 32,795 - 72,490</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=central-bank-fx" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://centralbank.bank.in/en/career" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Indian Navy SSC Officer - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-11T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">⚓ NAVY</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">IN</div>
+                        <div class="job-info">
+                            <h4>Indian Navy</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">SSC Officer - 260 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 11</span>
+                        <span class="tag">Graduate/B.Tech</span>
+                        <span class="tag">Defense</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 56,100 - 1,77,500</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=navy-ssc" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.joinindiannavy.gov.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- IAF Agniveer - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-20T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">✈️ AIR FORCE</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e3a8a;">IAF</div>
+                        <div class="job-info">
+                            <h4>Indian Air Force</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Agniveer Intake 01/2027</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 20</span>
+                        <span class="tag">10+2 PCM</span>
+                        <span class="tag">Defense</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 30,000 - 40,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=iaf-agniveer-2" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://iafrecruitment.edcil.co.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Yantra India Trade Apprentices - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-14T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🔥 HOT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #7c2d12;">YIL</div>
+                        <div class="job-info">
+                            <h4>Yantra India Limited</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Trade Apprentices - 3,979 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 14</span>
+                        <span class="tag">10th/ITI</span>
+                        <span class="tag">Apprentice</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 9,000 - 15,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=yantra-apprentice-2" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://www.apprenticeshipindia.gov.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- IOCL Pipelines Apprentices - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-08T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ PSU</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #0891b2;">IOCL</div>
+                        <div class="job-info">
+                            <h4>IOCL Pipelines Division</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Apprentices - 394 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 08</span>
+                        <span class="tag">10th/ITI</span>
+                        <span class="tag">Apprentice</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 9,000 - 12,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=iocl-apprentice" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://iocl.com/pages/careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Cochin Shipyard Workmen - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-06T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ PSU</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #1e40af;">CSL</div>
+                        <div class="job-info">
+                            <h4>Cochin Shipyard</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Kerala</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Workmen - 260 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #fef2f2; color: #ef4444;">⏰ Apply by Feb 06</span>
+                        <span class="tag">ITI/Diploma</span>
+                        <span class="tag">Technical</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 18,000 - 42,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=cochin-shipyard" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://cochinshipyard.in/careers" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <!-- Assam Police Forest Guard - NEW -->
+                <div class="job-card hot-job" data-type="government" data-deadline="2026-02-16T23:59:59">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🔥 HOT</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #15803d;">AP</div>
+                        <div class="job-info">
+                            <h4>Assam Police</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Assam</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">Forest Guard - 2,972 Posts</h3>
+                    <div class="job-tags">
+                        <span class="tag deadline-tag" style="background: #ecfdf5; color: #059669;">⏰ Apply by Feb 16</span>
+                        <span class="tag">12th Pass</span>
+                        <span class="tag">Police</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 22,000 - 70,000</span>
+                        <span class="job-type government" style="background: #059669;">Government</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=assam-forest-guard" class="view-job-btn"><i class="fas fa-eye"></i> View Job</a>
+                        <a href="https://slprbassam.in/" target="_blank" class="apply-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Make job cards clickable - navigate to detail page
+        document.addEventListener('DOMContentLoaded', function() {
+            const jobCards = document.querySelectorAll('.job-card[data-job]');
+            
+            jobCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't navigate if clicking on apply button, bookmark, or external links
+                    if (e.target.closest('.apply-btn') || 
+                        e.target.closest('.bookmark-btn') || 
+                        e.target.tagName === 'A') {
+                        return;
+                    }
+                    
+                    const jobId = this.dataset.job;
+                    if (jobId) {
+                        window.location.href = `job-detail.html?id=${jobId}`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
