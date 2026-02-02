@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,18 +27,18 @@
         .share-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
         .share-section h4 { margin-bottom: 1rem; }
         .share-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .share-btn { padding: 0.75rem 1.5rem; border-radius: var(--radius); display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: white; font-weight: 500; transition: transform 0.3s; white-space: nowrap; }
+        .share-btn { padding: 0.75rem 1.5rem; border-radius: var(--radius); display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: white; font-weight: 500; transition: transform 0.3s; white-space: nowrap;  min-width: 110px; }
         .share-btn:hover { transform: translateY(-2px); }
         .share-btn.twitter { background: #1da1f2; }
         .share-btn.linkedin { background: #0077b5; }
-        .share-btn.whatsapp { background: #25d366; }
+        .share-btn.whatsapp { background: #25d366; }        .share-btn i { font-size: 1.1rem; flex-shrink: 0; }        .share-btn span { white-space: nowrap; }
     </style>
 </head>
 <body>
     <nav class="navbar scrolled" id="navbar">
         <div class="nav-container">
             <a href="../index.html" class="logo">
-                <span class="logo-icon">??</span>
+                <span class="logo-icon"></span>
                 <span class="logo-text">Get<span class="highlight">Updated</span></span>
             </a>
             <div class="nav-menu" id="nav-menu">
@@ -155,9 +155,9 @@
                 <div class="share-section">
                     <h4>Share this article</h4>
                     <div class="share-buttons">
-                        <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+                        <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i><span>Twitter</span></a>
                         <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                        <a href="#" class="share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="#" class="share-btn whatsapp"><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a>
                     </div>
                 </div>
             </div>
@@ -167,7 +167,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
-                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ?? in India</p>
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with  in India</p>
             </div>
         </div>
     </footer>
@@ -176,6 +176,13 @@
     <script src="../script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
