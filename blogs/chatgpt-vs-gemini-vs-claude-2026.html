@@ -27,6 +27,7 @@
     <link rel="canonical" href="https://getupdated.in/blogs/chatgpt-vs-gemini-vs-claude-2026.html">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
     
     <!-- Schema Markup -->
     <script type="application/ld+json">
@@ -98,46 +99,18 @@
             line-height: 1.8;
         }
 
-        .header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f97316, #ea580c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-        .back-btn {
-            display: flex;
+        .back-link {
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: #94a3b8;
+            color: var(--primary);
             text-decoration: none;
-            transition: color 0.3s;
+            margin-bottom: 2rem;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
-
-        .back-btn:hover {
-            color: #f97316;
+        .back-link:hover {
+            gap: 0.75rem;
         }
 
         /* Hero */
@@ -735,15 +708,35 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <a href="../index.html" class="logo">GetUpdated</a>
-            <a href="../blogs.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i> All Blogs
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">Get<span class="highlight">Updated</span></span>
             </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="../index.html#home" class="nav-link">Home</a>
+                <a href="../index.html#services" class="nav-link">Services</a>
+                <a href="../index.html#tech" class="nav-link">News</a>
+                <a href="../index.html#jobs" class="nav-link">Jobs</a>
+                <a href="../index.html#income" class="nav-link">Income Ideas</a>
+                <a href="../index.html#offers" class="nav-link">Offers</a>
+                <a href="../index.html#blogs" class="nav-link active">Blogs</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Hero -->
     <section class="hero">
@@ -781,6 +774,10 @@
     <!-- Article -->
     <article class="article-container">
         
+        <a href="../blogs.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to All Blogs
+        </a>
+
         <!-- TOC -->
         <nav class="toc">
             <h3><i class="fas fa-list"></i> What's Inside</h3>
@@ -1290,12 +1287,18 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2026 GetUpdated. All rights reserved.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem;">
-            Last updated: January 2026 | AI landscape changes rapidly - we'll keep this updated!
-        </p>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 GetUpdated. All rights reserved. Made with ❤️ in India</p>
+            </div>
+        </div>
     </footer>
 
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="../script.js"></script>
     <script>
         function toggleFaq(element) {
             const faqItem = element.parentElement;
