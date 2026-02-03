@@ -44,11 +44,11 @@
     min-width: 0;
 }
 
-/* Sidebar */
+/* Sidebar - Non-sticky (scrolls with content like B2L News) */
 .blog-sidebar {
-    position: sticky;
-    top: 100px;
-    height: fit-content;
+    position: static;
+    top: auto;
+    height: auto;
 }
 
 .sidebar-widget {
@@ -102,11 +102,12 @@
     opacity: 0.8;
 }
 
-/* Sidebar Recent Posts */
+/* Sidebar Recent Posts - B2L News Style (large stacked layout) */
 .sidebar-post {
     display: flex;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
     border-bottom: 1px solid var(--blog-border);
     text-decoration: none;
 }
@@ -121,21 +122,20 @@
 }
 
 .sidebar-post img {
-    width: 80px;
-    height: 60px;
+    width: 100%;
+    height: 140px;
     object-fit: cover;
-    border-radius: 4px;
-    flex-shrink: 0;
+    border-radius: 6px;
 }
 
 .sidebar-post-content h4 {
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--blog-text);
     line-height: 1.4;
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
