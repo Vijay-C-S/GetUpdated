@@ -103,8 +103,19 @@
                 <h1>All <span class="gradient-text">Blogs</span></h1>
                 <p>Insights, tutorials, and stories to help you grow</p>
             </div>
+
+            <!-- Search Bar -->
+            <div class="search-container" style="margin-bottom: 2rem;">
+                <form class="search-form" id="blog-search-form" style="display: flex; gap: 0.5rem; max-width: 500px; margin: 0 auto;">
+                    <input type="text" name="q" id="search-input" class="search-input" placeholder="Search blogs..." style="flex: 1; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; background: var(--card-bg); color: var(--text);">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </form>
+                <p id="search-results-text" style="text-align: center; margin-top: 1rem; color: var(--text-muted); display: none;"></p>
+            </div>
             
-            <div class="all-blogs-grid">
+            <div class="all-blogs-grid" id="blogs-grid">
                 <!-- Post Budget 2026 Analysis - NEW -->
                 <a href="blogs/union-budget-2026-post-analysis.html" class="blog-card clickable-card">
                     <div class="blog-image">
@@ -201,6 +212,94 @@
     </button>
 
     <script src="script.js"></script>
+    <script>
+        // Blog Search Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const searchForm = document.getElementById('blog-search-form');
+            const blogsGrid = document.getElementById('blogs-grid');
+            const resultsText = document.getElementById('search-results-text');
+            const blogCards = blogsGrid.querySelectorAll('.blog-card');
+
+            // Get search query from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+
+            if (query) {
+                searchInput.value = query;
+                filterBlogs(query);
+            }
+
+            // Handle form submission
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchQuery = searchInput.value.trim();
+                
+                if (searchQuery) {
+                    // Update URL without reload
+                    const newUrl = window.location.pathname + '?q=' + encodeURIComponent(searchQuery);
+                    window.history.pushState({}, '', newUrl);
+                    filterBlogs(searchQuery);
+                } else {
+                    // Clear search
+                    window.history.pushState({}, '', window.location.pathname);
+                    showAllBlogs();
+                }
+            });
+
+            // Real-time search as user types
+            searchInput.addEventListener('input', function() {
+                const searchQuery = searchInput.value.trim();
+                if (searchQuery.length >= 2) {
+                    filterBlogs(searchQuery);
+                } else if (searchQuery.length === 0) {
+                    showAllBlogs();
+                }
+            });
+
+            function filterBlogs(query) {
+                const searchTerms = query.toLowerCase().split(' ');
+                let visibleCount = 0;
+
+                blogCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
+                    const category = card.querySelector('.blog-category') ? card.querySelector('.blog-category').textContent.toLowerCase() : '';
+                    const content = title + ' ' + description + ' ' + category;
+
+                    const matches = searchTerms.every(term => content.includes(term));
+
+                    if (matches) {
+                        card.style.display = '';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Show results text
+                resultsText.style.display = 'block';
+                if (visibleCount === 0) {
+                    resultsText.innerHTML = '😔 No blogs found for "<strong>' + escapeHtml(query) + '</strong>". Try a different search term.';
+                } else {
+                    resultsText.innerHTML = '🔍 Found <strong>' + visibleCount + '</strong> blog' + (visibleCount !== 1 ? 's' : '') + ' matching "<strong>' + escapeHtml(query) + '</strong>"';
+                }
+            }
+
+            function showAllBlogs() {
+                blogCards.forEach(card => {
+                    card.style.display = '';
+                });
+                resultsText.style.display = 'none';
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        });
+    </script>
 </body>
 </html>
 
