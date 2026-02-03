@@ -7,6 +7,10 @@
     <meta name="robots" content="index, follow">
     <title>Fresher Jobs & Internships India 2026 - GetUpdated</title>
     <link rel="canonical" href="https://www.getupdated.in/jobs.html">
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en-in" href="https://www.getupdated.in/jobs.html">
+    <link rel="alternate" hreflang="en" href="https://www.getupdated.in/jobs.html">
+    <link rel="alternate" hreflang="x-default" href="https://www.getupdated.in/jobs.html">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -141,7 +145,7 @@
                 <h1>All <span class="gradient-text">Job Opportunities</span></h1>
                 <p>Find your dream job from top companies worldwide</p>
             </div>
-            
+
             <div class="jobs-filter">
                 <button class="filter-btn active" data-filter="all">All Jobs</button>
                 <button class="filter-btn" data-filter="remote">Remote</button>
@@ -152,7 +156,7 @@
 
             <div class="all-jobs-grid">
                 <!-- ========== NEW JOBS - JAN 31, 2026 ========== -->
-                
+
                 <!-- Hungama AI/GenAI Engineers -->
                 <div class="job-card hot-job" data-type="internship" data-job="hungama-ai" style="border-color: #a855f7;">
                     <div class="job-badge" style="background: linear-gradient(135deg, #a855f7, #9333ea);">🤖 AI/GenAI</div>
@@ -424,7 +428,7 @@
                 </div>
 
                 <!-- ========== PREVIOUS JOBS - JAN 29, 2026 ========== -->
-                
+
                 <!-- CIPLA Freshers Hiring -->
                 <div class="job-card hot-job" data-type="fulltime" style="border-color: #22c55e;">
                     <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">🔥 NEW</div>
@@ -947,7 +951,7 @@
                 </div>
 
                 <!-- ========== NEW REMOTE/FULLTIME/INTERNSHIP JOBS ========== -->
-                
+
                 <!-- Universal Tech Remote Software Developer -->
                 <div class="job-card hot-job" data-type="remote">
                     <div class="job-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a);">💼 REMOTE</div>
@@ -1291,7 +1295,7 @@
                 </div>
 
                 <!-- ========== GOVERNMENT JOBS ========== -->
-                
+
                 <!-- RRB Group D -->
                 <div class="job-card hot-job" data-type="government" data-deadline="2026-03-02T23:59:59">
                     <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">🏛️ GOVT</div>
@@ -2188,7 +2192,7 @@
         // Make job cards clickable - navigate to detail page
         document.addEventListener('DOMContentLoaded', function() {
             const jobCards = document.querySelectorAll('.job-card[data-job]');
-            
+
             jobCards.forEach(card => {
                 card.addEventListener('click', function(e) {
                     // Don't navigate if clicking on apply button, bookmark, or external links
@@ -2197,7 +2201,7 @@
                         e.target.tagName === 'A') {
                         return;
                     }
-                    
+
                     const jobId = this.dataset.job;
                     if (jobId) {
                         window.location.href = `job-detail.html?id=${jobId}`;
@@ -2208,8 +2212,5 @@
     </script>
 </body>
 </html>
-
-
-
 
 
