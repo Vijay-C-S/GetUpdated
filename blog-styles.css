@@ -463,34 +463,56 @@
     background: var(--blog-card-bg);
 }
 
-/* Also Read Section */
+/* Also Read Section - Styled Box with Image */
 .also-read {
-    background: var(--blog-card-bg);
-    border: 1px solid var(--blog-border);
+    background: var(--blog-bg);
+    border: 2px dashed #ef4444;
     border-radius: 8px;
-    padding: 1rem 1.25rem;
+    padding: 1.25rem;
     margin: 2rem 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+    position: relative;
 }
 
 .also-read-label {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--blog-bg);
+    padding: 0 10px;
     font-weight: 600;
-    color: var(--blog-accent);
-    white-space: nowrap;
+    color: #ef4444;
     font-size: 0.9rem;
 }
 
-.also-read a {
-    color: var(--blog-text);
-    text-decoration: none;
-    font-size: 0.95rem;
-    line-height: 1.5;
+.also-read-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.also-read a:hover {
-    color: var(--blog-accent);
+.also-read-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.also-read-text {
+    flex: 1;
+}
+
+.also-read-text a {
+    color: var(--blog-text);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    display: block;
+}
+
+.also-read-text a:hover {
+    color: #ef4444;
 }
 
 /* Tags Section */
@@ -790,8 +812,14 @@
         grid-template-columns: 1fr;
     }
     
-    .also-read {
+    .also-read-content {
         flex-direction: column;
-        gap: 0.5rem;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .also-read-image {
+        width: 60px;
+        height: 60px;
     }
 }
