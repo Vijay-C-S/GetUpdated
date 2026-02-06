@@ -3439,9 +3439,9 @@
             document.getElementById('companyLogo').textContent = job.logo;
             document.getElementById('companyName').innerHTML = `${job.company} <span class="new-badge">NEW</span>`;
             document.getElementById('jobTitle').textContent = job.title;
-            document.getElementById('jobLocation').innerHTML = `< i class="fas fa-map-marker-alt" ></i > ${job.location} `;
-            document.getElementById('jobExperience').innerHTML = `< i class="fas fa-briefcase" ></i > ${job.experience} `;
-            document.getElementById('jobType').innerHTML = `< i class="fas fa-clock" ></i > ${job.type} `;
+            document.getElementById('jobLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${job.location} `;
+            document.getElementById('jobExperience').innerHTML = `<i class="fas fa-briefcase"></i> ${job.experience} `;
+            document.getElementById('jobType').innerHTML = `<i class="fas fa-clock"></i> ${job.type} `;
 
             // Update info cards
             document.getElementById('salaryValue').textContent = job.salary;
@@ -3453,7 +3453,7 @@
 
             // Update skills
             document.getElementById('skillsTags').innerHTML = job.skills.map(skill =>
-                `< span class="skill-tag" > ${skill}</span > `
+                `<span class="skill-tag"> ${skill}</span> `
             ).join('');
 
             // Update sidebar
