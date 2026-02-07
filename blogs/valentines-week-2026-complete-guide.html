@@ -84,14 +84,11 @@
                     </div>
                 </header>
 
-                <!-- Featured Image - Changes on each refresh! -->
+                <!-- Featured Image -->
                 <div class="featured-image-container">
-                    <img id="featured-hero-image"
-                        src="../images/valentine1.png"
-                        alt="Valentine's Week 2026" class="featured-image" width="800" height="450" loading="eager">
-                    <p id="featured-hero-caption" class="image-caption">Love is in the air! Valentine's Week 2026 starts
-                        today 🌹 | Photo: Unsplash
-                    </p>
+                    <img src="../images/valentine1.png" alt="Valentine's Week 2026 - Rose Day to Valentine's Day"
+                        class="featured-image" width="800" height="450" loading="eager">
+                    <p class="image-caption">Love is in the air! Valentine's Week 2026 starts today 🌹</p>
                 </div>
 
                 <!-- Article Content -->
@@ -136,9 +133,8 @@
 
                     <!-- Rose Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine2.png"
-                            alt="Beautiful red roses for Rose Day 2026" class="featured-image" width="700" height="400"
-                            loading="lazy">
+                        <img src="../images/valentine2.png" alt="Beautiful red roses for Rose Day 2026"
+                            class="featured-image" width="700" height="400" loading="lazy">
                         <p class="image-caption">A single red rose speaks louder than a thousand words 🌹</p>
                     </div>
 
@@ -217,9 +213,8 @@
 
                     <!-- Propose Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine3.png"
-                            alt="Couple holding hands on Propose Day 2026" class="featured-image" width="700"
-                            height="400" loading="lazy">
+                        <img src="../images/valentine3.png" alt="Couple holding hands on Propose Day 2026"
+                            class="featured-image" width="700" height="400" loading="lazy">
                         <p class="image-caption">Propose Day - when words become promises 💕</p>
                     </div>
 
@@ -251,9 +246,8 @@
 
                     <!-- Chocolate Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine4.png"
-                            alt="Luxury chocolates for Chocolate Day 2026" class="featured-image" width="700"
-                            height="400" loading="lazy">
+                        <img src="../images/valentine4.png" alt="Luxury chocolates for Chocolate Day 2026"
+                            class="featured-image" width="700" height="400" loading="lazy">
                         <p class="image-caption">Life is like a box of chocolates... make sure it's a good one! 🍫</p>
                     </div>
 
@@ -288,9 +282,8 @@
 
                     <!-- Teddy Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine5.png"
-                            alt="Cute teddy bear for Teddy Day 2026" class="featured-image" width="700" height="400"
-                            loading="lazy">
+                        <img src="../images/valentine5.png" alt="Cute teddy bear for Teddy Day 2026"
+                            class="featured-image" width="700" height="400" loading="lazy">
                         <p class="image-caption">Because everyone needs a cuddle buddy! 🧸</p>
                     </div>
 
@@ -377,9 +370,8 @@
 
                     <!-- Hug Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine6.png"
-                            alt="Couple hugging on Hug Day 2026" class="featured-image" width="700" height="400"
-                            loading="lazy">
+                        <img src="../images/valentine6.png" alt="Couple hugging on Hug Day 2026" class="featured-image"
+                            width="700" height="400" loading="lazy">
                         <p class="image-caption">Sometimes, a hug says more than a thousand words 🤗</p>
                     </div>
 
@@ -433,9 +425,8 @@
 
                     <!-- Valentine's Day Image -->
                     <div class="featured-image-container" style="margin: 2rem 0;">
-                        <img src="../images/valentine7.png"
-                            alt="Romantic Valentine's Day celebration 2026" class="featured-image" width="700"
-                            height="400" loading="lazy">
+                        <img src="../images/valentine7.png" alt="Romantic Valentine's Day celebration 2026"
+                            class="featured-image" width="700" height="400" loading="lazy">
                         <p class="image-caption">Valentine's Day 2026 - Make it unforgettable! ❤️</p>
                     </div>
 
@@ -690,68 +681,6 @@
 
     <script src="../script.js"></script>
 
-    <!-- Random Valentine Image Rotation -->
-    <script>
-        (function () {
-            // Array of beautiful Valentine-themed images with captions (LOCAL IMAGES)
-            const valentineImages = [
-                {
-                    src: '../images/valentine1.png',
-                    alt: 'Beautiful red roses for Valentine\'s Week',
-                    caption: 'Love is in the air! Valentine\'s Week 2026 starts today 🌹'
-                },
-                {
-                    src: '../images/valentine2.png',
-                    alt: 'Heart shaped Valentine decoration',
-                    caption: 'Celebrate love this Valentine\'s Week! 💕'
-                },
-                {
-                    src: '../images/valentine3.png',
-                    alt: 'Romantic couple celebrating Valentine\'s',
-                    caption: 'Make this Valentine\'s Week unforgettable! 💑'
-                },
-                {
-                    src: '../images/valentine4.png',
-                    alt: 'Red rose petals for Rose Day',
-                    caption: 'Rose Day kickstarts the week of love! 🌹'
-                },
-                {
-                    src: '../images/valentine5.png',
-                    alt: 'Luxury chocolates for Chocolate Day',
-                    caption: 'Sweet moments await this Valentine\'s Week! 🍫'
-                },
-                {
-                    src: '../images/valentine6.png',
-                    alt: 'Romantic Valentine\'s celebration',
-                    caption: 'Love, laughter, and memories - Happy Valentine\'s! ❤️'
-                },
-                {
-                    src: '../images/valentine7.png',
-                    alt: 'Heart balloons for Valentine\'s Day',
-                    caption: 'Let your heart soar this Valentine\'s Week! 🎈💕'
-                },
-                {
-                    src: '../images/valentine8.png',
-                    alt: 'Love letters and roses',
-                    caption: 'Words of love for your special someone! 💌'
-                }
-            ];
-
-            // Get random image
-            const randomIndex = Math.floor(Math.random() * valentineImages.length);
-            const selectedImage = valentineImages[randomIndex];
-
-            // Update the featured image on page load
-            const heroImage = document.getElementById('featured-hero-image');
-            const heroCaption = document.getElementById('featured-hero-caption');
-
-            if (heroImage && heroCaption) {
-                heroImage.src = selectedImage.src;
-                heroImage.alt = selectedImage.alt;
-                heroCaption.textContent = selectedImage.caption;
-            }
-        })();
-    </script>
 
     <!-- Ads -->
     <script src="https://pl28651117.effectivegatecpm.com/49/5b/52/495b52b6086994ad230aaaf172aba64c.js"></script>
