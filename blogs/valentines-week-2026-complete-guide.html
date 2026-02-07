@@ -84,12 +84,13 @@
                     </div>
                 </header>
 
-                <!-- Featured Image -->
+                <!-- Featured Image - Changes on each refresh! -->
                 <div class="featured-image-container">
-                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800"
-                        alt="Red roses for Valentine's Week 2026" class="featured-image" width="800" height="450"
-                        loading="eager">
-                    <p class="image-caption">Love is in the air! Valentine's Week 2026 starts today 🌹 | Photo: Unsplash
+                    <img id="featured-hero-image"
+                        src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800"
+                        alt="Valentine's Week 2026" class="featured-image" width="800" height="450" loading="eager">
+                    <p id="featured-hero-caption" class="image-caption">Love is in the air! Valentine's Week 2026 starts
+                        today 🌹 | Photo: Unsplash
                     </p>
                 </div>
 
@@ -688,6 +689,69 @@
     </footer>
 
     <script src="../script.js"></script>
+
+    <!-- Random Valentine Image Rotation -->
+    <script>
+        (function () {
+            // Array of beautiful Valentine-themed images with captions
+            const valentineImages = [
+                {
+                    src: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800',
+                    alt: 'Beautiful red roses for Valentine\'s Week',
+                    caption: 'Love is in the air! Valentine\'s Week 2026 starts today 🌹 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1494225829922-bd26f5c8d829?w=800',
+                    alt: 'Heart shaped Valentine decoration',
+                    caption: 'Celebrate love this Valentine\'s Week! 💕 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800',
+                    alt: 'Romantic couple celebrating Valentine\'s',
+                    caption: 'Make this Valentine\'s Week unforgettable! 💑 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=800',
+                    alt: 'Red rose petals for Rose Day',
+                    caption: 'Rose Day kickstarts the week of love! 🌹 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800',
+                    alt: 'Luxury chocolates for Chocolate Day',
+                    caption: 'Sweet moments await this Valentine\'s Week! 🍫 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800',
+                    alt: 'Romantic Valentine\'s celebration',
+                    caption: 'Love, laughter, and memories - Happy Valentine\'s! ❤️ | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',
+                    alt: 'Heart balloons for Valentine\'s Day',
+                    caption: 'Let your heart soar this Valentine\'s Week! 🎈💕 | Photo: Unsplash'
+                },
+                {
+                    src: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=800',
+                    alt: 'Love letters and roses',
+                    caption: 'Words of love for your special someone! 💌 | Photo: Unsplash'
+                }
+            ];
+
+            // Get random image
+            const randomIndex = Math.floor(Math.random() * valentineImages.length);
+            const selectedImage = valentineImages[randomIndex];
+
+            // Update the featured image on page load
+            const heroImage = document.getElementById('featured-hero-image');
+            const heroCaption = document.getElementById('featured-hero-caption');
+
+            if (heroImage && heroCaption) {
+                heroImage.src = selectedImage.src;
+                heroImage.alt = selectedImage.alt;
+                heroCaption.textContent = selectedImage.caption;
+            }
+        })();
+    </script>
 
     <!-- Ads -->
     <script src="https://pl28651117.effectivegatecpm.com/49/5b/52/495b52b6086994ad230aaaf172aba64c.js"></script>
