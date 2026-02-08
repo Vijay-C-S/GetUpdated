@@ -1,9 +1,27 @@
+# GetUpdated Robots.txt
+# https://www.getupdated.in
+
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://www.getupdated.in/sitemap.xml
 
-# Block unnecessary files
+# Allow Google to access all important content
+User-agent: Googlebot
+Allow: /
+
+# Allow Google Ads to crawl
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+# Block unnecessary files that don't need indexing
 Disallow: /css/
 Disallow: /js/
 Disallow: /sections/
+Disallow: /.git/
+Disallow: /.gitignore
+Disallow: /index-modular.html
