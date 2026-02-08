@@ -691,6 +691,10 @@ section {
     color: var(--secondary);
 }
 
+.blog-icon {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
 .service-card h3 {
     font-size: 1.25rem;
     font-weight: 600;
@@ -2184,6 +2188,16 @@ section {
 
     .footer-links h4 {
         margin-bottom: 1rem;
+    }
+
+    /* Improve touch targets for share buttons */
+    .share-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .article-share {
+        gap: 0.5rem;
     }
 }
 
