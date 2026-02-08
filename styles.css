@@ -1,4 +1,4 @@
-/* ===== CSS Variables ===== */
+﻿/* ===== CSS Variables ===== */
 :root {
     --primary: #6366f1;
     --primary-dark: #4f46e5;
@@ -168,66 +168,17 @@ textarea {
 }
 
 /* ===== Preloader ===== */
-.preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
 
-.preloader.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
 
-.loader-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
 
-.loader-container .loader-box {
-    position: absolute;
-    width: 7rem;
-    height: 7rem;
-    top: 50%;
-    left: 50%;
-    margin: -3.5rem 0 0 -3.5rem;
-    border-top: solid 3px #32daf9;
-    border-radius: 50%;
-    animation: rotate 2s infinite linear;
-}
 
-.loader-container .loader-box::before {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 5px;
-    right: 5px;
-    bottom: 5px;
-    border-top: solid 3px #f17362;
-    border-radius: 50%;
-    animation: rotate 2s infinite linear;
-}
 
-.loader-container .loader-box::after {
-    content: "";
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    right: 12px;
-    bottom: 12px;
-    border-top: solid 3px #7e0cf5;
-    border-radius: 50%;
-    animation: rotate 2s infinite linear;
-}
+
+
+
+
+
+
 
 @keyframes rotate {
     0% {
