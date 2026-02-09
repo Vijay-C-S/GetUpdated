@@ -24,4 +24,7 @@ Disallow: /js/
 Disallow: /sections/
 Disallow: /.git/
 Disallow: /.gitignore
-Disallow: /index-modular.html
+
+# Block non-existent URLs discovered by Google
+Disallow: /category/
+Disallow: /job-detail.html?*
