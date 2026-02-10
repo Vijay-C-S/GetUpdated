@@ -405,6 +405,14 @@ textarea {
     margin-bottom: 1.5rem;
 }
 
+/* ===== Logo Image ===== */
+.logo-img {
+    height: 40px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
 .gradient-text {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
