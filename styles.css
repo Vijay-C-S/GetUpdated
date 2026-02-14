@@ -1479,6 +1479,7 @@ section {
 .newsletter-text h2 .gradient-text {
     background: white;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
