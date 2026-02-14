@@ -19,8 +19,6 @@ User-agent: AdsBot-Google
 Allow: /
 
 # Block unnecessary files that don't need indexing
-Disallow: /css/
-Disallow: /js/
 Disallow: /sections/
 Disallow: /.git/
 Disallow: /.gitignore
