@@ -2514,3 +2514,7 @@ body:has(.blog-detail) .navbar {
         font-size: 1.25rem;
     }
 }
+.view-all {
+    text-align: center;
+    margin-top: 2rem;
+}
