@@ -164,23 +164,22 @@
             padding: 0.9rem 1.2rem;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             transition: all 0.3s ease;
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
             cursor: pointer;
+            width: 100%;
         }
 
         .view-job-btn:hover {
-            background: var(--primary);
-            color: white;
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
 
         .job-card[data-job] {
@@ -414,61 +413,20 @@
                 <button class="filter-btn" data-filter="government">Government</button>
             </div>
             <div class="jobs-grid">
-                <!-- India Post GDS - MEGA RECRUITMENT -->
-                <div class="job-card hot-job" data-type="government" data-job="india-post-gds"
-                    data-deadline="2026-02-16" style="border-color: #dc2626;">
-                    <div class="job-badge" style="background: linear-gradient(135deg, #ef4444, #dc2626);">28K+ POSTS
-                    </div>
-                    <div class="job-header">
-                        <div class="company-logo" style="background: #dc2626;">POST</div>
-                        <div class="job-info">
-                            <h4>India Post</h4>
-                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
-                        </div>
-                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
-                    </div>
-                    <h3 class="job-title">GDS - 28,636 Posts</h3>
-                    <p class="job-description">Apply for Gramin Dak Sevak (GDS), Branch Postmaster (BPM) & Assistant
-                        Branch Postmaster (ABPM) posts across all states. 10th pass candidates eligible. Selection based
-                        on merit ? no exam or interview required!</p>
-                    <div class="job-tags">
-                        <span class="tag deadline-tag" data-deadline="2026-02-16"
-                            style="background: #fef2f2; color: #ef4444;">Apply by Feb
-                            16</span>
-                        <span class="tag">10th Pass</span>
-                        <span class="tag">Postal</span>
-                    </div>
-                    <div class="job-footer">
-                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12,000 - 14,500/month</span>
-                        <span class="job-type government" style="background: #059669;">Government</span>
-                    </div>
-                    <div class="job-buttons">
-                        <a href="job-detail.html?id=india-post-gds" class="view-job-btn"><i class="fas fa-eye"></i> View
-                            Job</a>
-                        <a href="https://indiapostgdsonline.gov.in/" target="_blank" class="apply-btn"
-                            data-deadline="2026-02-16"
-                            style="background: linear-gradient(135deg, #ef4444, #dc2626);">Apply Now <i
-                                class="fas fa-external-link-alt"></i></a>
-                    </div>
-                </div>
                 <!-- UPSC Civil Services 2026 -->
-                <div class="job-card hot-job" data-type="government" data-job="upsc-cse" data-deadline="2026-02-24"
-                    style="border-color: #7c3aed;">
+                <div class="job-card hot-job" data-type="government" data-job="upsc-cse" style="border-color: #7c3aed;">
                     <div class="job-badge" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">UPSC</div>
                     <div class="job-header">
                         <div class="company-logo" style="background: #7c3aed;">UPSC</div>
                         <div class="job-info">
-                            <h4>UPSC Civil Services</h4>
+                            <h4>Union Public Service Commission</h4>
                             <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
                         </div>
                         <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
                     </div>
                     <h3 class="job-title">IAS/IPS/IFS - 933 Posts</h3>
-                    <p class="job-description">India's most prestigious civil services exam! Apply for IAS, IPS, IFS &
-                        21 other Group A & B services. Any graduate can apply. Prelims exam in May 2026.</p>
                     <div class="job-tags">
-                        <span class="tag deadline-tag" data-deadline="2026-02-24"
-                            style="background: #f5f3ff; color: #7c3aed;">Apply by Feb
+                        <span class="tag deadline-tag" style="background: #f5f3ff; color: #7c3aed;">Apply by Feb
                             24</span>
                         <span class="tag">Graduate</span>
                         <span class="tag">IAS/IPS</span>
@@ -480,46 +438,65 @@
                     <div class="job-buttons">
                         <a href="job-detail.html?id=upsc-cse" class="view-job-btn"><i class="fas fa-eye"></i> View
                             Job</a>
-                        <a href="https://upsc.gov.in/" target="_blank" class="apply-btn" data-deadline="2026-02-24"
-                            style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">Apply Now <i
-                                class="fas fa-external-link-alt"></i></a>
                     </div>
                 </div>
-                <!-- RRB Group D -->
-                <div class="job-card hot-job" data-type="government" data-job="rrb-groupd" data-deadline="2026-03-02"
-                    style="border-color: #059669;">
-                    <div class="job-badge" style="background: linear-gradient(135deg, #059669, #047857);">RAILWAY</div>
+
+                <!-- Hungama AI/GenAI Engineers -->
+                <div class="job-card hot-job" data-type="internship" data-job="hungama-ai"
+                    style="border-color: #a855f7;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #a855f7, #9333ea);">AI/GenAI</div>
                     <div class="job-header">
-                        <div class="company-logo" style="background: #1e40af;">RRB</div>
+                        <div class="company-logo" style="background: #9333ea;">H</div>
                         <div class="job-info">
-                            <h4>Railway Recruitment</h4>
-                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> All India</span>
+                            <h4>Hungama Digital</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai/Noida</span>
                         </div>
                         <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
                     </div>
-                    <h3 class="job-title">Group D - 22,195 Posts</h3>
-                    <p class="job-description">Join Indian Railways! Apply for Track Maintainer, Pointsman, Helper &
-                        other Level-1 posts. 10th pass & ITI holders eligible. Age 18-33 years as on Jan 1, 2026.</p>
+                    <h3 class="job-title">AI & Gen AI Engineer Intern</h3>
                     <div class="job-tags">
-                        <span class="tag deadline-tag" data-deadline="2026-03-02"
-                            style="background: #ecfdf5; color: #059669;">Apply by Mar
-                            02</span>
-                        <span class="tag">10th Pass</span>
-                        <span class="tag">Railway</span>
+                        <span class="tag" style="background: #f3e8ff; color: #9333ea;">₹25K-50K/month</span>
+                        <span class="tag">ML/AI</span>
+                        <span class="tag">6 Months</span>
                     </div>
                     <div class="job-footer">
-                        <span class="salary"><i class="fas fa-rupee-sign"></i> 18,000 - 56,900</span>
-                        <span class="job-type government" style="background: #059669;">Government</span>
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 25K-50K/month</span>
+                        <span class="job-type internship">Internship</span>
                     </div>
                     <div class="job-buttons">
-                        <a href="job-detail.html?id=rrb-groupd" class="view-job-btn"><i class="fas fa-eye"></i> View
+                        <a href="job-detail.html?id=hungama-ai" class="view-job-btn"><i class="fas fa-eye"></i> View
                             Job</a>
-                        <a href="https://www.rrbapply.gov.in/" target="_blank" class="apply-btn"
-                            data-deadline="2026-03-02"
-                            style="background: linear-gradient(135deg, #059669, #047857);">Apply Now <i
-                                class="fas fa-external-link-alt"></i></a>
                     </div>
                 </div>
+
+                <!-- Kokuyo Camlin HR Intern -->
+                <div class="job-card hot-job" data-type="internship" data-job="kokuyo-hr"
+                    style="border-color: #f97316;">
+                    <div class="job-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">TODAY</div>
+                    <div class="job-header">
+                        <div class="company-logo" style="background: #f97316;">KC</div>
+                        <div class="job-info">
+                            <h4>Kokuyo Camlin</h4>
+                            <span class="job-location"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        </div>
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                    </div>
+                    <h3 class="job-title">HR Intern - HRIS & Recruitment</h3>
+                    <div class="job-tags">
+                        <span class="tag">6 Months</span>
+                        <span class="tag">HR</span>
+                        <span class="tag">MS Excel</span>
+                    </div>
+                    <div class="job-footer">
+                        <span class="salary"><i class="fas fa-rupee-sign"></i> 12K/month</span>
+                        <span class="job-type internship">Internship</span>
+                    </div>
+                    <div class="job-buttons">
+                        <a href="job-detail.html?id=kokuyo-hr" class="view-job-btn"><i class="fas fa-eye"></i> View
+                            Job</a>
+                    </div>
+                </div>
+
                 <div class="view-all">
                     <a href="jobs.html" class="btn btn-outline">Browse All Jobs <i class="fas fa-arrow-right"></i></a>
                 </div>
