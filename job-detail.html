@@ -7,7 +7,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6F84NNX9ZX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-6F84NNX9ZX');
     </script>
@@ -357,6 +357,54 @@
             box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
         }
 
+        /* Engagement Apply Button - positioned above bottom */
+        .engagement-apply-section {
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            text-align: center;
+        }
+
+        .engagement-apply-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .engagement-apply-section p i {
+            color: #667eea;
+            margin-right: 0.4rem;
+        }
+
+        .engagement-apply-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.35);
+            letter-spacing: 0.5px;
+        }
+
+        .engagement-apply-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .engagement-apply-btn i {
+            font-size: 1rem;
+        }
+
         .verified-badge {
             display: flex;
             align-items: center;
@@ -608,9 +656,6 @@
                     </span>
                 </div>
                 <div class="header-actions">
-                    <a href="#" class="apply-btn-large" id="applyBtnHeader" target="_blank">
-                        APPLY NOW
-                    </a>
                     <button class="share-btn" onclick="shareJob()">
                         <i class="fas fa-share-alt"></i>
                     </button>
@@ -654,6 +699,15 @@
                             <!-- Skills populated dynamically -->
                         </div>
                     </div>
+
+                    <!-- Engagement Apply Button -->
+                    <div class="engagement-apply-section">
+                        <p><i class="fas fa-bolt"></i> Interested in this role? Apply directly on the company's portal
+                        </p>
+                        <a href="#" class="engagement-apply-btn" id="applyBtnMain" target="_blank">
+                            APPLY NOW <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Sidebar -->
@@ -662,9 +716,6 @@
                         <div class="logo" id="sidebarLogo">H</div>
                         <h4 id="sidebarCompanyName">Company Name</h4>
                         <p class="type">Hiring Partner</p>
-                        <a href="#" class="direct-apply-btn" id="applyBtnSidebar" target="_blank">
-                            DIRECT APPLY
-                        </a>
                         <div class="verified-badge">
                             <i class="fas fa-shield-alt"></i>
                             SAFEGUARDED BY GETUPDATED
@@ -3534,9 +3585,8 @@
             document.getElementById('openings').textContent = job.openings;
             document.getElementById('qualification').textContent = job.qualification;
 
-            // Update apply buttons
-            document.getElementById('applyBtnHeader').href = job.applyUrl;
-            document.getElementById('applyBtnSidebar').href = job.applyUrl;
+            // Update apply button
+            document.getElementById('applyBtnMain').href = job.applyUrl;
 
             // Update page title
             document.title = `${job.title} at ${job.company} - GetUpdated`;
