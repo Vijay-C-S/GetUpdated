@@ -4,6 +4,9 @@
 User-agent: *
 Allow: /
 
+# Prevent indexing of /index.html duplicate
+Disallow: /index.html
+
 # Sitemap location
 Sitemap: https://www.getupdated.in/sitemap.xml
 
@@ -25,4 +28,3 @@ Disallow: /.gitignore
 
 # Block non-existent URLs discovered by Google
 Disallow: /category/
-Disallow: /job-detail.html?*

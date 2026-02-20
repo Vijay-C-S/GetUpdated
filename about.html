@@ -1,49 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6F84NNX9ZX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-6F84NNX9ZX');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About GetUpdated - Your one-stop destination for tech news, job opportunities, and online offers. Learn about our mission and team.">
+    <meta name="description"
+        content="About GetUpdated - Your one-stop destination for tech news, job opportunities, and online offers. Learn about our mission and team.">
     <meta name="robots" content="index, follow">
     <title>About GetUpdated - Tech News, Jobs & Income Ideas</title>
     <link rel="icon" type="image/jpeg" href="images/favicon.jpg">
     <link rel="canonical" href="https://www.getupdated.in/about.html">
+    <link rel="alternate" hreflang="en-in" href="https://www.getupdated.in/about.html">
+    <link rel="alternate" hreflang="x-default" href="https://www.getupdated.in/about.html">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .about-page {
             padding: 120px 0 60px;
             min-height: 100vh;
         }
+
         .about-container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
+
         .about-header {
             text-align: center;
             margin-bottom: 3rem;
         }
+
         .about-header h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--text-primary);
         }
+
         .about-header p {
             color: var(--text-secondary);
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
         }
+
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -54,9 +64,11 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
+
         .back-link:hover {
             gap: 0.75rem;
         }
+
         .about-content {
             background: var(--bg-card);
             border-radius: var(--radius-xl);
@@ -64,12 +76,15 @@
             box-shadow: var(--shadow-lg);
             margin-bottom: 2rem;
         }
+
         .about-section {
             margin-bottom: 3rem;
         }
+
         .about-section:last-child {
             margin-bottom: 0;
         }
+
         .about-section h2 {
             font-size: 1.75rem;
             color: var(--text-primary);
@@ -78,20 +93,24 @@
             align-items: center;
             gap: 0.75rem;
         }
+
         .about-section h2 i {
             color: var(--primary);
         }
+
         .about-section p {
             color: var(--text-secondary);
             line-height: 1.8;
             margin-bottom: 1rem;
         }
+
         .mission-vision {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
+
         .mv-card {
             background: var(--bg-secondary);
             border-radius: var(--radius-lg);
@@ -100,10 +119,12 @@
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
+
         .mv-card:hover {
             border-color: var(--primary);
             transform: translateY(-5px);
         }
+
         .mv-card .icon {
             width: 70px;
             height: 70px;
@@ -115,21 +136,25 @@
             margin: 0 auto 1.5rem;
             font-size: 2rem;
         }
+
         .mv-card h3 {
             color: var(--text-primary);
             margin-bottom: 1rem;
             font-size: 1.3rem;
         }
+
         .mv-card p {
             color: var(--text-secondary);
             margin-bottom: 0;
         }
+
         .services-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
+
         .service-item {
             display: flex;
             align-items: flex-start;
@@ -139,48 +164,57 @@
             border-radius: var(--radius-lg);
             transition: all 0.3s ease;
         }
+
         .service-item:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-md);
         }
+
         .service-item i {
             font-size: 1.5rem;
             color: var(--primary);
             margin-top: 0.25rem;
         }
+
         .service-item h4 {
             color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
+
         .service-item p {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 0;
             line-height: 1.6;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-top: 2rem;
         }
+
         .stat-card {
             text-align: center;
             padding: 1.5rem;
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
             border-radius: var(--radius-lg);
         }
+
         .stat-card .number {
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
             line-height: 1;
         }
+
         .stat-card .label {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
+
         .contact-cta {
             text-align: center;
             padding: 3rem;
@@ -188,10 +222,12 @@
             border-radius: var(--radius-xl);
             color: white;
         }
+
         .contact-cta h3 {
             font-size: 1.75rem;
             margin-bottom: 1rem;
         }
+
         .contact-cta p {
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 1.5rem;
@@ -199,6 +235,7 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .contact-cta .btn {
             background: white;
             color: var(--primary);
@@ -211,23 +248,28 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
         }
+
         .contact-cta .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+
         @media (max-width: 768px) {
             .about-content {
                 padding: 1.5rem;
             }
+
             .about-header h1 {
                 font-size: 2rem;
             }
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar scrolled" id="navbar">
@@ -263,7 +305,7 @@
             <a href="./" class="back-link">
                 <i class="fas fa-arrow-left"></i> Back to Home
             </a>
-            
+
             <div class="about-header">
                 <span class="section-badge">Who We Are</span>
                 <h1>About <span class="gradient-text">GetUpdated</span></h1>
@@ -274,10 +316,15 @@
                 <div class="about-section">
                     <h2><i class="fas fa-rocket"></i> Our Story</h2>
                     <p>
-                        <strong>GetUpdated</strong> was born out of a simple idea ? to create a single platform where people can find everything they need to stay informed and grow in the digital age. In a world overflowing with information, we recognized the need for a curated, trustworthy source that brings together tech news, career opportunities, and money-saving deals.
+                        <strong>GetUpdated</strong> was born out of a simple idea ? to create a single platform where
+                        people can find everything they need to stay informed and grow in the digital age. In a world
+                        overflowing with information, we recognized the need for a curated, trustworthy source that
+                        brings together tech news, career opportunities, and money-saving deals.
                     </p>
                     <p>
-                        Founded in 2025 and based in Bangalore, India, we started as a small project and have grown into a platform that helps thousands of users every day. Our team is passionate about technology, career growth, and helping people make smarter financial decisions.
+                        Founded in 2025 and based in Bangalore, India, we started as a small project and have grown into
+                        a platform that helps thousands of users every day. Our team is passionate about technology,
+                        career growth, and helping people make smarter financial decisions.
                     </p>
                 </div>
 
@@ -287,12 +334,15 @@
                         <div class="mv-card">
                             <div class="icon"></div>
                             <h3>Our Mission</h3>
-                            <p>To empower individuals with timely, accurate, and actionable information that helps them advance in their careers, stay updated with technology, and make smarter financial decisions.</p>
+                            <p>To empower individuals with timely, accurate, and actionable information that helps them
+                                advance in their careers, stay updated with technology, and make smarter financial
+                                decisions.</p>
                         </div>
                         <div class="mv-card">
                             <div class="icon"></div>
                             <h3>Our Vision</h3>
-                            <p>To become India's most trusted platform for job seekers, tech enthusiasts, and anyone looking to grow personally and financially in the digital economy.</p>
+                            <p>To become India's most trusted platform for job seekers, tech enthusiasts, and anyone
+                                looking to grow personally and financially in the digital economy.</p>
                         </div>
                     </div>
                 </div>
@@ -390,7 +440,7 @@
             </div>
         </div>
     </section>
-<!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -405,5 +455,5 @@
 
     <script src="script.js"></script>
 </body>
-</html>
 
+</html>
