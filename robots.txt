@@ -4,9 +4,6 @@
 User-agent: *
 Allow: /
 
-# Prevent indexing of /index.html duplicate
-Disallow: /index.html
-
 # Sitemap location
 Sitemap: https://www.getupdated.in/sitemap.xml
 
