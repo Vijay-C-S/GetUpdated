@@ -50,7 +50,7 @@ if (sections.length > 0 && navLinks.length > 0) {
             const sectionHeight = section.offsetHeight;
             const sectionTop = section.offsetTop - 100;
             const sectionId = section.getAttribute('id');
-            const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+            const navLink = document.querySelector(`.nav-link[href="#${sectionId}"], .nav-link[href="/#${sectionId}"]`);
             
             if (navLink && scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
                 navLinks.forEach(link => link.classList.remove('active'));
@@ -400,11 +400,14 @@ typingStyle.textContent = `
 document.head.appendChild(typingStyle);
 
 // ===== Smooth Scroll for Navigation Links =====
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        // Extract the hash part (works for both "#section" and "/#section")
+        const hash = href.includes('#') ? '#' + href.split('#')[1] : href;
+        const target = document.querySelector(hash);
         if (target) {
+            e.preventDefault();
             const offsetTop = target.offsetTop - 80;
             window.scrollTo({
                 top: offsetTop,
