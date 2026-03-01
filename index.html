@@ -3,21 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2196788914593702" crossorigin="anonymous"></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6F84NNX9ZX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-6F84NNX9ZX');
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Preconnect to external domains for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="T63TAvKNobnLc4tD4ZKaTuDczvknzQ0W7-ilWBhDKx0" />
     <meta name="description"
         content="GetUpdated - Your one-stop destination for latest tech news, job opportunities, and online offers. Stay updated with technology, find your dream job, and discover ways to earn money online.">
@@ -95,16 +86,7 @@
             line-height: 1.6
         }
 
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg)
-            }
-
-            100% {
-                transform: rotate(360deg)
-            }
-        }
+        a { text-decoration: none; color: inherit }
 
         .navbar {
             position: fixed;
@@ -128,18 +110,171 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            color: #667eea;
             text-decoration: none
+        }
+
+        .logo-text .highlight {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #cbd5e1;
+            white-space: nowrap
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 0.75rem }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            background: #334155;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            margin-left: 0.5rem
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #f8fafc;
+            border-radius: 9999px
         }
 
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 6rem 2rem 4rem
+            position: relative;
+            padding: 8rem 1.5rem 4rem;
+            overflow: hidden
+        }
+
+        .hero-content { max-width: 600px }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(236,72,153,0.1));
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6366f1;
+            margin-bottom: 1.5rem
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%)
+        }
+
+        .hero-card {
+            position: absolute;
+            padding: 1rem 1.5rem;
+            background: #1e293b;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.875rem
+        }
+
+        /* Critical mobile styles - prevent FOUC */
+        @media (max-width: 900px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: #0f172a;
+                flex-direction: column;
+                padding: 5rem 2rem 2rem;
+                gap: 1.25rem;
+                box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+                z-index: 999
+            }
+
+            .hamburger { display: flex }
+
+            .hero-image { display: none }
+
+            .hero-content {
+                max-width: 100%;
+                text-align: center
+            }
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator { display: none }
+
+            .hero-title { font-size: 2.25rem }
+        }
+
+        @media (max-width: 576px) {
+            .nav-container { padding: 0 1rem }
+            .logo { font-size: 1.25rem }
+            .hero { padding: 5.5rem 1rem 2rem }
+            .hero-title { font-size: 1.85rem; line-height: 1.3 }
         }
     </style>
+    <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -192,6 +327,16 @@
             box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
         }
     </style>
+
+    <!-- AdSense & Analytics (deferred to not block rendering) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2196788914593702" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6F84NNX9ZX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-6F84NNX9ZX');
+    </script>
 </head>
 
 <body>
