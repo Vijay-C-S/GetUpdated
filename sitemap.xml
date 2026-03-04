@@ -3,19 +3,19 @@
   <!-- Main Pages -->
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-02-24</lastmod>
+    <lastmod>2026-03-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.getupdated.in/jobs.html</loc>
-    <lastmod>2026-02-24</lastmod>
+    <lastmod>2026-03-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-02-24</lastmod>
+    <lastmod>2026-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -56,73 +56,7 @@
     <priority>0.4</priority>
   </url>
 
-  <!-- Job Detail Pages -->
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=upsc-cse</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=india-post-gds</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=rrb-groupd</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=rbi-attendant</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=nabard-assistant</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=isro-scientist</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=navy-ssc</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=google-tse</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=microsoft-engineering</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=amazon-sde</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=goldman-sachs-analyst</loc>
-    <lastmod>2026-02-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <!-- Job Detail Pages - Private Sector -->
   <url>
     <loc>https://www.getupdated.in/job-detail.html?id=hungama-ai</loc>
     <lastmod>2026-02-24</lastmod>
@@ -136,25 +70,67 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=hungama-marketing</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.getupdated.in/job-detail.html?id=kokuyo-hr</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=salesforce-security</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=amar-ujala-design</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=deloitte-aml</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=plutonic-flutter</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=amazon-investigation</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=maga-retail</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=audi-marketing</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=nobroker-sales</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=zebronics-hr</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=mbd-hr</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=cipla-sales</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=goldman-sachs-analyst</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -166,7 +142,37 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=tower-research</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=amazon-investigation</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=salesforce-security</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=puma-retail</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=deloitte-aml</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=urban-company-bd</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=sportvot-video</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -190,22 +196,156 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=cipla-sales</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=amazon-sde</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=amazon-sde2</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=urban-company-bd</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=google-tse</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=microsoft-engineering</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=tower-research</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.getupdated.in/job-detail.html?id=puma-retail</loc>
+    <loc>https://www.getupdated.in/job-detail.html?id=bynd-ai</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=pipeshub-sdet</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=agule-ai</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=kriate-uiux</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=csat-backend</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=universal-tech</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=sfj-frontend</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=branch-intern</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=mindmach-fullstack</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=dicetek-fullstack</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=calipers-backend</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=cars24-sales</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=turtlemint-marketing</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Job Detail Pages - Government -->
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=bsnl-set</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=ncert-academic</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=ssc-chsl</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=drdo-scientist</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=indiapost-gds</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=rbi-gradeb</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html?id=upsc-nda</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Blog Articles -->
