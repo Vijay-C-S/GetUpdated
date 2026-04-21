@@ -55,8 +55,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
-
-  <!-- Job Detail Pages excluded from sitemap temporarily (content changes frequently) -->
+  <url>
+    <loc>https://www.getupdated.in/job-detail.html</loc>
+    <lastmod>2026-04-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Blog Articles -->
   <url>
