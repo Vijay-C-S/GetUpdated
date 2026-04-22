@@ -175,8 +175,8 @@
             margin-top: 3rem;
             padding: 1.5rem;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(79, 70, 229, 0.1));
+            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(79, 70, 229, 0.06));
         }
 
         .faq-section h3 {
@@ -192,26 +192,26 @@
         .faq-item {
             padding: 0.9rem 1rem;
             border-radius: 12px;
-            background: rgba(2, 6, 23, 0.35);
+            background: var(--bg-card);
         }
 
         .faq-item h4 {
             font-size: 1rem;
             margin-bottom: 0.35rem;
-            color: var(--text-primary, #e5e7eb);
+            color: var(--text-primary);
         }
 
         .faq-item p {
             font-size: 0.9rem;
-            color: var(--text-secondary, #9ca3af);
+            color: var(--text-secondary);
         }
 
         .trending-links {
             margin-top: 2.5rem;
             padding: 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
             border-radius: 14px;
-            background: rgba(2, 6, 23, 0.35);
+            background: var(--bg-card);
         }
 
         .trending-links h3 {
@@ -234,15 +234,39 @@
             padding: 0.55rem 0.85rem;
             border-radius: 999px;
             text-decoration: none;
-            color: #e5e7eb;
-            background: rgba(236, 72, 153, 0.18);
-            border: 1px solid rgba(236, 72, 153, 0.35);
+            color: var(--text-primary);
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.25);
             font-size: 0.82rem;
             transition: transform 0.2s ease, background 0.2s ease;
         }
 
         .trending-chip:hover {
             transform: translateY(-2px);
+            background: rgba(236, 72, 153, 0.18);
+        }
+
+        [data-theme="dark"] .faq-section {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(79, 70, 229, 0.1));
+        }
+
+        [data-theme="dark"] .faq-item {
+            background: rgba(2, 6, 23, 0.35);
+        }
+
+        [data-theme="dark"] .trending-links {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(2, 6, 23, 0.35);
+        }
+
+        [data-theme="dark"] .trending-chip {
+            color: #e5e7eb;
+            background: rgba(236, 72, 153, 0.18);
+            border: 1px solid rgba(236, 72, 153, 0.35);
+        }
+
+        [data-theme="dark"] .trending-chip:hover {
             background: rgba(236, 72, 153, 0.3);
         }
 
