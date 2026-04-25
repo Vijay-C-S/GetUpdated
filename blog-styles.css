@@ -31,3 +31,10 @@ html, body { max-width: 100%; overflow-x: hidden; }
     padding: 0;
   }
 }
+
+/* Guard against AdSense ad/embed overflow on narrow phones */
+.blog-wrapper ins,
+.blog-wrapper iframe,
+.blog-wrapper .adsbygoogle {
+    max-width: 100% !important;
+}
