@@ -952,30 +952,31 @@
 
         .home-blog-popup {
             position: relative;
-            width: min(92vw, 650px);
+            width: min(88vw, 420px);
             background: #ffffff;
             color: #111827;
-            border-radius: 18px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-            padding: 1rem 1rem 1.2rem;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+            padding: 0.75rem 0.75rem 1rem;
             border: 1px solid #d1d5db;
         }
 
         .home-blog-popup-close {
             position: absolute;
-            top: 8px;
-            right: 10px;
+            top: 6px;
+            right: 8px;
             border: none;
             background: #ef4444;
-            width: 42px;
-            height: 42px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            font-size: 2rem;
+            font-size: 1.4rem;
             font-weight: 800;
             line-height: 1;
             color: #ffffff;
             cursor: pointer;
-            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.35);
+            box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+            z-index: 1;
         }
 
         .home-blog-popup-close:hover {
@@ -985,25 +986,27 @@
 
         .home-blog-popup-image {
             width: 100%;
-            border-radius: 12px;
-            object-fit: contain;
+            max-height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
             display: block;
-            margin: 0 auto 0.9rem;
+            margin: 0 auto 0.6rem;
         }
 
         .home-blog-popup-title {
-            margin: 0 0 0.55rem;
-            font-size: 1.55rem;
+            margin: 0 0 0.35rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: #111827;
             text-align: center;
         }
 
         .home-blog-popup-text {
-            margin: 0 0 0.95rem;
-            font-size: 1rem;
+            margin: 0 0 0.65rem;
+            font-size: 0.85rem;
             color: #374151;
             text-align: center;
+            line-height: 1.45;
         }
 
         .home-blog-popup-btn {
@@ -1011,22 +1014,38 @@
             width: 100%;
             text-align: center;
             border: 1px solid #f59e0b;
-            border-radius: 12px;
-            padding: 0.9rem;
+            border-radius: 10px;
+            padding: 0.65rem;
             color: #b45309;
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 800;
             background: linear-gradient(135deg, #fef3c7, #fde68a);
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.25);
+            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.25);
         }
 
         .home-blog-popup-btn small {
             display: block;
-            margin-top: 0.3rem;
+            margin-top: 0.2rem;
             color: #111827;
-            font-size: 0.94rem;
+            font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .home-blog-popup {
+                width: 95vw;
+                padding: 0.6rem 0.6rem 0.8rem;
+            }
+            .home-blog-popup-image {
+                max-height: 160px;
+            }
+            .home-blog-popup-title {
+                font-size: 1.05rem;
+            }
+            .home-blog-popup-text {
+                font-size: 0.8rem;
+            }
         }
     </style>
 
