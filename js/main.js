@@ -40,8 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fun stuff
     initEasterEgg();
     
-    // Console branding
-    console.log('%c GetUpdated🚀', 'font-size: 24px; font-weight: bold; color: #6366f1;');
-    console.log('%c Welcome to GetUpdated- Your Gateway to Success!', 'font-size: 14px; color: #ec4899;');
+
 });
 

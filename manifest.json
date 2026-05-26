@@ -1,0 +1,59 @@
+{
+  "name": "GetUpdated - Tech News, Jobs & Offers",
+  "short_name": "GetUpdated",
+  "description": "Your one-stop destination for latest tech news, job opportunities, and online offers in India.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#6366f1",
+  "lang": "en-IN",
+  "scope": "/",
+  "orientation": "any",
+  "categories": ["news", "education", "business"],
+  "icons": [
+    {
+      "src": "/images/favicon.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/favicon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/chatgpt-vs-gemini-vs-claude.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "GetUpdated homepage with tech news, jobs and offers"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Latest Jobs",
+      "short_name": "Jobs",
+      "description": "Browse latest fresher jobs and internships",
+      "url": "/jobs.html",
+      "icons": [{"src": "/images/favicon.jpg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Tech News",
+      "short_name": "News",
+      "description": "Latest AI and tech news",
+      "url": "/tech-news.html",
+      "icons": [{"src": "/images/favicon.jpg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Blogs",
+      "short_name": "Blogs",
+      "description": "Read our latest blog articles",
+      "url": "/blogs.html",
+      "icons": [{"src": "/images/favicon.jpg", "sizes": "96x96"}]
+    }
+  ]
+}

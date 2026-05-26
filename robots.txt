@@ -3,13 +3,18 @@
 
 User-agent: *
 Allow: /
-
-# Sitemap location
-Sitemap: https://www.getupdated.in/sitemap.xml
+# Prevent crawling of internal component files
+Disallow: /sections/
+Disallow: /.git/
+Disallow: /.gitignore
+Disallow: /category/
+Crawl-delay: 2
 
 # Allow Google to access all important content
 User-agent: Googlebot
 Allow: /
+Disallow: /sections/
+Disallow: /.git/
 
 # Allow Google Ads to crawl
 User-agent: Mediapartners-Google
@@ -18,10 +23,5 @@ Allow: /
 User-agent: AdsBot-Google
 Allow: /
 
-# Block unnecessary files that don't need indexing
-Disallow: /sections/
-Disallow: /.git/
-Disallow: /.gitignore
-
-# Block non-existent URLs discovered by Google
-Disallow: /category/
+# Sitemap location
+Sitemap: https://www.getupdated.in/sitemap.xml
