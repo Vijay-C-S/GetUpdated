@@ -290,7 +290,7 @@
             <div class="article-content">
                 <p>Here is the situation almost every student and indie developer in India runs into. You have an idea for an AI project — a college mini-project, a résumé screener, a chatbot for your startup, a coding assistant for your own editor. You sit down to build it, you reach for an API, and then you hit the wall: OpenAI wants a card on file, Anthropic wants a card on file, Google gives you a free tier that quietly throttles you, and suddenly your ₹0 side project has a monthly bill attached to it before it has a single user.</p>
 
-                <p>Meanwhile there is a genuinely free option sitting in plain sight that most people either have not heard of or assume is some kind of limited demo. It is not. NVIDIA runs a hosted API catalogue at <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a> that serves more than a hundred open models — Llama, DeepSeek, Qwen, Mistral, OpenAI's open-weight GPT-OSS models, and NVIDIA's own Nemotron family — on NVIDIA's own GPU infrastructure, through an API that speaks the exact same protocol as OpenAI's. You sign up, you get an API key, and you get free credits to spend on any model in the catalogue. <span class="hl-green">No credit card. No trial countdown clock ticking down from day one.</span></p>
+                <p>Meanwhile there is a genuinely free option sitting in plain sight that most people either have not heard of or assume is some kind of limited demo. It is not. NVIDIA runs a hosted API catalogue at <strong>build.nvidia.com</strong> that serves more than a hundred open models — Llama, DeepSeek, Qwen, Mistral, OpenAI's open-weight GPT-OSS models, and NVIDIA's own Nemotron family — on NVIDIA's own GPU infrastructure, through an API that speaks the exact same protocol as OpenAI's. You sign up, you get an API key, and you get free credits to spend on any model in the catalogue. <span class="hl-green">No credit card. No trial countdown clock ticking down from day one.</span></p>
 
                 <p>I have been running this key across several projects for a while now, and this guide is everything I wish someone had written down for me on day one: how to actually get the key, how to redeem the extra credits most people never claim, how to wire it into your code in about four lines, which model you should genuinely be using for which job, and — importantly — where the free tier stops being enough.</p>
 
@@ -321,27 +321,15 @@
 
                 <p>The whole process takes about five minutes, and roughly four of those are waiting for a verification email. Here is the exact sequence.</p>
 
-                <p><strong>Step 1 — Create your NVIDIA account.</strong> Go to <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a> and click Sign In / Get Started in the top right. You can register with an email address or sign in with an existing Google or GitHub account. This creates an NVIDIA Developer Program membership, which is free. You will not be asked for payment details at any point in this flow.</p>
+                <p><strong>Step 1 — Create your NVIDIA account.</strong> Go to <strong>build.nvidia.com</strong> and click Sign In / Get Started in the top right. You can register with an email address or sign in with an existing Google or GitHub account. This creates an NVIDIA Developer Program membership, which is free. You will not be asked for payment details at any point in this flow.</p>
 
                 <p><strong>Step 2 — Verify the account.</strong> Confirm the link in your email. NVIDIA has also been asking for phone verification on new accounts, so keep your phone handy — you will get an OTP. This step matters more than it looks, because verification is what actually releases your credit balance. Accounts that stall at half-verified sometimes show a zero balance and people assume the free tier is gone. It is not; the verification simply is not finished.</p>
 
-                <p><strong>Step 3 — Generate the API key.</strong> Once you are inside, go to <a href="https://build.nvidia.com/settings/api-keys" target="_blank" rel="noopener noreferrer">build.nvidia.com/settings/api-keys</a>, or click your profile icon and pick API Keys. Hit <em>Generate API Key</em>, give it a recognisable name (I use one key per project — "college-chatbot", "resume-parser" — so I can revoke one without breaking everything else), and confirm.</p>
+                <p><strong>Step 3 — Generate the API key.</strong> Once you are inside, go to <strong>build.nvidia.com/settings/api-keys</strong>, or click your profile icon and pick API Keys. Hit <em>Generate API Key</em>, give it a recognisable name (I use one key per project — "college-chatbot", "resume-parser" — so I can revoke one without breaking everything else), and confirm.</p>
 
                 <p>You will get a long string that begins with <code>nvapi-</code>. <span class="key-point">Copy it immediately and store it somewhere safe — NVIDIA shows the full key exactly once.</span> If you close that dialog without copying it, <span class="hl-red">the key is not recoverable</span> and you will need to generate a new one.</p>
 
                 <p><strong>Step 4 — Check your credit balance.</strong> Click your profile avatar in the API catalogue. You should see your credit balance sitting there — <span class="hl-green">1,000 credits</span> on a fresh, verified account. This is the number that matters, not any dollar figure.</p>
-
-                <p class="official-link">
-                    <a href="https://build.nvidia.com/" target="_blank" rel="noopener">
-                        Get Your Free API Key Here — Official NVIDIA Build Portal
-                    </a>
-                </p>
-
-                <p class="official-link">
-                    <a href="https://build.nvidia.com/settings/api-keys" target="_blank" rel="noopener">
-                        Direct Link — Generate NVIDIA API Key (nvapi- key)
-                    </a>
-                </p>
 
                 <div class="warning-box">
                     <h4><i class="fas fa-triangle-exclamation"></i> Never commit your key to GitHub</h4>
@@ -376,7 +364,7 @@
                     <li><strong>If you already signed up with a business or institutional email</strong>, the request flow is usually shorter — the licence activation and credit top-up happen with fewer additional steps.</li>
                 </ul>
 
-                <p><span class="hl-violet">For students in India, your college or university email address</span> (the <code>@somecollege.edu.in</code> or <code>@iit*.ac.in</code> style address most institutions issue) generally counts as an organisation email here. If your college gave you one and you have never used it, this is an excellent reason to go dig out the password. If your request is not processed automatically, the <a href="https://forums.developer.nvidia.com/" target="_blank" rel="noopener noreferrer">NVIDIA Developer Forums</a> have a running thread for credit requests where NVIDIA staff process them manually — that is the documented fallback route, and it does work, it is just slower.</p>
+                <p><span class="hl-violet">For students in India, your college or university email address</span> (the <code>@somecollege.edu.in</code> or <code>@iit*.ac.in</code> style address most institutions issue) generally counts as an organisation email here. If your college gave you one and you have never used it, this is an excellent reason to go dig out the password. If your request is not processed automatically, the <strong>NVIDIA Developer Forums</strong> have a running thread for credit requests where NVIDIA staff process them manually — that is the documented fallback route, and it does work, it is just slower.</p>
 
                 <div class="tip-box">
                     <h4><i class="fas fa-lightbulb"></i> Do the credit request on day one</h4>
@@ -560,7 +548,7 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <div class="info-box">
                     <h4>A quick note on model names</h4>
-                    <p>NVIDIA's catalogue moves fast — models get added, versioned and occasionally deprecated. Before you hard-code an ID, open the model's card on <a href="https://build.nvidia.com/models" target="_blank" rel="noopener noreferrer">build.nvidia.com/models</a> and copy the exact ID shown in its code sample. Every card shows the current ID and the features that model supports (tool calling, vision, structured output, context length). If a call fails with a model-not-found error, an outdated ID is the first thing to check.</p>
+                    <p>NVIDIA's catalogue moves fast — models get added, versioned and occasionally deprecated. Before you hard-code an ID, open the model's card on <strong>build.nvidia.com/models</strong> and copy the exact ID shown in its code sample. Every card shows the current ID and the features that model supports (tool calling, vision, structured output, context length). If a call fails with a model-not-found error, an outdated ID is the first thing to check.</p>
                 </div>
 
                 <!-- Also Read Section -->
@@ -713,7 +701,7 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <p>If you are looking for an unlimited free replacement for a ChatGPT Plus subscription, or a production backend for an app with real users, <span class="hl-red">this is not that</span>. The credits are finite, the rate limits are modest, and there is no SLA. Trying to force it into that role will end in frustration.</p>
 
-                <p>My recommendation: go to <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a>, sign up, generate the key, and <span class="key-point">immediately submit the request for the additional 4,000 credits</span>. Start with <code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code> as your default model, keep <code>meta/llama-3.1-8b-instruct</code> around for cheap bulk work, and reach for the coder or reasoning models only when the task earns it. <span class="hl-green">Ten minutes of setup, ₹0 spent</span>, and you have a genuinely capable AI backend for whatever you want to build next.</p>
+                <p>My recommendation: go to <strong>build.nvidia.com</strong>, sign up, generate the key, and <span class="key-point">immediately submit the request for the additional 4,000 credits</span>. Start with <code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code> as your default model, keep <code>meta/llama-3.1-8b-instruct</code> around for cheap bulk work, and reach for the coder or reasoning models only when the task earns it. <span class="hl-green">Ten minutes of setup, ₹0 spent</span>, and you have a genuinely capable AI backend for whatever you want to build next.</p>
 
                 <h2>Official Links</h2>
 
