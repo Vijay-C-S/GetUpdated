@@ -54,6 +54,25 @@
         .article-content pre code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Courier New",monospace;font-size:0.88rem;line-height:1.7;color:var(--blog-text);white-space:pre;display:block}
         .article-content p code,.article-content li code,.article-content td code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Courier New",monospace;font-size:0.9em;background:var(--blog-card-bg);border:1px solid var(--blog-border);border-radius:4px;padding:0.1rem 0.35rem;word-break:break-word}
         @media (max-width:576px){.article-content pre code{font-size:0.78rem}}
+
+        /* Theme-aware emphasis colours for key points */
+        .hl-green{color:#15803d;font-weight:700}
+        .hl-amber{color:#b45309;font-weight:700}
+        .hl-red{color:#dc2626;font-weight:700}
+        .hl-violet{color:#6d28d9;font-weight:700}
+        [data-theme="dark"] .hl-green{color:#4ade80}
+        [data-theme="dark"] .hl-amber{color:#fbbf24}
+        [data-theme="dark"] .hl-red{color:#f87171}
+        [data-theme="dark"] .hl-violet{color:#c4b5fd}
+
+        /* Highlighted key-takeaway line */
+        .key-point{background:linear-gradient(transparent 62%,rgba(34,197,94,0.28) 62%);font-weight:700;color:var(--blog-text)}
+
+        /* Centred official-link callout (matches site style) */
+        .official-link{text-align:center;margin:1.5rem 0 1.8rem}
+        .official-link a{display:inline;color:#22c55e;text-decoration:none;background:transparent;border:none;border-radius:0;padding:0;box-shadow:none;font-weight:700;letter-spacing:0.3px;font-size:1.05rem}
+        .official-link a:hover{color:#16a34a;text-decoration:underline}
+        [data-theme="dark"] .official-link a:hover{color:#4ade80}
     </style>
 
     <!-- Schema.org Article Markup -->
@@ -271,7 +290,7 @@
             <div class="article-content">
                 <p>Here is the situation almost every student and indie developer in India runs into. You have an idea for an AI project — a college mini-project, a résumé screener, a chatbot for your startup, a coding assistant for your own editor. You sit down to build it, you reach for an API, and then you hit the wall: OpenAI wants a card on file, Anthropic wants a card on file, Google gives you a free tier that quietly throttles you, and suddenly your ₹0 side project has a monthly bill attached to it before it has a single user.</p>
 
-                <p>Meanwhile there is a genuinely free option sitting in plain sight that most people either have not heard of or assume is some kind of limited demo. It is not. NVIDIA runs a hosted API catalogue at <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a> that serves more than a hundred open models — Llama, DeepSeek, Qwen, Mistral, OpenAI's open-weight GPT-OSS models, and NVIDIA's own Nemotron family — on NVIDIA's own GPU infrastructure, through an API that speaks the exact same protocol as OpenAI's. You sign up, you get an API key, and you get free credits to spend on any model in the catalogue. No credit card. No trial countdown clock ticking down from day one.</p>
+                <p>Meanwhile there is a genuinely free option sitting in plain sight that most people either have not heard of or assume is some kind of limited demo. It is not. NVIDIA runs a hosted API catalogue at <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a> that serves more than a hundred open models — Llama, DeepSeek, Qwen, Mistral, OpenAI's open-weight GPT-OSS models, and NVIDIA's own Nemotron family — on NVIDIA's own GPU infrastructure, through an API that speaks the exact same protocol as OpenAI's. You sign up, you get an API key, and you get free credits to spend on any model in the catalogue. <span class="hl-green">No credit card. No trial countdown clock ticking down from day one.</span></p>
 
                 <p>I have been running this key across several projects for a while now, and this guide is everything I wish someone had written down for me on day one: how to actually get the key, how to redeem the extra credits most people never claim, how to wire it into your code in about four lines, which model you should genuinely be using for which job, and — importantly — where the free tier stops being enough.</p>
 
@@ -288,13 +307,13 @@
                 <div class="info-box">
                     <h4>The NVIDIA free tier at a glance</h4>
                     <ul>
-                        <li><strong>Cost:</strong> ₹0 — no credit card required at sign-up</li>
-                        <li><strong>Starting balance:</strong> 1,000 API credits on account verification</li>
-                        <li><strong>Extra credits:</strong> up to 4,000 more on request (5,000 total)</li>
-                        <li><strong>Models:</strong> 100+ open models — Nemotron, Llama, DeepSeek, Qwen, Mistral, GPT-OSS and more</li>
-                        <li><strong>Rate limit:</strong> roughly 40 requests per minute per model, account-level</li>
+                        <li><strong>Cost:</strong> <span class="hl-green">₹0 — no credit card required at sign-up</span></li>
+                        <li><strong>Starting balance:</strong> <span class="hl-green">1,000 API credits</span> on account verification</li>
+                        <li><strong>Extra credits:</strong> <span class="hl-green">up to 4,000 more on request</span> (5,000 total)</li>
+                        <li><strong>Models:</strong> <span class="hl-violet">100+ open models</span> — Nemotron, Llama, DeepSeek, Qwen, Mistral, GPT-OSS and more</li>
+                        <li><strong>Rate limit:</strong> <span class="hl-amber">roughly 40 requests per minute per model</span>, account-level</li>
                         <li><strong>API style:</strong> OpenAI-compatible, at <code>https://integrate.api.nvidia.com/v1</code></li>
-                        <li><strong>Expiry:</strong> no trial countdown on the base credits</li>
+                        <li><strong>Expiry:</strong> <span class="hl-green">no trial countdown on the base credits</span></li>
                     </ul>
                 </div>
 
@@ -308,9 +327,21 @@
 
                 <p><strong>Step 3 — Generate the API key.</strong> Once you are inside, go to <a href="https://build.nvidia.com/settings/api-keys" target="_blank" rel="noopener noreferrer">build.nvidia.com/settings/api-keys</a>, or click your profile icon and pick API Keys. Hit <em>Generate API Key</em>, give it a recognisable name (I use one key per project — "college-chatbot", "resume-parser" — so I can revoke one without breaking everything else), and confirm.</p>
 
-                <p>You will get a long string that begins with <code>nvapi-</code>. Copy it immediately and store it somewhere safe. NVIDIA shows the full key exactly once. If you close that dialog without copying it, the key is not recoverable and you will need to generate a new one.</p>
+                <p>You will get a long string that begins with <code>nvapi-</code>. <span class="key-point">Copy it immediately and store it somewhere safe — NVIDIA shows the full key exactly once.</span> If you close that dialog without copying it, <span class="hl-red">the key is not recoverable</span> and you will need to generate a new one.</p>
 
-                <p><strong>Step 4 — Check your credit balance.</strong> Click your profile avatar in the API catalogue. You should see your credit balance sitting there — 1,000 credits on a fresh, verified account. This is the number that matters, not any dollar figure.</p>
+                <p><strong>Step 4 — Check your credit balance.</strong> Click your profile avatar in the API catalogue. You should see your credit balance sitting there — <span class="hl-green">1,000 credits</span> on a fresh, verified account. This is the number that matters, not any dollar figure.</p>
+
+                <p class="official-link">
+                    <a href="https://build.nvidia.com/" target="_blank" rel="noopener">
+                        Get Your Free API Key Here — Official NVIDIA Build Portal
+                    </a>
+                </p>
+
+                <p class="official-link">
+                    <a href="https://build.nvidia.com/settings/api-keys" target="_blank" rel="noopener">
+                        Direct Link — Generate NVIDIA API Key (nvapi- key)
+                    </a>
+                </p>
 
                 <div class="warning-box">
                     <h4><i class="fas fa-triangle-exclamation"></i> Never commit your key to GitHub</h4>
@@ -334,18 +365,18 @@
 
                 <h3>The initial 1,000 credits — automatic, no code needed</h3>
 
-                <p>There is no coupon, no voucher and no redemption code for the base allowance. The 1,000 credits are applied to your account automatically once verification completes. If you are searching for a promo code to enter somewhere, stop — that field does not exist. If your balance shows zero on a new account, the cause is almost always incomplete email or phone verification, or a corporate network blocking the verification callback. Finish verification and the balance appears.</p>
+                <p><span class="key-point">There is no coupon, no voucher and no redemption code for the base allowance.</span> The 1,000 credits are applied to your account automatically once verification completes. If you are searching for a promo code to enter somewhere, stop — <span class="hl-red">that field does not exist</span>. If your balance shows zero on a new account, the cause is almost always <span class="hl-amber">incomplete email or phone verification</span>, or a corporate network blocking the verification callback. Finish verification and the balance appears.</p>
 
                 <h3>The additional 4,000 credits — you have to ask</h3>
 
-                <p>This is the part most people never claim. From inside the API catalogue, click your profile and choose <strong>Request More</strong>. What happens next depends on the email you registered with:</p>
+                <p><span class="key-point">This is the part most people never claim.</span> From inside the API catalogue, click your profile and choose <span class="hl-green">Request More</span>. What happens next depends on the email you registered with:</p>
 
                 <ul>
-                    <li><strong>If you signed up with a personal email</strong> (Gmail, Outlook, Yahoo), you will be prompted to supply a business or organisation email address. Providing a valid one activates a <strong>free 90-day NVIDIA AI Enterprise evaluation licence</strong> and unlocks up to 4,000 additional credits, bringing your total to 5,000.</li>
+                    <li><strong>If you signed up with a personal email</strong> (Gmail, Outlook, Yahoo), you will be prompted to supply a business or organisation email address. Providing a valid one activates a <strong>free 90-day NVIDIA AI Enterprise evaluation licence</strong> and unlocks <span class="hl-green">up to 4,000 additional credits</span>, bringing your total to <span class="hl-green">5,000</span>.</li>
                     <li><strong>If you already signed up with a business or institutional email</strong>, the request flow is usually shorter — the licence activation and credit top-up happen with fewer additional steps.</li>
                 </ul>
 
-                <p>For students in India, your college or university email address (the <code>@somecollege.edu.in</code> or <code>@iit*.ac.in</code> style address most institutions issue) generally counts as an organisation email here. If your college gave you one and you have never used it, this is an excellent reason to go dig out the password. If your request is not processed automatically, the <a href="https://forums.developer.nvidia.com/" target="_blank" rel="noopener noreferrer">NVIDIA Developer Forums</a> have a running thread for credit requests where NVIDIA staff process them manually — that is the documented fallback route, and it does work, it is just slower.</p>
+                <p><span class="hl-violet">For students in India, your college or university email address</span> (the <code>@somecollege.edu.in</code> or <code>@iit*.ac.in</code> style address most institutions issue) generally counts as an organisation email here. If your college gave you one and you have never used it, this is an excellent reason to go dig out the password. If your request is not processed automatically, the <a href="https://forums.developer.nvidia.com/" target="_blank" rel="noopener noreferrer">NVIDIA Developer Forums</a> have a running thread for credit requests where NVIDIA staff process them manually — that is the documented fallback route, and it does work, it is just slower.</p>
 
                 <div class="tip-box">
                     <h4><i class="fas fa-lightbulb"></i> Do the credit request on day one</h4>
@@ -356,15 +387,15 @@
 
                 <p>Credits are not tokens, and this trips people up constantly. A credit is roughly a unit of compute cost, and each API request consumes a variable number of them depending on which model you called and how much work it did.</p>
 
-                <p>The practical rule is simple: <strong>model size drives credit burn</strong>. A small model like Llama 3.1 8B costs a fraction of a credit per request. A giant reasoning model in the hundreds-of-billions-of-parameters range costs meaningfully more per call, because NVIDIA is running far more GPU compute to answer you. A reasoning model that "thinks" for two thousand tokens before it answers costs more than a straightforward chat model that replies in fifty.</p>
+                <p>The practical rule is simple: <span class="key-point">model size drives credit burn</span>. A small model like Llama 3.1 8B costs <span class="hl-green">a fraction of a credit</span> per request. A giant reasoning model in the hundreds-of-billions-of-parameters range costs meaningfully more per call, because NVIDIA is running far more GPU compute to answer you. A reasoning model that "thinks" for two thousand tokens before it answers costs more than a straightforward chat model that replies in fifty.</p>
 
                 <p>What this means for your 1,000 free credits: if you spend them all on the largest reasoning models with long chain-of-thought outputs, you will burn through them surprisingly quickly. If you use a small or mid-size model for the ninety per cent of your calls that are routine and reserve the giants for the genuinely hard problems, the same 1,000 credits stretch a very long way. That routing discipline is the single biggest determinant of how far your free tier goes.</p>
 
-                <p>Independently of credits, there is a <strong>rate limit of roughly 40 requests per minute per model</strong>, applied at the account level. This one catches people building bulk pipelines — you can have 4,000 credits sitting unused and still get throttled because you fired off two hundred requests in ten seconds. Add a small delay or a retry-with-backoff loop to any batch job.</p>
+                <p>Independently of credits, there is a <span class="hl-amber">rate limit of roughly 40 requests per minute per model</span>, applied at the account level. This one catches people building bulk pipelines — <span class="key-point">you can have 4,000 credits sitting unused and still get throttled</span> because you fired off two hundred requests in ten seconds. Add a small delay or a retry-with-backoff loop to any batch job.</p>
 
                 <h2>Making Your First API Call</h2>
 
-                <p>Here is where NVIDIA made an excellent decision: rather than inventing a new API format, they made the hosted endpoints <strong>OpenAI-compatible</strong>. The base URL is <code>https://integrate.api.nvidia.com/v1</code> and it accepts standard <code>/chat/completions</code> requests. If you have ever written OpenAI code, you already know how to use this — you change two lines.</p>
+                <p>Here is where NVIDIA made an excellent decision: rather than inventing a new API format, they made the hosted endpoints <span class="hl-violet">OpenAI-compatible</span>. The base URL is <code>https://integrate.api.nvidia.com/v1</code> and it accepts standard <code>/chat/completions</code> requests. <span class="key-point">If you have ever written OpenAI code, you already know how to use this — you change two lines.</span></p>
 
                 <h3>Python</h3>
 
@@ -453,7 +484,7 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <h2>Which Model Is Best? An Honest Breakdown</h2>
 
-                <p>"Which model is best" is the wrong question, and asking it is how people waste their credits. The right question is <em>best at what</em>. A 550-billion-parameter reasoning model is objectively worse than an 8B model at the job of classifying five thousand support tickets, because it costs vastly more and the 8B model gets it right anyway.</p>
+                <p><span class="key-point">"Which model is best" is the wrong question</span>, and asking it is how people waste their credits. The right question is <span class="hl-violet">best at what</span>. A 550-billion-parameter reasoning model is objectively worse than an 8B model at the job of classifying five thousand support tickets, because it costs vastly more and the 8B model gets it right anyway.</p>
 
                 <p>Here is how I actually route work across the catalogue, with the model IDs you paste into your code.</p>
 
@@ -468,9 +499,9 @@ console.log(res.choices[0].message.content);</code></pre>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>General purpose / best all-rounder</td>
+                            <td><span class="hl-green">General purpose / best all-rounder</span></td>
                             <td><code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code></td>
-                            <td>The sweet spot. Strong reasoning and chat quality at a fraction of the credit cost of the giants.</td>
+                            <td><span class="hl-green">The sweet spot.</span> Strong reasoning and chat quality at a fraction of the credit cost of the giants.</td>
                         </tr>
                         <tr>
                             <td>Writing and refactoring code</td>
@@ -485,7 +516,7 @@ console.log(res.choices[0].message.content);</code></pre>
                         <tr>
                             <td>Maximum quality, cost no object</td>
                             <td><code>nvidia/nemotron-3-ultra-550b-a55b</code></td>
-                            <td>NVIDIA's flagship. Excellent, and the fastest way to empty your credit balance.</td>
+                            <td>NVIDIA's flagship. Excellent, and <span class="hl-red">the fastest way to empty your credit balance</span>.</td>
                         </tr>
                         <tr>
                             <td>Agents and tool calling</td>
@@ -523,9 +554,9 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <h3>So what is the single best pick?</h3>
 
-                <p>If you force me to name one model and one model only: <strong><code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code></strong>. NVIDIA post-trained this specifically for reasoning and instruction-following, and the result punches far above its parameter count. On the free tier, the thing you are optimising is <em>quality per credit</em>, and that is precisely where this model wins. It handles chat, summarisation, structured output, everyday coding and light reasoning well enough that you rarely need to reach for anything bigger.</p>
+                <p>If you force me to name one model and one model only: <span class="hl-violet"><code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code></span>. NVIDIA post-trained this specifically for reasoning and instruction-following, and the result punches far above its parameter count. On the free tier, <span class="key-point">the thing you are optimising is quality per credit</span>, and that is precisely where this model wins. It handles chat, summarisation, structured output, everyday coding and light reasoning well enough that you rarely need to reach for anything bigger.</p>
 
-                <p>The pattern I would actually recommend is a two-tier setup: run Nemotron Super as your default, and add one escalation rule — when a request involves serious multi-step reasoning or heavy code generation, route it to DeepSeek or the Qwen coder. Two model IDs and one <code>if</code> statement will make your free credits last several times longer than calling the biggest model for everything.</p>
+                <p>The pattern I would actually recommend is a two-tier setup: run Nemotron Super as your default, and add one escalation rule — when a request involves serious multi-step reasoning or heavy code generation, route it to DeepSeek or the Qwen coder. <span class="key-point">Two model IDs and one <code>if</code> statement will make your free credits last several times longer</span> than calling the biggest model for everything.</p>
 
                 <div class="info-box">
                     <h4>A quick note on model names</h4>
@@ -583,11 +614,11 @@ console.log(res.choices[0].message.content);</code></pre>
                 <p>I would rather you go in with clear expectations than discover these at 2 a.m. before a demo:</p>
 
                 <ul>
-                    <li><strong>The rate limit is real and low.</strong> Around 40 requests per minute per model is fine for a chatbot with a handful of users and completely inadequate for a batch job over ten thousand rows. Build in backoff from the start.</li>
-                    <li><strong>Credits are finite and non-renewing.</strong> This is not a monthly free allowance that resets. You get 1,000, you can request up to 4,000 more, and then you are done. Budget accordingly.</li>
+                    <li><span class="hl-amber">The rate limit is real and low.</span> Around 40 requests per minute per model is fine for a chatbot with a handful of users and completely inadequate for a batch job over ten thousand rows. Build in backoff from the start.</li>
+                    <li><span class="hl-red">Credits are finite and non-renewing.</span> This is not a monthly free allowance that resets. You get 1,000, you can request up to 4,000 more, and then you are done. Budget accordingly.</li>
                     <li><strong>No frontier closed models.</strong> The catalogue is open-weight models. There is no GPT-5-class or Claude Opus-class model here. For the hardest reasoning tasks, the best commercial models are still ahead — this is a trade-off you are making in exchange for zero cost.</li>
                     <li><strong>Cold starts on less popular models.</strong> Frequently used models respond instantly. Something obscure may take noticeably longer on the first call while capacity spins up.</li>
-                    <li><strong>Not a production SLA.</strong> These are evaluation endpoints. There is no uptime guarantee, and NVIDIA can change or deprecate a hosted model. Do not put a paying customer's critical path behind it.</li>
+                    <li><span class="hl-red">Not a production SLA.</span> These are evaluation endpoints. There is no uptime guarantee, and NVIDIA can change or deprecate a hosted model. Do not put a paying customer's critical path behind it.</li>
                     <li><strong>The business email requirement can be a wall.</strong> If you have no organisation or college email at all, unlocking the additional 4,000 credits is harder, and you may need to go the forum request route.</li>
                     <li><strong>Model IDs drift.</strong> Catalogue entries get versioned and retired. Code that worked six months ago can fail with a model-not-found error. Keep model IDs in config, not scattered through your source.</li>
                 </ul>
@@ -597,10 +628,10 @@ console.log(res.choices[0].message.content);</code></pre>
                 <p>These are the habits that make the difference between a free tier that lasts a weekend and one that lasts a semester:</p>
 
                 <ol>
-                    <li><strong>Route by difficulty, not by habit.</strong> Default to a mid-size model and escalate to a large one only when the task genuinely needs it. This is the single highest-impact change you can make.</li>
+                    <li><span class="hl-green">Route by difficulty, not by habit.</span> Default to a mid-size model and escalate to a large one only when the task genuinely needs it. <span class="key-point">This is the single highest-impact change you can make.</span></li>
                     <li><strong>Cap <code>max_tokens</code> deliberately.</strong> If you want a one-line summary, do not leave the ceiling at 4,096. Long generations cost more, and an unbounded reasoning model will happily think out loud for two thousand tokens before answering.</li>
                     <li><strong>Cache aggressively.</strong> During development you will run the same prompt dozens of times while tweaking downstream code. Cache responses to a local file keyed by prompt hash. This alone can cut development burn by more than half.</li>
-                    <li><strong>Prototype in the browser playground.</strong> Every model card has a free web playground. Iterate on your prompt there until it produces what you want, then move it into code. Do not burn API credits on prompt experiments.</li>
+                    <li><span class="hl-green">Prototype in the browser playground.</span> Every model card has a free web playground. Iterate on your prompt there until it produces what you want, then move it into code. <span class="hl-amber">Do not burn API credits on prompt experiments.</span></li>
                     <li><strong>Trim your context.</strong> Sending an entire document when three relevant paragraphs would do costs you on every single call. Retrieval before generation is cheaper as well as more accurate.</li>
                     <li><strong>Use small models for structure, big models for judgement.</strong> Extraction, classification, formatting and routing are 8B-model jobs. Save the expensive models for tasks that genuinely require reasoning.</li>
                     <li><strong>Request the extra credits on day one.</strong> Worth repeating. Do it before you need them.</li>
@@ -610,7 +641,7 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <p>At some point your project either dies or it grows, and if it grows you will hit the ceiling. You have three sensible exits.</p>
 
-                <p><strong>Self-host the same model.</strong> This is the option people forget, and it is the best one for many projects. Almost everything in this catalogue is open weights. You can pull the NIM container, or run the raw model with vLLM or Ollama, on a rented GPU or your own machine, and pay nothing per token forever. Your code barely changes — vLLM also exposes an OpenAI-compatible endpoint, so it is once again a base URL swap. If you have a decent GPU, the small and mid-size models run comfortably at home.</p>
+                <p><span class="hl-green">Self-host the same model.</span> This is the option people forget, and it is the best one for many projects. Almost everything in this catalogue is open weights. You can pull the NIM container, or run the raw model with vLLM or Ollama, on a rented GPU or your own machine, and <span class="key-point">pay nothing per token forever</span>. Your code barely changes — vLLM also exposes an OpenAI-compatible endpoint, so it is once again a base URL swap. If you have a decent GPU, the small and mid-size models run comfortably at home.</p>
 
                 <p><strong>Move to NVIDIA AI Enterprise.</strong> If you are inside a company that already runs NVIDIA infrastructure, the paid licence gives you production support, guaranteed capacity and the same model catalogue. This is the path NVIDIA is nudging you towards, and for enterprise deployments it is a reasonable one.</p>
 
@@ -676,13 +707,45 @@ console.log(res.choices[0].message.content);</code></pre>
 
                 <h2>Final Verdict — Is the NVIDIA Free API Worth Your Time?</h2>
 
-                <p>Yes, emphatically — provided you understand what it is for.</p>
+                <p><span class="hl-green">Yes, emphatically</span> — provided you understand what it is for.</p>
 
                 <p>If you are a student building a project, a developer learning how LLM applications are actually assembled, an indie hacker validating an idea, or an engineer evaluating open models before committing to a deployment, this is one of the best free offers in AI right now. A hundred-plus serious models, real GPU infrastructure behind them, an API that is a two-line change from OpenAI's, and no credit card. The fact that everything you write is portable to self-hosting later makes it better still — you are learning transferable skills, not vendor-specific ones.</p>
 
-                <p>If you are looking for an unlimited free replacement for a ChatGPT Plus subscription, or a production backend for an app with real users, this is not that. The credits are finite, the rate limits are modest, and there is no SLA. Trying to force it into that role will end in frustration.</p>
+                <p>If you are looking for an unlimited free replacement for a ChatGPT Plus subscription, or a production backend for an app with real users, <span class="hl-red">this is not that</span>. The credits are finite, the rate limits are modest, and there is no SLA. Trying to force it into that role will end in frustration.</p>
 
-                <p>My recommendation: go to <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a>, sign up, generate the key, and immediately submit the request for the additional 4,000 credits. Start with <code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code> as your default model, keep <code>meta/llama-3.1-8b-instruct</code> around for cheap bulk work, and reach for the coder or reasoning models only when the task earns it. Ten minutes of setup, ₹0 spent, and you have a genuinely capable AI backend for whatever you want to build next.</p>
+                <p>My recommendation: go to <a href="https://build.nvidia.com/" target="_blank" rel="noopener noreferrer">build.nvidia.com</a>, sign up, generate the key, and <span class="key-point">immediately submit the request for the additional 4,000 credits</span>. Start with <code>nvidia/llama-3.3-nemotron-super-49b-v1.5</code> as your default model, keep <code>meta/llama-3.1-8b-instruct</code> around for cheap bulk work, and reach for the coder or reasoning models only when the task earns it. <span class="hl-green">Ten minutes of setup, ₹0 spent</span>, and you have a genuinely capable AI backend for whatever you want to build next.</p>
+
+                <h2>Official Links</h2>
+
+                <p class="official-link">
+                    <a href="https://build.nvidia.com/" target="_blank" rel="noopener">
+                        Get Your Free API Key Here — Official NVIDIA Build Portal
+                    </a>
+                </p>
+
+                <p class="official-link">
+                    <a href="https://build.nvidia.com/settings/api-keys" target="_blank" rel="noopener">
+                        Generate API Key — NVIDIA API Keys Page
+                    </a>
+                </p>
+
+                <p class="official-link">
+                    <a href="https://build.nvidia.com/models" target="_blank" rel="noopener">
+                        Browse All Models — NVIDIA NIM Model Catalogue
+                    </a>
+                </p>
+
+                <p class="official-link">
+                    <a href="https://docs.api.nvidia.com/nim/reference/llm-apis" target="_blank" rel="noopener">
+                        Official API Documentation — NVIDIA NIM Reference
+                    </a>
+                </p>
+
+                <p class="official-link">
+                    <a href="https://forums.developer.nvidia.com/" target="_blank" rel="noopener">
+                        Request Extra Credits — NVIDIA Developer Forums
+                    </a>
+                </p>
 
             </div>
 
