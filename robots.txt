@@ -1,27 +1,68 @@
-# GetUpdated Robots.txt
-# https://www.getupdated.in
+# GetUpdated — https://www.getupdated.in
+# Tech news, fresher jobs and internships in India
 
+# ── Default: allow everything crawlable ──────────────────────────────
 User-agent: *
 Allow: /
-# Prevent crawling of internal component files
 Disallow: /sections/
 Disallow: /.git/
-Disallow: /.gitignore
-Disallow: /category/
-Crawl-delay: 2
 
-# Allow Google to access all important content
+# ── Google ───────────────────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
 Disallow: /sections/
-Disallow: /.git/
 
-# Allow Google Ads to crawl
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
 User-agent: Mediapartners-Google
 Allow: /
 
 User-agent: AdsBot-Google
 Allow: /
 
-# Sitemap location
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+# ── Bing / Yandex ────────────────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+Disallow: /sections/
+
+User-agent: YandexBot
+Allow: /
+
+# ── AI answer engines (drive referral traffic — keep allowed) ────────
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# ── Aggressive SEO scrapers (save bandwidth) ─────────────────────────
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# ── Sitemaps ─────────────────────────────────────────────────────────
 Sitemap: https://www.getupdated.in/sitemap.xml
