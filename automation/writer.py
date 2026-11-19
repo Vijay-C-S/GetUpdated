@@ -198,7 +198,7 @@ def assemble(meta: dict, body: str) -> str:
         jp["qualifications"] = job["qualifications"]
     if job.get("valid_through"):
         jp["validThrough"] = f"{job['valid_through']}T23:59:59"
-    if job.get("vacancies"):
+    if int(job.get("vacancies") or 0) >= 100:  # small counts are never published
         jp["totalJobOpenings"] = job["vacancies"]
     blocks.append(jsonld(jp))
     if faqs:
@@ -279,6 +279,19 @@ def load_and_check(draft_dir: Path) -> tuple[dict, str]:
     return meta, body
 
 
+# a 1-2 digit number (not part of a bigger number like 1,265 or 3047) followed by posts/vacancies/...
+SMALL_COUNT_RE = re.compile(r"(?<![\d,.])\b([1-9]\d?)\s*(\+\s*)?(posts?|vacanc\w*|openings?|seats?|positions?)\b", re.I)
+
+
+def small_count_mentions(meta: dict, body: str) -> list[str]:
+    """Counts below 100 that slipped into the text (house rule: don't publish them)."""
+    hay = " ".join([body, meta.get("slug", "").replace("-", " ")] +
+                   [str(meta.get(k, "")) for k in ("h1", "seo_title", "card_title", "card_excerpt",
+                                                   "whatsapp_text", "meta_description", "og_title")] +
+                   [str(f) for f in meta.get("key_facts", [])] + [str(f) for f in meta.get("faqs", [])])
+    return sorted({m.group(0) for m in SMALL_COUNT_RE.finditer(re.sub(r"<[^>]+>", " ", hay))})
+
+
 def validate_page(page: str) -> None:
     if "{{" in page:
         raise ValueError("unfilled template placeholder")
@@ -287,7 +300,7 @@ def validate_page(page: str) -> None:
 
 
 def expand(draft_dir: Path, problem: str) -> None:
-    """Ask the model to deepen a too-short article, reusing the facts already gathered."""
+    """Ask the model to fix a rejected draft (too short / house rule), reusing the facts already gathered."""
     body = (draft_dir / "body.html").read_text(encoding="utf-8")
     meta = (draft_dir / "meta.json").read_text(encoding="utf-8")
     log(f"writer: expanding draft ({problem})")
@@ -295,7 +308,8 @@ def expand(draft_dir: Path, problem: str) -> None:
               "with the Write tool so it has 9-13 <h2> sections and 1,500-2,200 words (12,000-18,000 characters). "
               "Keep every fact, link and class exactly as verified; add depth only with genuinely useful, "
               "non-factual guidance (preparation, what the work involves, how to apply well, mistakes to avoid). "
-              "Do not invent facts. Do not change meta.json.\n\nMETA.JSON:\n" + meta + "\n\nCURRENT BODY.HTML:\n" + body)
+              "Do not invent facts. Only rewrite meta.json if the problem says so (keep it valid JSON with "
+              "every field).\n\nMETA.JSON:\n" + meta + "\n\nCURRENT BODY.HTML:\n" + body)
     system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
     run_claude(prompt, CONFIG["writer_model"], ["Write"], timeout=CONFIG["writer_timeout_sec"],
                effort=CONFIG.get("writer_effort"), system_prompt=system,
@@ -339,6 +353,14 @@ def write_job(job_id: str) -> dict:
             raise
         expand(draft_dir, str(exc))  # one cheap retry instead of discarding the research
         meta, body = load_and_check(draft_dir)
+    small = small_count_mentions(meta, body)
+    if small:
+        expand(draft_dir, f"house rule broken: vacancy counts below 100 must not be mentioned, found {small}; "
+                          "remove them from body.html AND rewrite meta.json without them")
+        meta, body = load_and_check(draft_dir)
+        if small_count_mentions(meta, body):
+            meta["verification_notes"] = (meta.get("verification_notes", "") +
+                                          f" | WARNING: still mentions {small_count_mentions(meta, body)}")
     meta["title"] = meta["h1"]  # publisher / approval message use "title"
     (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     page = assemble(meta, body)

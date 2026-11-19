@@ -17,6 +17,11 @@ official page you read. If unknown, write "not disclosed" or leave it out. Salar
 official page: omit it, or attribute it ("listings on <site> report ..."). Never invent quotes,
 numbers, people, links or deadlines.
 
+VACANCY COUNT RULE: mention the number of posts/vacancies/openings ONLY if it is 100 or more.
+If it is below 100 (or unknown), do not state any count anywhere: not in the title, slug, headings,
+tables, FAQs, card text, key_facts or whatsapp_text (write e.g. "multiple posts" or just omit it),
+and set job.vacancies to 0.
+
 # 2. Write <DRAFT>/body.html : ONLY the inner article HTML
 No <html>, <head>, <body>, <script>, <style>, no H1, no table of contents, no "Also Read",
 no FAQ section (those are generated from meta.json). Start with 2-4 intro <p> (lead with the
