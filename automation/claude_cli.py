@@ -13,12 +13,14 @@ class UsageLimitError(RuntimeError):
 
 
 def run_claude(prompt: str, model: str, allowed_tools: list[str] | None = None,
-               timeout: int = 600, cwd: Path = REPO_DIR) -> str:
+               timeout: int = 600, cwd: Path = REPO_DIR, effort: str | None = None) -> str:
     cmd = [CONFIG["claude_bin"], "-p", "--model", model, "--output-format", "json"]
     if allowed_tools:
         cmd += ["--allowedTools", ",".join(allowed_tools)]
+    if effort:
+        cmd += ["--effort", effort]
     cmd += list(CONFIG.get("claude_extra_args", []))
-    log(f"claude: model={model} tools={allowed_tools or 'none'}")
+    log(f"claude: model={model} effort={effort or 'default'} tools={allowed_tools or 'none'}")
     proc = subprocess.run(cmd, input=prompt, cwd=str(cwd), capture_output=True, text=True,
                           encoding="utf-8", errors="replace", timeout=timeout)
     out = proc.stdout.strip()

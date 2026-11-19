@@ -29,6 +29,7 @@ DEFAULT_CONFIG = {
     "claude_bin": "claude",
     "filter_model": "haiku",
     "writer_model": "sonnet",
+    "writer_effort": "low",
     "claude_extra_args": [],
     "writer_timeout_sec": 1800,
     "filter_timeout_sec": 300,

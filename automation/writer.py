@@ -109,7 +109,7 @@ def write_job(job_id: str) -> dict:
 
     try:
         run_claude(build_prompt(job, draft_dir), CONFIG["writer_model"], WRITER_TOOLS,
-                   timeout=CONFIG["writer_timeout_sec"])
+                   timeout=CONFIG["writer_timeout_sec"], effort=CONFIG.get("writer_effort"))
     finally:
         # Safety net: the writer must only write into the draft dir. Undo anything else.
         # Hold the git lock so we never revert a publish that is in progress.
