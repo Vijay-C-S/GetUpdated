@@ -38,3 +38,10 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .blog-wrapper .adsbygoogle {
     max-width: 100% !important;
 }
+
+/* Red alert box for deadlines / "apply early" notes */
+.alert-box{background:#fef2f2;border:1px solid #ef4444;color:#991b1b;padding:1.25rem 1.5rem;border-radius:8px;margin:1.5rem 0}
+.alert-box h4{font-size:1rem;font-weight:600;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;color:#b91c1c}
+[data-theme="dark"] .alert-box{background:rgba(239,68,68,0.12);color:#fca5a5}
+[data-theme="dark"] .alert-box h4{color:#f87171}
+@media (max-width:576px){.alert-box{padding:1rem}}

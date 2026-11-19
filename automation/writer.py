@@ -272,7 +272,7 @@ def load_and_check(draft_dir: Path) -> tuple[dict, str]:
         problems.append(f"article too short ({len(body)} chars)")
     if len(re.findall(r"<h2", body)) < 7:
         problems.append("fewer than 7 <h2> sections")
-    body = links_only_in_official_section(body)
+    body = house_style(links_only_in_official_section(body), meta["official_url"])
     sec = official_section_bounds(body)
     if not sec:
         problems.append('no "Official Links" <h2> section')
@@ -281,6 +281,27 @@ def load_and_check(draft_dir: Path) -> tuple[dict, str]:
     if problems:
         raise ValueError("; ".join(problems))
     return meta, body
+
+
+GREEN_LINK_STYLE = ("display:inline;color:#22c55e;text-decoration:none;background:transparent;border:none;"
+                    "border-radius:0;padding:0;box-shadow:none;font-weight:700;letter-spacing:0.3px;")
+URGENT_RE = re.compile(r"apply early|deadline|last date|closing date|closes|don.?t wait|do not wait|hurry|urgent", re.I)
+
+
+def house_style(body: str, official_url: str) -> str:
+    """Site look, applied in code (free): the official apply link is green (same inline style as
+    the hand-written posts) and deadline / 'apply early' boxes are red (.alert-box)."""
+    def green(m: re.Match) -> str:
+        inner = m.group(2)
+        return (f'<a href="{official_url}" target="_blank" rel="noopener" style="{GREEN_LINK_STYLE}">'
+                f"{inner}</a>")
+    body = re.sub(r'<a\s[^>]*href="(' + re.escape(official_url) + r')"[^>]*>(.*?)</a>', green, body, flags=re.S)
+
+    def red(m: re.Match) -> str:
+        if not URGENT_RE.search(m.group(2)):
+            return m.group(0)
+        return '<div class="alert-box">' + re.sub(r"fa-lightbulb|fa-circle-info|fa-info-circle", "fa-clock", m.group(2))
+    return re.sub(r'<div class="(tip-box|warning-box|info-box)">(\s*<h4>.*?</h4>)', red, body, flags=re.S)
 
 
 def official_section_bounds(body: str) -> tuple[int, int] | None:

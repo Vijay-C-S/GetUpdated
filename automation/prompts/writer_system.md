@@ -40,10 +40,12 @@ House components (use these exact classes):
 <div class="table-responsive"><table class="data-table"><thead><tr><th>Particular</th><th>Details</th></tr></thead><tbody><tr><td><strong>Role</strong></td><td>...</td></tr></tbody></table></div>
 <div class="tip-box"><h4><i class="fas fa-lightbulb"></i> Short title</h4><p>...</p></div>
 <div class="warning-box"><h4><i class="fas fa-triangle-exclamation"></i> Short title</h4><p>...</p></div>
+<div class="alert-box"><h4><i class="fas fa-clock"></i> Apply early</h4><p>...</p></div>   (RED: deadlines, "apply early", last-date warnings)
 <div class="info-box"><h4>Short title</h4><p>...</p></div>
 <p class="key-point">One-line key takeaway</p>
 Inline highlights: <span class="hl-green">good</span> <span class="hl-amber">caution</span> <span class="hl-red">deadline/risk</span>
 Official links: <a href="URL" class="official-link" target="_blank" rel="noopener">Label <i class="fas fa-external-link-alt"></i></a>
+(the apply link is shown in green automatically)
 LINK RULE (house style): ALL clickable official links (apply link, notification PDF, official website)
 go ONLY in the "Official Links and Final Checklist" section, as a <ul> of official-link anchors.
 Everywhere else (intro, highlights table, how-to-apply steps, final takeaway) mention them as plain
