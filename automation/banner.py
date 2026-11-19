@@ -89,6 +89,89 @@ def make_banner(out: Path, company: str, role: str, tag: str = "Freshers Jobs",
     return out
 
 
+# --------------------------------------------------------------------------- company image
+HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"}
+
+
+def _get_image(url: str):
+    import io
+
+    import requests
+    r = requests.get(url, headers=HEADERS, timeout=20)
+    r.raise_for_status()
+    if "svg" in r.headers.get("content-type", "") or url.lower().split("?")[0].endswith(".svg"):
+        return None  # Pillow cannot read SVG
+    img = Image.open(io.BytesIO(r.content))
+    img.load()
+    return img
+
+
+def _page_images(page_url: str) -> tuple[list[str], list[str]]:
+    """(share images, logo candidates) found on a page, best first."""
+    from urllib.parse import urljoin
+
+    import requests
+    from bs4 import BeautifulSoup
+    r = requests.get(page_url, headers=HEADERS, timeout=20)
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, "html.parser")
+    base = r.url
+    share = [urljoin(base, m["content"]) for m in soup.find_all("meta", content=True)
+             if (m.get("property") or m.get("name") or "").lower() in ("og:image", "og:image:url", "twitter:image")]
+    logos = [urljoin(base, l["href"]) for l in soup.find_all("link", href=True)
+             if "apple-touch-icon" in " ".join(l.get("rel", [])).lower()]
+    for img in soup.find_all("img", src=True):
+        hay = " ".join([img.get("src", ""), img.get("alt", ""), " ".join(img.get("class", [])), img.get("id", "")]).lower()
+        if "logo" in hay:
+            logos.append(urljoin(base, img["src"]))
+    return share, logos
+
+
+def _fit_cover(img: Image.Image) -> Image.Image:
+    img = img.convert("RGB")
+    scale = max(W / img.width, H / img.height)
+    img = img.resize((round(img.width * scale), round(img.height * scale)), Image.LANCZOS)
+    left, top = (img.width - W) // 2, (img.height - H) // 2
+    return img.crop((left, top, left + W, top + H))
+
+
+def _logo_card(logo: Image.Image) -> Image.Image:
+    card = Image.new("RGB", (W, H), "white")
+    logo = logo.convert("RGBA")
+    scale = min(720 / logo.width, 460 / logo.height)
+    logo = logo.resize((max(1, round(logo.width * scale)), max(1, round(logo.height * scale))), Image.LANCZOS)
+    card.paste(logo, ((W - logo.width) // 2, (H - logo.height) // 2), logo)
+    return card
+
+
+def company_image(out: Path, page_urls: list[str]) -> bool:
+    """Save the company's own share image or logo as a 1200x800 WebP. Returns False if none found."""
+    logos_seen: list[str] = []
+    for page in [u for u in page_urls if u]:
+        try:
+            share, logos = _page_images(page)
+        except Exception:  # noqa: BLE001
+            continue
+        for url in share:
+            try:
+                img = _get_image(url)
+                if img and img.width >= 600 and img.height >= 300:
+                    _fit_cover(img).save(out, "WEBP", quality=82, method=6)
+                    return True
+            except Exception:  # noqa: BLE001
+                pass
+        logos_seen += logos
+    for url in logos_seen:
+        try:
+            img = _get_image(url)
+            if img and min(img.width, img.height) >= 96:
+                _logo_card(img).save(out, "WEBP", quality=85, method=6)
+                return True
+        except Exception:  # noqa: BLE001
+            pass
+    return False
+
+
 if __name__ == "__main__":
     # quick manual test: python banner.py out.webp "Company" "Role" "Tag" "extra"
     make_banner(Path(sys.argv[1]), *sys.argv[2:6])

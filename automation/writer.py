@@ -22,7 +22,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-from banner import make_banner
+from banner import company_image, make_banner
 from claude_cli import run_claude
 from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, existing_blog_slugs, get_job,
                     git_is_clean, log, now_iso, run, today_ist, update_job)
@@ -322,8 +322,14 @@ def write_job(job_id: str) -> dict:
     page = assemble(meta, body)
     validate_page(page)
     (draft_dir / "post.html").write_text(page, encoding="utf-8")
-    make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"],
-                meta.get("banner_extra", ""))
+    # Post image: the company's own share image / logo; generated banner only as a fallback.
+    img_pages = [meta.get("company_url"), meta.get("official_url")]
+    if job.get("source_type") == "ats":
+        img_pages.append(job["url"])
+    if not company_image(draft_dir / "banner.webp", img_pages):
+        log("writer: no company image found; using generated banner")
+        make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"],
+                    meta.get("banner_extra", ""))
     update_job(job_id, status="draft_ready", slug=meta["slug"], draft_title=meta["h1"],
                drafted_at=now_iso(), drafted_on=today_ist().isoformat())
     log(f"writer: draft ready {meta['slug']}")
