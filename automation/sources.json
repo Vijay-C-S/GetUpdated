@@ -1,45 +1,52 @@
 [
   {
-    "name": "News: IT freshers Bengaluru",
+    "name": "OffCampusJobs4u (IT freshers)",
     "type": "rss",
-    "url": "https://news.google.com/rss/search?q=(%22hiring+freshers%22+OR+%22off+campus%22+OR+%22fresher%22)+(Bangalore+OR+Bengaluru)+2026+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "News/aggregator; find the company's official careers page or form.",
+    "url": "https://offcampusjobs4u.com/feed/",
+    "hint": "Aggregator article; open it and follow its 'Apply link' to the company's official careers page.",
     "enabled": true
   },
   {
-    "name": "News: IT freshers work from home",
+    "name": "FreshersNow (IT freshers)",
     "type": "rss",
-    "url": "https://news.google.com/rss/search?q=(%22work+from+home%22+OR+remote)+(freshers+OR+intern+OR+internship)+2026+India+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "News/aggregator; find the official posting.",
+    "url": "https://www.freshersnow.com/feed/",
+    "hint": "Aggregator article; open it and follow its official apply link.",
     "enabled": true
   },
   {
-    "name": "News: internships Bengaluru / remote",
+    "name": "FresherOpenings (IT freshers)",
     "type": "rss",
-    "url": "https://news.google.com/rss/search?q=internship+2026+(Bangalore+OR+Bengaluru+OR+remote)+(software+OR+electronics+OR+VLSI+OR+embedded)+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "News/aggregator; find the official internship page.",
+    "url": "https://fresheropenings.com/feed/",
+    "hint": "Aggregator article; open it and follow its official apply link.",
     "enabled": true
   },
   {
-    "name": "News: apprentice IT/EC (PSUs)",
+    "name": "FreeJobAlert (central + state govt)",
     "type": "rss",
-    "url": "https://news.google.com/rss/search?q=apprentice+recruitment+2026+(BEL+OR+HAL+OR+ISRO+OR+DRDO+OR+BSNL+OR+ECIL+OR+%22electronics%22+OR+%22computer+science%22)+when:2d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "Find the official notification on the PSU website or NATS portal.",
+    "url": "https://www.freejobalert.com/feed/",
+    "hint": "Aggregator article; open it and follow its 'Official Notification' PDF / 'Official Website' / 'Apply Online' links.",
     "enabled": true
   },
   {
-    "name": "News: central govt recruitment",
+    "name": "KarnatakaCareers (Karnataka + central)",
     "type": "rss",
-    "url": "https://news.google.com/rss/search?q=(SSC+OR+UPSC+OR+RRB+OR+IBPS+OR+SBI+OR+RBI+OR+ISRO+OR+DRDO+OR+BEL+OR+HAL+OR+NIC+OR+C-DOT)+recruitment+2026+notification+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "Find the official notification PDF on the organisation's .gov.in / .nic.in / official site.",
+    "url": "https://www.karnatakacareers.org/feed/",
+    "hint": "Aggregator article; open it and follow its official notification / website links.",
     "enabled": true
   },
   {
     "name": "News: Karnataka govt recruitment",
     "type": "rss",
     "url": "https://news.google.com/rss/search?q=(Karnataka+OR+KPSC+OR+KEA)+recruitment+2026+(notification+OR+%22apply+online%22)+when:2d&hl=en-IN&gl=IN&ceid=IN:en",
-    "hint": "Find the official notification on kpsc.kar.nic.in, cetonline.karnataka.gov.in/kea or the department's karnataka.gov.in site.",
-    "enabled": true
+    "hint": "Headline only (Google News link cannot be opened); WebSearch the headline and find the official notification on kpsc.kar.nic.in, cetonline.karnataka.gov.in/kea or the department's karnataka.gov.in site.",
+    "enabled": false
+  },
+  {
+    "name": "News: central govt recruitment",
+    "type": "rss",
+    "url": "https://news.google.com/rss/search?q=(SSC+OR+UPSC+OR+RRB+OR+IBPS+OR+SBI+OR+RBI+OR+ISRO+OR+DRDO+OR+BEL+OR+HAL+OR+NIC+OR+C-DOT)+recruitment+2026+notification+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
+    "hint": "Headline only; WebSearch the headline and find the official notification.",
+    "enabled": false
   },
   {
     "name": "EXAMPLE careers page (edit me)",

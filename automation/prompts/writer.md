@@ -13,8 +13,15 @@ Never edit, create or delete any other file. Never run git. The pipeline publish
 ## Step 1: Verify against the official source (mandatory)
 
 1. Find the OFFICIAL source: the company's careers page / job post / official application form,
-   or the government's official notification PDF/page. Use WebFetch on the lead URL, and
-   WebSearch if the lead is a news article or aggregator.
+   or the government's official notification PDF/page. Work through these in order, and do not
+   give up before trying all of them:
+   a. WebFetch the lead URL. Aggregator pages (FreeJobAlert, FreshersNow, OffCampusJobs4u, ...)
+      list "Official Notification", "Official Website", "Apply Link" URLs: collect them.
+   b. WebFetch each official link (PDF notifications are fine to fetch).
+   c. If an official site blocks you, WebSearch "<organisation> <post> notification 2026 site:<official domain>"
+      and try the official result URLs, the organisation's careers/recruitment page, and its homepage.
+   d. For company jobs, also try the company's careers site (careers.<company>.com, Workday,
+      Greenhouse, Lever, LinkedIn job post by the company).
 2. Confirm from the official source: company, role, location, eligibility (degree, batch/year),
    how to apply, and the last date if one exists.
 3. If you cannot find an official source, or the posting is closed/expired, or it is not

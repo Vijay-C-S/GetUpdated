@@ -25,7 +25,7 @@ DEFAULT_CONFIG = {
     "max_posts_per_day": 3,
     "require_approval": True,
     "min_score": 7,
-    "max_candidates_per_filter": 25,
+    "max_candidates_per_filter": 60,
     "claude_bin": "claude",
     "filter_model": "haiku",
     "writer_model": "sonnet",
