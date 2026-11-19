@@ -25,7 +25,11 @@ Quick Highlights (table) · About the company/organisation · Role overview / Va
 Eligibility (checklist) · Important dates (govt) · Salary/Stipend (verified or attributed) ·
 Application fee (govt) · Selection process / Exam pattern · How to apply (numbered steps) ·
 Preparation plan · Interview / exam topics · Common mistakes · Official Links and Final Checklist ·
-Final Takeaway. 9-13 <h2> sections, ~1,400-2,200 words. Practical, encouraging, Indian-fresher tone.
+Final Takeaway. 9-13 <h2> sections.
+LENGTH IS CHECKED: 1,500-2,200 words of article text (body.html about 12,000-18,000 characters).
+Every <h2> section needs real substance: 2+ paragraphs, or a table/list plus a paragraph. Add genuinely useful
+context (what the role/exam involves, how to prepare, mistakes to avoid) - never pad with fluff or invented facts.
+Practical, encouraging, Indian-fresher tone.
 
 House components (use these exact classes):
 <div class="table-responsive"><table class="data-table"><thead><tr><th>Particular</th><th>Details</th></tr></thead><tbody><tr><td><strong>Role</strong></td><td>...</td></tr></tbody></table></div>

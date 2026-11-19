@@ -286,6 +286,22 @@ def validate_page(page: str) -> None:
         json.loads(block)
 
 
+def expand(draft_dir: Path, problem: str) -> None:
+    """Ask the model to deepen a too-short article, reusing the facts already gathered."""
+    body = (draft_dir / "body.html").read_text(encoding="utf-8")
+    meta = (draft_dir / "meta.json").read_text(encoding="utf-8")
+    log(f"writer: expanding draft ({problem})")
+    prompt = (f"The article draft was rejected: {problem}. Rewrite {draft_dir.as_posix()}/body.html "
+              "with the Write tool so it has 9-13 <h2> sections and 1,500-2,200 words (12,000-18,000 characters). "
+              "Keep every fact, link and class exactly as verified; add depth only with genuinely useful, "
+              "non-factual guidance (preparation, what the work involves, how to apply well, mistakes to avoid). "
+              "Do not invent facts. Do not change meta.json.\n\nMETA.JSON:\n" + meta + "\n\nCURRENT BODY.HTML:\n" + body)
+    system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
+    run_claude(prompt, CONFIG["writer_model"], ["Write"], timeout=CONFIG["writer_timeout_sec"],
+               effort=CONFIG.get("writer_effort"), system_prompt=system,
+               budget_usd=CONFIG.get("writer_budget_usd"))
+
+
 # --------------------------------------------------------------------------- main
 def write_job(job_id: str) -> dict:
     job = get_job(job_id)
@@ -316,7 +332,13 @@ def write_job(job_id: str) -> dict:
                 run(["git", "reset", "--hard", "HEAD"])
                 run(["git", "clean", "-fd", "--", "blogs", "images", "css", "js", "sections"])
 
-    meta, body = load_and_check(draft_dir)
+    try:
+        meta, body = load_and_check(draft_dir)
+    except ValueError as exc:
+        if not re.search(r"too short|fewer than 7", str(exc)):
+            raise
+        expand(draft_dir, str(exc))  # one cheap retry instead of discarding the research
+        meta, body = load_and_check(draft_dir)
     meta["title"] = meta["h1"]  # publisher / approval message use "title"
     (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     page = assemble(meta, body)

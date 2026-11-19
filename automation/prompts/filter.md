@@ -36,5 +36,6 @@ Categories: "Freshers Jobs", "Internship", "Apprenticeship", "Work From Home", "
 
 The user message contains ALREADY COVERED (recent titles/slugs) and CANDIDATES (id | title | src | note).
 
-Reply with ONLY a JSON array, one object per candidate, no prose:
-[{"id":"...","worthy":true,"score":8,"company":"Organisation","role":"Role title","category":"Freshers Jobs","reason":"short"}]
+Reply with ONLY a JSON array, no prose. Keep it compact:
+- score >= 7: {"id":"...","worthy":true,"score":8,"company":"Org","role":"Role","category":"Freshers Jobs","reason":"<= 10 words"}
+- score < 7:  {"id":"...","score":3,"reason":"<= 5 words"}
