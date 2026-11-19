@@ -1,5 +1,6 @@
 {
-  "max_posts_per_day": 3,
+  "max_posts_per_day": 0,
+  "require_lead_approval": true,
   "require_approval": true,
   "min_score": 7,
   "filter_model": "haiku",

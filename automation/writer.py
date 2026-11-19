@@ -272,11 +272,38 @@ def load_and_check(draft_dir: Path) -> tuple[dict, str]:
         problems.append(f"article too short ({len(body)} chars)")
     if len(re.findall(r"<h2", body)) < 7:
         problems.append("fewer than 7 <h2> sections")
-    if meta["official_url"] not in body:
-        problems.append("official link not used in the article")
+    body = links_only_in_official_section(body)
+    sec = official_section_bounds(body)
+    if not sec:
+        problems.append('no "Official Links" <h2> section')
+    elif meta["official_url"] not in body[sec[0]:sec[1]]:
+        problems.append("official apply/notification link missing from the Official Links section")
     if problems:
         raise ValueError("; ".join(problems))
     return meta, body
+
+
+def official_section_bounds(body: str) -> tuple[int, int] | None:
+    """Start/end offsets of the 'Official Links ...' <h2> section."""
+    heads = list(re.finditer(r"<h2[^>]*>(.*?)</h2>", body, re.S))
+    for i, h in enumerate(heads):
+        if re.search(r"official\s+link", h.group(1), re.I):
+            return h.start(), (heads[i + 1].start() if i + 1 < len(heads) else len(body))
+    return None
+
+
+def links_only_in_official_section(body: str) -> str:
+    """House rule: clickable external links live only in the Official Links section.
+    Any external <a> elsewhere becomes plain <strong> text (free, deterministic)."""
+    sec = official_section_bounds(body)
+    if not sec:
+        return body
+    anchor = re.compile(r'<a\s[^>]*href="https?://[^"]*"[^>]*>(.*?)</a>', re.S | re.I)
+
+    def to_text(chunk: str) -> str:
+        return anchor.sub(lambda m: f"<strong>{re.sub(r'<i[^>]*></i>', '', m.group(1)).strip()}</strong>", chunk)
+
+    return to_text(body[:sec[0]]) + body[sec[0]:sec[1]] + to_text(body[sec[1]:])
 
 
 # a 1-2 digit number (not part of a bigger number like 1,265 or 3047) followed by posts/vacancies/...

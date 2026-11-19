@@ -57,7 +57,7 @@ def filter_candidates() -> int:
             score = int(v.get("score", 0) or 0)
             ok = bool(v.get("worthy")) and score >= CONFIG["min_score"]
             job.update({
-                "status": "queued" if ok else "rejected",
+                "status": ("lead_pending" if CONFIG.get("require_lead_approval", True) else "queued") if ok else "rejected",
                 "score": score, "reason": v.get("reason", ""),
                 "company": v.get("company", ""), "role": v.get("role", ""),
                 "category": v.get("category", ""), "updated_at": now_iso(),

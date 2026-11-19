@@ -22,8 +22,9 @@ IST = timezone(timedelta(hours=5, minutes=30))
 DEFAULT_CONFIG = {
     "site_url": "https://www.getupdated.in",
     "git_branch": "main",
-    "max_posts_per_day": 3,
-    "require_approval": True,
+    "max_posts_per_day": 0,          # 0 = no cap (you approve each lead anyway)
+    "require_lead_approval": True,   # ask on Telegram before writing a draft
+    "require_approval": True,        # ask on Telegram before publishing a draft
     "min_score": 7,
     "max_candidates_per_filter": 60,
     "claude_bin": "claude",

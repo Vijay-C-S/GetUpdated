@@ -18,8 +18,8 @@ from publisher import publish
 HELP = (
     "GetUpdated automation bot\n\n"
     "/status  - today's numbers and queue\n"
-    "/pending - re-send drafts waiting for approval\n"
-    "/run     - run the watchdog + writer now\n"
+    "/pending - re-send leads and drafts waiting for you\n"
+    "/run     - check sources for new leads now\n"
     "/post <url> [note] - write a blog for this job link right away\n"
     "/help    - this message"
 )
@@ -54,7 +54,18 @@ def handle_callback(cb: dict) -> None:
     if not job:
         tg.send_message(f"Unknown job {job_id}")
         return
-    if action == "pub":
+    if action == "draft":
+        if job.get("status") not in ("lead_pending", "failed", "rejected"):
+            tg.send_message(f"Lead is '{job.get('status')}' already.")
+            return
+        update_job(job_id, status="queued", priority=5)
+        tg.send_message(f"✍️ Writing draft: {job.get('company') or ''} - {job.get('role') or job.get('title')}\n"
+                        "I'll send it here for Publish / Skip in a few minutes.")
+        run_pipeline_bg("--write", job_id)
+    elif action == "ign":
+        update_job(job_id, status="rejected", reason="ignored by you")
+        tg.send_message(f"🙈 Ignored: {job.get('company') or ''} - {job.get('role') or job.get('title')}")
+    elif action == "pub":
         if job.get("status") != "draft_ready":
             tg.send_message(f"Job is '{job.get('status')}', not waiting for approval.")
             return
@@ -71,18 +82,24 @@ def cmd_status() -> str:
     pub_today = sum(1 for j in jobs if j.get("published_on") == today)
     return (f"📊 Status ({today})\n"
             f"Published today: {pub_today}\n"
-            f"Waiting approval: {count('draft_ready')}\n"
+            f"Leads waiting for you: {count('lead_pending')}\n"
+            f"Drafts waiting approval: {count('draft_ready')}\n"
+            f"Writing now: {count('writing')}\n"
             f"Queued to write: {count('queued')}\n"
             f"New candidates: {count('candidate')}\n"
             f"Failed: {count('failed')}  Rejected: {count('rejected')}")
 
 
 def cmd_pending() -> None:
-    from pipeline import send_for_approval
-    pending = [j for j in load_jobs().values() if j.get("status") == "draft_ready"]
-    if not pending:
-        tg.send_message("No drafts waiting.")
-    for j in pending:
+    from pipeline import send_for_approval, send_lead
+    jobs = load_jobs().values()
+    leads = [j for j in jobs if j.get("status") == "lead_pending"]
+    drafts = [j for j in jobs if j.get("status") == "draft_ready"]
+    if not leads and not drafts:
+        tg.send_message("Nothing waiting for you.")
+    for j in sorted(leads, key=lambda j: -int(j.get("score", 0))):
+        send_lead(j)
+    for j in drafts:
         send_for_approval(j["id"])
 
 

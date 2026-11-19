@@ -57,18 +57,48 @@ def write_and_dispatch(job_id: str) -> None:
         log(f"pipeline: job {job_id} failed: {exc}")
 
 
+def git_pull() -> bool:
+    """Get posts you pushed manually, so templates and dedupe are current."""
+    try:
+        with FileLock("git", wait=600):
+            run(["git", "pull", "--rebase", "origin", CONFIG["git_branch"]], timeout=120)
+        return True
+    except Exception as exc:  # noqa: BLE001
+        log(f"pipeline: git pull failed: {exc}")
+        tg.notify(f"⚠️ git pull failed on the VM: {str(exc)[:300]}")
+        return False
+
+
+def send_lead(job: dict) -> None:
+    """Telegram: a new lead passed the filter. You decide whether to spend a draft on it."""
+    text = (f"🆕 NEW LEAD ({job.get('score', '-')}/10) · {job.get('category', '')}\n"
+            f"{job.get('company', '')} - {job.get('role', '')}\n\n"
+            f"{job.get('title', '')}\n\n"
+            f"💡 {job.get('reason', '')}\n"
+            f"🔗 {job.get('url', '')}")
+    buttons = [[{"text": "✍️ Write draft", "callback_data": f"draft:{job['id']}"},
+                {"text": "❌ Ignore", "callback_data": f"ign:{job['id']}"}]]
+    try:
+        tg.send_message(text, buttons=buttons)
+        update_job(job["id"], lead_notified=True)
+    except Exception as exc:  # noqa: BLE001
+        log(f"pipeline: could not send lead {job['id']}: {exc}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--watch-only", action="store_true")
     ap.add_argument("--write", metavar="JOB_ID")
     args = ap.parse_args()
 
-    lock = FileLock("pipeline")
+    # Approved drafts (--write) wait their turn; scheduled runs just skip if busy.
+    lock = FileLock("pipeline", wait=3 * 3600 if args.write else 0)
     if not lock.acquire():
         log("pipeline: another run is in progress; exiting")
         return
     try:
         if args.write:
+            git_pull()
             write_and_dispatch(args.write)
             return
         scan()
@@ -83,19 +113,24 @@ def main() -> None:
             log(f"pipeline: filter failed: {exc}")
             tg.notify(f"⚠️ Filter step failed: {str(exc)[:300]}")
 
-        try:  # get posts you pushed manually, so templates and dedupe are current
-            with FileLock("git", wait=600):
-                run(["git", "pull", "--rebase", "origin", CONFIG["git_branch"]], timeout=120)
-        except Exception as exc:  # noqa: BLE001
-            log(f"pipeline: git pull failed: {exc}")
-            tg.notify(f"⚠️ git pull failed on the VM: {str(exc)[:300]}")
-            return
+        # Ask you about each new good lead (✍️ Write draft / ❌ Ignore).
+        for job in sorted((j for j in load_jobs().values()
+                           if j.get("status") == "lead_pending" and not j.get("lead_notified")),
+                          key=lambda j: -int(j.get("score", 0))):
+            send_lead(job)
 
-        budget = CONFIG["max_posts_per_day"] - posts_today()
+        if CONFIG.get("require_lead_approval", True):
+            return  # drafts start only when you tap ✍️ (bot runs pipeline.py --write <id>)
+
+        if not git_pull():
+            return
+        cap = int(CONFIG.get("max_posts_per_day") or 0)
         queued = sorted((j for j in load_jobs().values() if j.get("status") == "queued"),
                         key=lambda j: (-int(j.get("priority", 0)), -int(j.get("score", 0))))
-        log(f"pipeline: {len(queued)} queued, budget {max(budget, 0)} today")
-        for job in queued[:max(budget, 0)]:
+        if cap:
+            queued = queued[:max(cap - posts_today(), 0)]
+        log(f"pipeline: writing {len(queued)} queued job(s)")
+        for job in queued:
             try:
                 write_and_dispatch(job["id"])
             except UsageLimitError:

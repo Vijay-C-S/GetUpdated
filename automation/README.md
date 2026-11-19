@@ -6,19 +6,22 @@ the Oracle VM using your Claude subscription (Claude Code headless).
 
 ```
 cron (every 2h, 8am-10pm IST)
-  1. watchdog.py   sources.json -> new leads (no AI)            state/jobs.json
-  2. filter_jobs.py  Haiku scores leads, queues the good ones
-  3. writer.py     Sonnet verifies on the official site, writes  state/drafts/<id>/
-                   post.html + meta.json; banner.py makes the image
-  4. Telegram:     banner + facts + draft file + [✅ Publish] [❌ Skip]
+  1. watchdog.py     feeds + official company job APIs -> new leads (no AI)
+  2. filter_jobs.py  Haiku keeps entry-level IT/EC (Bengaluru/WFH), central + Karnataka govt
+  3. Telegram:       🆕 NEW LEAD  [✍️ Write draft] [❌ Ignore]        <- you decide
 bot.py (always on)
-  5. ✅ Publish -> publisher.py: copy post + image, add cards to index.html and
-                   blogs.html, add sitemap entry, commit, push, wait until live
-  6. Telegram:     banner + WhatsApp text with link -> you copy to your channel
+  4. ✍️ -> writer.py  Python pre-fetches official pages; Sonnet verifies + writes the article;
+                     Python builds the page from templates/ and adds the company image
+  5. Telegram:       draft image + facts + full HTML  [✅ Publish] [❌ Skip]   <- you decide
+  6. ✅ -> publisher.py  post + image + homepage/blogs cards + sitemap, commit, push, wait live
+  7. Telegram:       image + ready-to-paste WhatsApp text with the link
 ```
 
 ## Safety rails
-- Max `max_posts_per_day` (default 3). Nothing goes live without your ✅ while `require_approval` is true.
+- Two approvals: nothing is drafted without your ✍️ and nothing goes live without your ✅.
+- No daily cap by default (`max_posts_per_day: 0`).
+- House rules enforced in code: clickable official links only in the "Official Links" section;
+  vacancy counts below 100 are never mentioned.
 - The writer must confirm the job on an official source, or it gives up and tells you why.
 - The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
 - Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.
@@ -58,9 +61,9 @@ bot.py (always on)
 | Command | What it does |
 |---|---|
 | `/post <url> [note]` | Write a blog for this job link now. Skips the filter and the daily cap. |
-| `/run` | Run watchdog, filter and writer now |
+| `/run` | Check sources for new leads now |
 | `/status` | Today's counts and the queue |
-| `/pending` | Re-send drafts that are waiting for approval |
+| `/pending` | Re-send leads and drafts waiting for you |
 
 ## Tuning
 - **Sources:** `sources.json`. `rss` feeds, or `page` (any careers or notification page; new links are detected and the first scan only records a baseline). Set `"enabled": false` to pause one.

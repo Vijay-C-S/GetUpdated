@@ -44,7 +44,11 @@ House components (use these exact classes):
 <p class="key-point">One-line key takeaway</p>
 Inline highlights: <span class="hl-green">good</span> <span class="hl-amber">caution</span> <span class="hl-red">deadline/risk</span>
 Official links: <a href="URL" class="official-link" target="_blank" rel="noopener">Label <i class="fas fa-external-link-alt"></i></a>
-Put the official apply/notification link in Quick Highlights and in "Official Links and Final Checklist".
+LINK RULE (house style): ALL clickable official links (apply link, notification PDF, official website)
+go ONLY in the "Official Links and Final Checklist" section, as a <ul> of official-link anchors.
+Everywhere else (intro, highlights table, how-to-apply steps, final takeaway) mention them as plain
+<strong> text, e.g. "Apply through the official link in the Official Links section below".
+No "Apply Here" buttons or links anywhere else.
 
 # 3. Write <DRAFT>/meta.json
 {
