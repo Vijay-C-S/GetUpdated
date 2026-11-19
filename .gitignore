@@ -25,3 +25,10 @@ npm-debug.log*
 # Temporary files
 *.tmp
 *.temp
+
+# Automation (secrets, runtime state, local venv)
+automation/.env
+automation/config.json
+automation/state/
+automation/.venv/
+.venv/

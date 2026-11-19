@@ -1,0 +1,83 @@
+# GetUpdated job-blog automation
+
+Finds new job postings, writes a blog post in the site's house style, publishes it to
+getupdated.in, and sends you a ready-to-paste WhatsApp message on Telegram. Runs free on
+the Oracle VM using your Claude subscription (Claude Code headless).
+
+```
+cron (every 2h, 8am-10pm IST)
+  1. watchdog.py   sources.json -> new leads (no AI)            state/jobs.json
+  2. filter_jobs.py  Haiku scores leads, queues the good ones
+  3. writer.py     Sonnet verifies on the official site, writes  state/drafts/<id>/
+                   post.html + meta.json; banner.py makes the image
+  4. Telegram:     banner + facts + draft file + [✅ Publish] [❌ Skip]
+bot.py (always on)
+  5. ✅ Publish -> publisher.py: copy post + image, add cards to index.html and
+                   blogs.html, add sitemap entry, commit, push, wait until live
+  6. Telegram:     banner + WhatsApp text with link -> you copy to your channel
+```
+
+## Safety rails
+- Max `max_posts_per_day` (default 3). Nothing goes live without your ✅ while `require_approval` is true.
+- The writer must confirm the job on an official source, or it gives up and tells you why.
+- The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
+- Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.
+- Duplicate checks run against existing `blogs/` slugs and earlier leads.
+- Secrets live only in `automation/.env` on the VM (gitignored).
+
+## One-time setup on the Oracle VM
+
+1. **Telegram bot.** In Telegram open `@BotFather`, send `/newbot`, and copy the token.
+2. **GitHub push access from the VM.**
+   ```bash
+   ssh-keygen -t ed25519 -C "getupdated-vm" -f ~/.ssh/id_ed25519 -N ""
+   cat ~/.ssh/id_ed25519.pub
+   ```
+   On GitHub, open the repo's **Settings → Deploy keys → Add deploy key**, paste the key, and tick **Allow write access**.
+3. **Clone and install.**
+   ```bash
+   git clone git@github.com:Vijay-C-S/GetUpdated.git ~/GetUpdated
+   cd ~/GetUpdated
+   git config user.name "GetUpdated Bot"
+   git config user.email "<your GitHub noreply email>"
+   bash automation/setup/install.sh
+   ```
+4. **Log in to Claude Code once.** Run `claude`, then `/login` (open the link on your phone or PC), then `/exit`.
+5. **Add the bot token.** Run `nano automation/.env` and set `TELEGRAM_BOT_TOKEN=...`.
+6. **Start the bot.**
+   ```bash
+   sudo systemctl start getupdated-bot
+   ```
+7. **Get your chat ID.** Send any message to your bot. It replies with your chat ID. Put `TELEGRAM_CHAT_ID=<id>` in `.env`, then run:
+   ```bash
+   sudo systemctl restart getupdated-bot
+   ```
+8. **Test.** Send `/run` to the bot. To test a single job, send `/post <job link>`.
+
+## Telegram commands
+| Command | What it does |
+|---|---|
+| `/post <url> [note]` | Write a blog for this job link now. Skips the filter and the daily cap. |
+| `/run` | Run watchdog, filter and writer now |
+| `/status` | Today's counts and the queue |
+| `/pending` | Re-send drafts that are waiting for approval |
+
+## Tuning
+- **Sources:** `sources.json`. `rss` feeds, or `page` (any careers or notification page; new links are detected and the first scan only records a baseline). Set `"enabled": false` to pause one.
+- **Behaviour:** `config.json`. Settings are `max_posts_per_day`, `require_approval`, `min_score`, `filter_model`, `writer_model`, `homepage_cards`, and `claude_extra_args` (extra CLI flags passed to `claude`).
+- **Style rules:** `prompts/writer.md`. The writer also copies the 3 newest posts in `blogs/`, so improving your manual posts improves the auto ones.
+- **Schedule:** `crontab -e`. Times are in UTC; 02:30 UTC is 08:00 IST.
+
+## Logs and troubleshooting
+```bash
+tail -f automation/state/automation.log      # everything
+tail -f automation/state/cron.log            # cron runs
+journalctl -u getupdated-bot -f              # bot service
+```
+- **"usage limit reached":** the Claude plan limit was hit. The job stays queued and retries on the next run.
+- **Publish failed / repo dirty:** run `cd ~/GetUpdated && git status`. Fix it or `git stash`, then tap `/pending`.
+- **Stale lock after a crash:** delete `automation/state/*.lock`. Locks also expire automatically.
+
+## Keep Oracle free
+Stay within the Always Free A1 shape (4 OCPU / 24 GB) and 200 GB of total block storage. In
+Billing, set a budget alert of ₹1 so you're warned if anything starts costing money.
