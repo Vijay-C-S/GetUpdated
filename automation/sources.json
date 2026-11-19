@@ -1,5 +1,76 @@
 [
   {
+    "name": "Official ATS: Greenhouse (Bengaluru tech)",
+    "type": "ats",
+    "provider": "greenhouse",
+    "enabled": true,
+    "companies": [
+      {
+        "slug": "rubrik",
+        "name": "Rubrik"
+      },
+      {
+        "slug": "databricks",
+        "name": "Databricks"
+      },
+      {
+        "slug": "groww",
+        "name": "Groww"
+      },
+      {
+        "slug": "druva",
+        "name": "Druva"
+      },
+      {
+        "slug": "zscaler",
+        "name": "Zscaler"
+      },
+      {
+        "slug": "hackerrank",
+        "name": "HackerRank"
+      }
+    ],
+    "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
+    "name": "Official ATS: Lever (Bengaluru tech)",
+    "type": "ats",
+    "provider": "lever",
+    "enabled": true,
+    "companies": [
+      {
+        "slug": "cred",
+        "name": "CRED"
+      },
+      {
+        "slug": "meesho",
+        "name": "Meesho"
+      },
+      {
+        "slug": "zeta",
+        "name": "Zeta"
+      },
+      {
+        "slug": "paytm",
+        "name": "Paytm"
+      }
+    ],
+    "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
+    "name": "Official ATS: Ashby (Bengaluru tech)",
+    "type": "ats",
+    "provider": "ashby",
+    "enabled": true,
+    "companies": [
+      {
+        "slug": "sarvam",
+        "name": "Sarvam AI"
+      }
+    ],
+    "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
     "name": "OffCampusJobs4u (IT freshers)",
     "type": "rss",
     "url": "https://offcampusjobs4u.com/feed/",

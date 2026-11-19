@@ -30,6 +30,8 @@ DEFAULT_CONFIG = {
     "filter_model": "haiku",
     "writer_model": "sonnet",
     "writer_effort": "low",
+    "writer_budget_usd": 0.8,
+    "filter_budget_usd": 0.1,
     "claude_extra_args": [],
     "writer_timeout_sec": 1800,
     "filter_timeout_sec": 300,

@@ -1,28 +1,145 @@
-"""Writer: Sonnet researches a queued job and writes a draft post in the site's format.
+"""Writer: Sonnet verifies a queued job and writes the article; Python builds the page.
 
-The draft (post.html + meta.json + banner.webp) lives in automation/state/drafts/<id>/.
-Nothing in the live site is touched here; publisher.py does that after approval.
+Token savers:
+- Python pre-fetches the lead page and the official links (incl. PDF text via pypdf),
+  so the model needs few or no web calls; leads with no official link are dropped before
+  any model call.
+- The model writes only body.html (article) + meta.json. The head, SEO tags, JSON-LD,
+  navbar, TOC, Also Read, FAQ, sidebar and footer are rendered here from templates/.
+- Static instructions live in the system prompt (cache-friendly across jobs).
+
+Output: automation/state/drafts/<id>/{post.html, meta.json, banner.webp}
 """
 from __future__ import annotations
 
+import html
+import io
 import json
 import re
 from pathlib import Path
+from urllib.parse import urljoin, urlparse
+
+import requests
+from bs4 import BeautifulSoup
 
 from banner import make_banner
 from claude_cli import run_claude
 from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, existing_blog_slugs, get_job,
                     git_is_clean, log, now_iso, run, today_ist, update_job)
 
-WRITER_TOOLS = ["Read", "Glob", "Grep", "WebFetch", "WebSearch", "Write", "Edit"]
-REQUIRED_META = ["slug", "title", "card_title", "card_excerpt", "tag", "image_alt",
-                 "company", "role", "official_url", "whatsapp_text", "verified"]
+WRITER_TOOLS = ["WebFetch", "WebSearch", "Write"]
 SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"}
+AGGREGATORS = ("freejobalert", "freshersnow", "offcampusjobs4u", "fresheropenings", "karnatakacareers",
+               "sarkari", "adda247", "jagranjosh", "testbook", "news.google", "careerpower")
+SKIP_DOMAINS = ("facebook.", "twitter.", "x.com", "instagram.", "t.me", "telegram.", "whatsapp.",
+                "youtube.", "youtu.be", "linkedin.com/shareArticle", "pinterest.", "play.google",
+                "apps.apple", "wa.me", "google.com/search", "reddit.com", "/share", "submit?url", "sharer", "mailto:")
+OFFICIAL_HINTS = (".gov.in", ".nic.in", ".res.in", ".ac.in", ".edu", ".org.in", "careers", "career",
+                  "jobs", "recruit", "apply", "forms.gle", "docs.google.com/forms", "lever.co",
+                  "greenhouse.io", "myworkdayjobs", "ashbyhq", "smartrecruiters", "naukri.com/job-listings",
+                  ".pdf", "notification")
 
 
-def latest_posts(n: int = 3) -> list[str]:
-    """Most recently added blog files according to git history."""
-    out = run(["git", "log", "--diff-filter=A", "--name-only", "--format=", "-n", "40", "--", "blogs/"])
+# --------------------------------------------------------------------------- pre-fetch
+def _domain(url: str) -> str:
+    return urlparse(url).netloc.lower().removeprefix("www.")
+
+
+def fetch_text(url: str, limit: int = 3500) -> str:
+    """Readable text of an HTML page or PDF (first pages). Raises on failure."""
+    r = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True)
+    r.raise_for_status()
+    ctype = r.headers.get("content-type", "").lower()
+    if "pdf" in ctype or url.lower().split("?")[0].endswith(".pdf"):
+        from pypdf import PdfReader
+        reader = PdfReader(io.BytesIO(r.content))
+        text = " ".join((p.extract_text() or "") for p in reader.pages[:6])
+        return re.sub(r"\s+", " ", text)[:limit * 2]
+    soup = BeautifulSoup(r.text, "html.parser")
+    for tag in soup(["script", "style", "nav", "header", "footer", "aside", "form", "noscript"]):
+        tag.decompose()
+    main = soup.find("article") or soup.find("main") or soup.body or soup
+    return re.sub(r"\s+", " ", main.get_text(" ", strip=True))[:limit]
+
+
+def official_links(page_html: str, base: str) -> list[tuple[str, str]]:
+    soup = BeautifulSoup(page_html, "html.parser")
+    lead_dom, seen, scored = _domain(base), set(), []
+    for a in soup.find_all("a", href=True):
+        href = urljoin(base, a["href"].strip())
+        dom = _domain(href)
+        if not href.startswith("http") or href in seen or dom == lead_dom:
+            continue
+        if any(s in href.lower() for s in SKIP_DOMAINS) or any(g in dom for g in AGGREGATORS):
+            continue
+        seen.add(href)
+        label = a.get_text(" ", strip=True)[:80]
+        hay = (href + " " + label).lower()
+        score = sum(h in hay for h in OFFICIAL_HINTS) + ("official" in hay) * 2 + ("notification" in hay)
+        if score:
+            scored.append((score, href, label))
+    scored.sort(key=lambda x: -x[0])
+    return [(h, l) for _, h, l in scored[:6]]
+
+
+def prefetch(job: dict) -> dict:
+    """Return {'lead_text', 'links', 'excerpts'}; raise ValueError if no official source is reachable."""
+    if job.get("source_type") == "ats":
+        return {"lead_text": "", "links": [(job["url"], "official posting")],
+                "excerpts": [(job["url"], job.get("full_text") or fetch_text(job["url"], 5000))]}
+    if job.get("source", "").startswith("manual"):
+        try:
+            return {"lead_text": fetch_text(job["url"], 4000), "links": [], "excerpts": []}
+        except Exception:  # noqa: BLE001
+            return {"lead_text": "", "links": [], "excerpts": []}
+    r = requests.get(job["url"], headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    lead_text = fetch_text(job["url"], 2500)
+    links = official_links(r.text, job["url"])
+    if not links:
+        raise ValueError("lead page has no official link to verify against (skipped before writing)")
+    excerpts = []
+    for href, _label in links[:4]:
+        try:
+            txt = fetch_text(href, 3500)
+            if len(txt) > 200:
+                excerpts.append((href, txt))
+        except Exception as exc:  # noqa: BLE001
+            log(f"writer: prefetch {href} failed: {exc}")
+        if len(excerpts) == 2:
+            break
+    return {"lead_text": lead_text, "links": links, "excerpts": excerpts}
+
+
+# --------------------------------------------------------------------------- prompt
+def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
+    d = today_ist()
+    parts = [
+        f"TODAY: {d.isoformat()} (IST)",
+        f"DRAFT FOLDER (write body.html and meta.json here, nowhere else): {draft_dir.as_posix()}",
+        "LEAD: " + json.dumps({k: job.get(k) for k in ("title", "url", "source", "company", "role",
+                                                        "category", "manual_note") if job.get(k)},
+                              ensure_ascii=False),
+    ]
+    if job.get("source_hint"):
+        parts.append(f"HINT: {job['source_hint']}")
+    if pre["lead_text"]:
+        parts.append("LEAD PAGE TEXT (aggregator, NOT a fact source):\n" + pre["lead_text"])
+    if pre["links"]:
+        parts.append("CANDIDATE OFFICIAL LINKS:\n" + "\n".join(f"- {h} ({l})" for h, l in pre["links"]))
+    for href, txt in pre["excerpts"]:
+        parts.append(f"OFFICIAL PAGE EXCERPT from {href}:\n{txt}")
+    if not pre["excerpts"]:
+        parts.append("No official page could be pre-fetched: find and read it with WebFetch/WebSearch.")
+    recent = sorted(existing_blog_slugs())
+    parts.append("SLUGS ALREADY USED (pick a new one): " + ", ".join(recent[-120:]))
+    return "\n\n".join(parts)
+
+
+# --------------------------------------------------------------------------- page assembly
+def latest_posts(n: int = 6) -> list[str]:
+    out = run(["git", "log", "--diff-filter=A", "--name-only", "--format=", "-n", "60", "--", "blogs/"])
     seen = []
     for line in out.splitlines():
         line = line.strip()
@@ -33,33 +150,111 @@ def latest_posts(n: int = 3) -> list[str]:
     return seen
 
 
-def build_prompt(job: dict, draft_dir: Path) -> str:
-    tpl = (AUTO_DIR / "prompts" / "writer.md").read_text(encoding="utf-8")
-    d = today_ist()
-    repl = {
-        "{{JOB}}": json.dumps({k: job.get(k) for k in ("title", "url", "summary", "source", "company",
-                                                         "role", "category", "manual_note")},
-                              indent=1, ensure_ascii=False),
-        "{{TODAY}}": d.isoformat(),
-        "{{TODAY_HUMAN}}": f"{d:%b} {d.day}, {d.year}",
-        "{{DRAFT_DIR}}": draft_dir.as_posix(),
-        "{{TEMPLATES}}": "\n".join(f"- {p}" for p in latest_posts()),
-        "{{SITE}}": CONFIG["site_url"],
-        "{{EXISTING_SLUGS}}": ", ".join(sorted(existing_blog_slugs())[-400:]),
+def post_title(path: Path) -> str:
+    m = re.search(r'<h1 class="article-title">(.*?)</h1>', path.read_text(encoding="utf-8"), re.S)
+    return re.sub(r"\s+", " ", m.group(1)).strip() if m else path.stem.replace("-", " ").title()
+
+
+def jsonld(obj: dict) -> str:
+    return ('    <script type="application/ld+json">\n'
+            + json.dumps(obj, indent=4, ensure_ascii=False) + "\n    </script>\n")
+
+
+def assemble(meta: dict, body: str) -> str:
+    site = CONFIG["site_url"].rstrip("/")
+    slug, d = meta["slug"], today_ist()
+    url, img = f"{site}/blogs/{slug}.html", f"{site}/images/{slug}.webp"
+    job = meta.get("job") or {}
+    faqs = [f for f in meta.get("faqs", []) if f.get("q") and f.get("a")]
+
+    # JSON-LD
+    blocks = [jsonld({
+        "@context": "https://schema.org", "@type": "Article", "headline": meta["h1"][:110],
+        "description": meta["meta_description"], "datePublished": d.isoformat(), "dateModified": d.isoformat(),
+        "author": {"@type": "Organization", "name": "GetUpdated", "url": site},
+        "publisher": {"@type": "Organization", "name": "GetUpdated",
+                      "logo": {"@type": "ImageObject", "url": f"{site}/images/favicon.jpg"}},
+        "image": img, "mainEntityOfPage": {"@type": "WebPage", "@id": url},
+        "inLanguage": "en-IN", "isAccessibleForFree": True}),
+        jsonld({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{site}/"},
+            {"@type": "ListItem", "position": 2, "name": "Blogs", "item": f"{site}/blogs.html"},
+            {"@type": "ListItem", "position": 3, "name": f"{meta['company']} {meta['role']}"[:80], "item": url}]})]
+    jp = {"@context": "https://schema.org", "@type": "JobPosting", "title": job.get("title") or meta["role"],
+          "description": job.get("description") or meta["meta_description"], "datePosted": d.isoformat(),
+          "employmentType": job.get("employment_type") or "FULL_TIME",
+          "hiringOrganization": {"@type": "Organization", "name": meta["company"],
+                                 **({"sameAs": meta["company_url"]} if meta.get("company_url") else {})},
+          "url": meta["official_url"], "directApply": False}
+    if job.get("remote"):
+        jp["jobLocationType"] = "TELECOMMUTE"
+        jp["applicantLocationRequirements"] = {"@type": "Country", "name": "India"}
+    else:
+        jp["jobLocation"] = {"@type": "Place", "address": {"@type": "PostalAddress",
+                             "addressLocality": job.get("city") or "India",
+                             **({"addressRegion": job["region"]} if job.get("region") else {}),
+                             "addressCountry": "IN"}}
+    if job.get("qualifications"):
+        jp["qualifications"] = job["qualifications"]
+    if job.get("valid_through"):
+        jp["validThrough"] = f"{job['valid_through']}T23:59:59"
+    if job.get("vacancies"):
+        jp["totalJobOpenings"] = job["vacancies"]
+    blocks.append(jsonld(jp))
+    if faqs:
+        blocks.append(jsonld({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
+            for f in faqs]}))
+
+    # article: intro + TOC + body + Also Read + FAQs
+    ind = "                    "
+    h2s = [re.sub(r"<[^>]+>", "", h).strip() for h in re.findall(r"<h2[^>]*>(.*?)</h2>", body, re.S)]
+    toc = (f'{ind}<div class="info-box" id="table-of-contents">\n{ind}    <h2>Table of Contents</h2>\n{ind}    <ol>\n'
+           + "".join(f"{ind}        <li>{h}</li>\n" for h in h2s + ["Also Read"] + (["FAQs"] if faqs else []))
+           + f"{ind}    </ol>\n{ind}</div>\n")
+    first = body.find("<h2")
+    body = (body[:first] + "\n" + toc + "\n" + body[first:]) if first != -1 else toc + body
+    also = [p for p in latest_posts() if not p.endswith(f"{slug}.html")][:5]
+    body += (f"\n{ind}<h2>Also Read</h2>\n{ind}<ul>\n"
+             + "".join(f'{ind}    <li><a href="{Path(p).name}">{post_title(REPO_DIR / p)}</a></li>\n' for p in also)
+             + f"{ind}</ul>\n")
+    if faqs:
+        body += f"\n{ind}<h2>FAQs</h2>\n" + "".join(
+            f"{ind}<h2>{i}. {html.escape(f['q'])}</h2>\n{ind}<p>{html.escape(f['a'])}</p>\n\n"
+            for i, f in enumerate(faqs, 1))
+    tags = "\n".join(f'                    <a href="javascript:void(0)" class="tag">{html.escape(t)}</a>'
+                     for t in meta.get("tags", [])[:6])
+
+    page = (AUTO_DIR / "templates" / "post_template.html").read_text(encoding="utf-8")
+    esc = lambda k: html.escape(str(meta.get(k, "")), quote=True)  # noqa: E731
+    fills = {
+        "{{META_DESCRIPTION}}": esc("meta_description"), "{{KEYWORDS}}": esc("keywords"),
+        "{{SEO_TITLE}}": esc("seo_title"), "{{OG_TITLE}}": esc("og_title"),
+        "{{OG_DESCRIPTION}}": esc("og_description"), "{{IMAGE_ALT}}": esc("image_alt"),
+        "{{IMAGE_CAPTION}}": esc("image_caption"), "{{H1}}": esc("h1"),
+        "{{DATE_ISO}}": d.isoformat(), "{{DATE_LONG}}": f"{d:%B} {d.day}, {d.year}",
+        "{{URL}}": url, "{{IMAGE_URL}}": img, "{{SLUG}}": slug,
+        "{{JSONLD}}": "".join(blocks).rstrip("\n"), "{{ARTICLE_CONTENT}}": body, "{{TAGS}}": tags,
     }
-    for k, v in repl.items():
-        tpl = tpl.replace(k, v)
-    return tpl
+    for k, v in fills.items():
+        page = page.replace(k, v)
+    return page
 
 
-def validate_draft(draft_dir: Path) -> dict:
-    meta_path, post_path = draft_dir / "meta.json", draft_dir / "post.html"
+# --------------------------------------------------------------------------- validation
+REQUIRED_META = ["slug", "seo_title", "meta_description", "h1", "og_title", "og_description",
+                 "card_title", "card_excerpt", "tag", "image_alt", "company", "role", "official_url",
+                 "whatsapp_text", "faqs"]
+
+
+def load_and_check(draft_dir: Path) -> tuple[dict, str]:
+    meta_path, body_path = draft_dir / "meta.json", draft_dir / "body.html"
     if not meta_path.exists():
         raise ValueError("writer did not produce meta.json")
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     if meta.get("verified") is not True:
-        raise ValueError(f"not verified: {meta.get('verification_notes') or meta.get('reason') or 'no reason given'}")
-    missing = [k for k in REQUIRED_META if not meta.get(k) and meta.get(k) is not False]
+        raise ValueError(f"not verified: {meta.get('verification_notes') or 'no reason given'}")
+    missing = [k for k in REQUIRED_META if not meta.get(k)]
     if missing:
         raise ValueError(f"meta.json missing fields: {missing}")
     slug = meta["slug"]
@@ -67,32 +262,31 @@ def validate_draft(draft_dir: Path) -> dict:
         raise ValueError(f"bad slug: {slug}")
     if (REPO_DIR / "blogs" / f"{slug}.html").exists():
         raise ValueError(f"blog already exists: {slug}")
-    if not post_path.exists():
-        raise ValueError("writer did not produce post.html")
-    html = post_path.read_text(encoding="utf-8")
+    if not body_path.exists():
+        raise ValueError("writer did not produce body.html")
+    body = body_path.read_text(encoding="utf-8")
     problems = []
-    if len(html) < 15000:
-        problems.append(f"post too short ({len(html)} bytes)")
-    if "</html>" not in html or "<title>" not in html:
-        problems.append("incomplete HTML document")
-    if f"blogs/{slug}.html" not in html:
-        problems.append("canonical/og:url does not use the slug")
-    if f"images/{slug}.webp" not in html:
-        problems.append(f"image path images/{slug}.webp not referenced")
-    if len(re.findall(r"<h2", html)) < 8:
-        problems.append("fewer than 8 <h2> sections")
-    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
-        try:
-            json.loads(block)
-        except json.JSONDecodeError as exc:
-            problems.append(f"invalid JSON-LD: {exc}")
-    if "googletagmanager" not in html or "adsbygoogle" not in html:
-        problems.append("analytics/adsense head block missing")
+    if re.search(r"<(html|head|body|script|style)\b", body, re.I):
+        problems.append("body.html contains page-level tags")
+    if len(body) < 8000:
+        problems.append(f"article too short ({len(body)} chars)")
+    if len(re.findall(r"<h2", body)) < 7:
+        problems.append("fewer than 7 <h2> sections")
+    if meta["official_url"] not in body:
+        problems.append("official link not used in the article")
     if problems:
         raise ValueError("; ".join(problems))
-    return meta
+    return meta, body
 
 
+def validate_page(page: str) -> None:
+    if "{{" in page:
+        raise ValueError("unfilled template placeholder")
+    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S):
+        json.loads(block)
+
+
+# --------------------------------------------------------------------------- main
 def write_job(job_id: str) -> dict:
     job = get_job(job_id)
     if not job:
@@ -107,22 +301,30 @@ def write_job(job_id: str) -> dict:
         f.unlink()
     update_job(job_id, status="writing", started_at=now_iso())
 
+    pre = prefetch(job)  # raises ValueError -> job fails cheaply, no model call
+    log(f"writer: prefetched {len(pre['links'])} official link(s), {len(pre['excerpts'])} excerpt(s)")
+    system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
     try:
-        run_claude(build_prompt(job, draft_dir), CONFIG["writer_model"], WRITER_TOOLS,
-                   timeout=CONFIG["writer_timeout_sec"], effort=CONFIG.get("writer_effort"))
+        run_claude(build_user_prompt(job, draft_dir, pre), CONFIG["writer_model"], WRITER_TOOLS,
+                   timeout=CONFIG["writer_timeout_sec"], effort=CONFIG.get("writer_effort"),
+                   system_prompt=system, budget_usd=CONFIG.get("writer_budget_usd"))
     finally:
         # Safety net: the writer must only write into the draft dir. Undo anything else.
-        # Hold the git lock so we never revert a publish that is in progress.
         with FileLock("git", wait=900):
             if not git_is_clean():
                 log("writer: model touched repo files; reverting them")
                 run(["git", "reset", "--hard", "HEAD"])
                 run(["git", "clean", "-fd", "--", "blogs", "images", "css", "js", "sections"])
 
-    meta = validate_draft(draft_dir)
+    meta, body = load_and_check(draft_dir)
+    meta["title"] = meta["h1"]  # publisher / approval message use "title"
+    (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+    page = assemble(meta, body)
+    validate_page(page)
+    (draft_dir / "post.html").write_text(page, encoding="utf-8")
     make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"],
                 meta.get("banner_extra", ""))
-    update_job(job_id, status="draft_ready", slug=meta["slug"], draft_title=meta["title"],
+    update_job(job_id, status="draft_ready", slug=meta["slug"], draft_title=meta["h1"],
                drafted_at=now_iso(), drafted_on=today_ist().isoformat())
     log(f"writer: draft ready {meta['slug']}")
     return meta

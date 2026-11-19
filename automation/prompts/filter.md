@@ -30,14 +30,11 @@ roles needing 2+ years experience, and anything in ALREADY COVERED (same organis
 ## Scoring
 9-10: perfect fit, official source likely, many readers will care (big company, many vacancies, Bengaluru/WFH).
 7-8: clear fit. 0-6: weak fit or any rule broken.
+Leads from "official ATS" sources ARE official postings: judge only fit (entry level, IT/EC, Bengaluru/remote).
 
 Categories: "Freshers Jobs", "Internship", "Apprenticeship", "Work From Home", "Govt Jobs", "Karnataka Govt Jobs", "Bank Jobs".
 
-ALREADY COVERED (recent post titles and slugs):
-{{RECENT}}
-
-CANDIDATES:
-{{CANDIDATES}}
+The user message contains ALREADY COVERED (recent titles/slugs) and CANDIDATES (id | title | src | note).
 
 Reply with ONLY a JSON array, one object per candidate, no prose:
-[{"id": "...", "worthy": true, "score": 8, "company": "Organisation", "role": "Role title", "category": "Freshers Jobs", "reason": "one short line"}]
+[{"id":"...","worthy":true,"score":8,"company":"Organisation","role":"Role title","category":"Freshers Jobs","reason":"short"}]

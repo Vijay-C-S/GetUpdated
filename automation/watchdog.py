@@ -71,6 +71,67 @@ def parse_page(html: str, base_url: str, link_pattern: str | None) -> list[dict]
     return found
 
 
+ENTRY_WORDS = ("intern", "graduate", "fresher", "trainee", "new grad", "apprentice", "entry",
+               "associate software", "sde 1", "sde i", "sde-1", "engineer i", "engineer 1",
+               "software engineer - i", "junior", "campus", "2025", "2026", "2027")
+SENIOR_WORDS = ("senior", "sr.", "sr ", "lead", "staff", "principal", "manager", "director", "head",
+                " ii", " iii", " iv", "architect", "vp", "specialist ii", "engineer 2", "engineer 3")
+LOCATION_WORDS = ("bengaluru", "bangalore", "remote", "work from home", "anywhere in india")
+
+
+def _strip_html(text: str, limit: int = 5000) -> str:
+    return BeautifulSoup(text or "", "html.parser").get_text(" ", strip=True)[:limit]
+
+
+def parse_ats(provider: str, company: str, name: str) -> list[dict]:
+    """Official company job boards. Every URL here IS the official posting."""
+    out = []
+    if provider == "greenhouse":
+        data = requests.get(f"https://boards-api.greenhouse.io/v1/boards/{company}/jobs?content=true",
+                            headers=HEADERS, timeout=30).json()
+        for j in data.get("jobs", []):
+            out.append({"title": j["title"], "url": j["absolute_url"],
+                        "location": (j.get("location") or {}).get("name", ""),
+                        "text": _strip_html(html_unescape(j.get("content", "")))})
+    elif provider == "lever":
+        data = requests.get(f"https://api.lever.co/v0/postings/{company}?mode=json",
+                            headers=HEADERS, timeout=30).json()
+        for j in data:
+            cats = j.get("categories") or {}
+            locs = " / ".join([cats.get("location") or ""] + list(cats.get("allLocations") or []))
+            text = (j.get("descriptionPlain") or "") + " " + " ".join(
+                f"{l.get('text')}: {_strip_html(l.get('content'), 1500)}" for l in j.get("lists", []))
+            out.append({"title": j["text"], "url": j["hostedUrl"], "location": locs,
+                        "text": text[:5000], "workplace": j.get("workplaceType", "")})
+    elif provider == "ashby":
+        data = requests.get(f"https://api.ashbyhq.com/posting-api/job-board/{company}",
+                            headers=HEADERS, timeout=30).json()
+        for j in data.get("jobs", []):
+            locs = j.get("location", "") + " " + " ".join(
+                str(s.get("location", "")) for s in j.get("secondaryLocations") or [])
+            out.append({"title": j["title"], "url": j["jobUrl"], "location": locs,
+                        "text": (j.get("descriptionPlain") or "")[:5000],
+                        "workplace": "remote" if j.get("isRemote") else ""})
+    items = []
+    for j in out:
+        t, loc = j["title"].lower(), (j["location"] + " " + j.get("workplace", "")).lower()
+        if not any(w in loc for w in LOCATION_WORDS):
+            continue
+        if "remote" in loc and "india" not in loc and not any(w in loc for w in LOCATION_WORDS[:2]):
+            continue  # remote but not open to India
+        if any(w in f" {t} " for w in SENIOR_WORDS) or not any(w in t for w in ENTRY_WORDS):
+            continue
+        items.append({"title": f"{name} hiring {j['title']} ({j['location'][:60]})", "url": j["url"],
+                      "summary": f"Official {provider} posting. Location: {j['location'][:80]}",
+                      "full_text": j["text"]})
+    return items
+
+
+def html_unescape(s: str) -> str:
+    import html as _html
+    return _html.unescape(s or "")
+
+
 def keyword_ok(text: str) -> bool:
     t = text.lower()
     if any(k in t for k in CONFIG["keywords_exclude"]):
@@ -101,11 +162,20 @@ def scan() -> int:
         for src in sources:
             if not src.get("enabled", True):
                 continue
-            name, url, kind = src["name"], src["url"], src.get("type", "rss")
-            time.sleep(6)  # be polite; avoids 429s from Google News
+            name, kind = src["name"], src.get("type", "rss")
+            time.sleep(3)  # be polite; avoids 429s
             try:
-                text = fetch(url)
-                items = parse_feed(text) if kind == "rss" else parse_page(text, url, src.get("link_pattern"))
+                if kind == "ats":
+                    items = []
+                    for comp in src.get("companies", []):
+                        slug, cname = (comp, comp.title()) if isinstance(comp, str) else (comp["slug"], comp["name"])
+                        try:
+                            items += parse_ats(src["provider"], slug, cname)
+                        except Exception as exc:  # noqa: BLE001
+                            log(f"watchdog: {src['provider']}/{slug} failed: {exc}")
+                else:
+                    text = fetch(src["url"])
+                    items = parse_feed(text) if kind == "rss" else parse_page(text, src["url"], src.get("link_pattern"))
             except Exception as exc:  # noqa: BLE001
                 log(f"watchdog: source '{name}' failed: {exc}")
                 continue
@@ -121,12 +191,13 @@ def scan() -> int:
                 seen.add(jid)
                 if baseline:
                     continue
-                if src.get("skip_keyword_filter") is not True and not keyword_ok(it["title"] + " " + it["summary"]):
+                if kind != "ats" and not keyword_ok(it["title"] + " " + it["summary"]):
                     continue
                 dup = is_duplicate(it["title"], jobs, slugs)
                 jobs[jid] = {
                     "id": jid, "title": it["title"], "url": it["url"], "summary": it["summary"],
-                    "source": name, "source_hint": src.get("hint", ""),
+                    "source": name, "source_hint": src.get("hint", ""), "source_type": kind,
+                    "full_text": it.get("full_text", ""),
                     "status": "rejected" if dup else "candidate",
                     "reason": dup or "", "found_at": now_iso(), "updated_at": now_iso(),
                 }

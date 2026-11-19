@@ -31,14 +31,19 @@ def filter_candidates() -> int:
 
     recent_titles = [j["title"] for j in jobs.values()
                      if j.get("status") in ("queued", "writing", "draft_ready", "published")][-60:]
-    payload = [{"id": j["id"], "title": j["title"], "summary": j.get("summary", ""),
-                "url": j["url"], "source": j["source"], "hint": j.get("source_hint", "")} for j in cands]
+    # Compact payload: one short line per candidate keeps input tokens low.
+    lines = []
+    for j in cands:
+        note = (j.get("summary") or "")[:140].replace("\n", " ")
+        lines.append(f'{j["id"]} | {j["title"][:160]} | src: {j["source"].split(" (")[0]}'
+                     + (f" | note: {note}" if note else ""))
+    covered = recent_titles + existing_blog_slugs()[-60:]
+    prompt = ("ALREADY COVERED:\n" + "\n".join(f"- {t}" for t in covered)
+              + "\n\nCANDIDATES (id | title | src | note):\n" + "\n".join(lines))
+    system = (AUTO_DIR / "prompts" / "filter.md").read_text(encoding="utf-8")
 
-    prompt = (AUTO_DIR / "prompts" / "filter.md").read_text(encoding="utf-8")
-    prompt = (prompt.replace("{{CANDIDATES}}", json.dumps(payload, indent=1, ensure_ascii=False))
-                    .replace("{{RECENT}}", json.dumps(recent_titles + existing_blog_slugs()[-80:], ensure_ascii=False)))
-
-    reply = run_claude(prompt, CONFIG["filter_model"], timeout=CONFIG["filter_timeout_sec"])
+    reply = run_claude(prompt, CONFIG["filter_model"], tools=[], system_prompt=system,
+                       timeout=CONFIG["filter_timeout_sec"], budget_usd=CONFIG.get("filter_budget_usd"))
     verdicts = {v["id"]: v for v in extract_json(reply) if isinstance(v, dict) and "id" in v}
 
     queued = 0
