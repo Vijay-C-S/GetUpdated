@@ -139,6 +139,8 @@ def main() -> None:
                     chat = str(msg["chat"]["id"])
                     if not owner:
                         # setup helper: tell the user their chat id
+                        log(f"bot: message from chat {chat} (@{msg.get('from', {}).get('username', '?')}) "
+                            "while TELEGRAM_CHAT_ID is not set")
                         tg.send_message(f"Your chat id is {chat}. Put TELEGRAM_CHAT_ID={chat} in automation/.env "
                                         "and restart the bot.", chat=chat)
                     elif chat == owner:
