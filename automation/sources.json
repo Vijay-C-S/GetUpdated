@@ -360,8 +360,9 @@
     "url": "https://www.ibps.in/index.php/recruitment/",
     "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
     "official": true,
-    "enabled": true,
-    "hint": "Official recruitment page / notification of the organisation itself."
+    "enabled": false,
+    "hint": "Official recruitment page / notification of the organisation itself.",
+    "note": "www.ibps.in rejects the VM's TLS handshake; IBPS news still arrives via FreeJobAlert."
   },
   {
     "name": "Official: C-DAC jobs",
