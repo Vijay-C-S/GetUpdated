@@ -45,10 +45,16 @@ def run_claude(prompt: str, model: str, tools: list[str] | None = None, timeout:
         data = {"is_error": True, "result": out or proc.stderr}
     result = str(data.get("result", ""))
     usage = data.get("usage") or {}
-    log("claude: done in {t} turns, in={i} cache_read={c} out={o}{cost}".format(
+    log("claude: done in {t} turns, in={i} cache_write={w} cache_read={c} out={o} (thinking={th}){cost}".format(
         t=data.get("num_turns", "?"), i=usage.get("input_tokens", "?"),
+        w=usage.get("cache_creation_input_tokens", "?"),
         c=usage.get("cache_read_input_tokens", "?"), o=usage.get("output_tokens", "?"),
+        th=(usage.get("output_tokens_details") or {}).get("thinking_tokens", "?"),
         cost=f", ~${data['total_cost_usd']:.3f} equiv" if data.get("total_cost_usd") else ""))
+    if not tools and proc.returncode == 0 and not data.get("is_error") and not result.strip():
+        # An empty answer used to be treated as "no verdicts"; make it visible and retryable instead.
+        raise RuntimeError(f"claude returned an empty answer (stop={data.get('stop_reason')}, "
+                           f"stderr={proc.stderr.strip()[:300]})")
     if proc.returncode != 0 or data.get("is_error"):
         blob = (result + " " + proc.stderr).lower()
         if "limit" in blob and ("usage" in blob or "reset" in blob or "rate" in blob) and "budget" not in blob:
