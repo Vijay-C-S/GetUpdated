@@ -237,7 +237,10 @@ def scan() -> int:
                     continue
                 if kind not in ("ats", "email") and not keyword_ok(it["title"] + " " + it["summary"]):
                     continue
-                dup = is_duplicate(it["title"], jobs, slugs)
+                key = it["title"]
+                if kind == "email":  # alert titles are generic ("Graduate Trainee Engineer"): add the company
+                    key = it["summary"].split(":", 1)[-1].replace("·", " ")[:120] or key
+                dup = is_duplicate(key, jobs, slugs)
                 jobs[jid] = {
                     "id": jid, "title": it["title"], "url": it["url"], "summary": it["summary"],
                     "source": name, "source_hint": src.get("hint", ""), "source_type": kind,
