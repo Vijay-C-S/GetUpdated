@@ -45,7 +45,8 @@ DEFAULT_CONFIG = {
         "vacancy", "vacancies", "off campus", "off-campus", "graduate", "trainee",
         "apply online", "notification", "walk-in", "batch", "passout", "passouts",
         "engineer", "developer", "analyst", "job", "jobs", "careers", "apprentice",
-        "apprenticeship", "trainee", "recruitment",
+        "apprenticeship", "trainee", "recruitment", "officer", "clerk", "probationary",
+        "advertisement", "advt", "engagement", "posts", "openings", "assistant",
     ],
     "keywords_exclude": [
         "result", "answer key", "admit card", "layoff", "layoffs", "fired",

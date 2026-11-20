@@ -1,6 +1,8 @@
 """Watchdog: scan job sources for new postings and record them as candidates.
 
-No AI is used here. Two source types (see sources.json):
+No AI is used here. Source types (see sources.json):
+  ats   - official company job boards (Greenhouse, Lever, Ashby, SmartRecruiters APIs).
+  email - LinkedIn / Naukri / Indeed job-alert emails read from an inbox (email_alerts.py).
   rss  - RSS/Atom feed; every new item is a candidate.
   page - an HTML page (careers / notifications list); every NEW link whose text
          matches the keywords is a candidate. The first scan of a page only
@@ -73,14 +75,44 @@ def parse_page(html: str, base_url: str, link_pattern: str | None) -> list[dict]
 
 ENTRY_WORDS = ("intern", "graduate", "fresher", "trainee", "new grad", "apprentice", "entry",
                "associate software", "sde 1", "sde i", "sde-1", "engineer i", "engineer 1",
-               "software engineer - i", "junior", "campus", "2025", "2026", "2027")
+               "software engineer - i", "junior", "campus", "university", "early career", "new college",
+               "2025", "2026", "2027")
 SENIOR_WORDS = ("senior", "sr.", "sr ", "lead", "staff", "principal", "manager", "director", "head",
                 " ii", " iii", " iv", "architect", "vp", "specialist ii", "engineer 2", "engineer 3")
-LOCATION_WORDS = ("bengaluru", "bangalore", "remote", "work from home", "anywhere in india")
+# Bengaluru, or remote/WFH from anywhere (you asked for any remote role).
+LOCATION_WORDS = ("bengaluru", "bangalore", "remote", "work from home", "wfh", "anywhere", "home based",
+                  "home-based", "distributed")
+MAX_AGE_DAYS = 21  # older ATS postings are probably filled; also stops a flood when a company is added
 
 
 def _strip_html(text: str, limit: int = 5000) -> str:
     return BeautifulSoup(text or "", "html.parser").get_text(" ", strip=True)[:limit]
+
+
+def _too_old(stamp) -> bool:
+    """stamp: ISO string or epoch ms. Unknown dates are kept."""
+    from datetime import datetime, timezone
+    try:
+        if isinstance(stamp, (int, float)):
+            dt = datetime.fromtimestamp(stamp / 1000, timezone.utc)
+        elif stamp:
+            dt = datetime.fromisoformat(str(stamp).replace("Z", "+00:00"))
+        else:
+            return False
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return (datetime.now(timezone.utc) - dt).days > MAX_AGE_DAYS
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _entry_level(title: str) -> bool:
+    t = f" {title.lower()} "
+    return not any(w in t for w in SENIOR_WORDS) and any(w in t for w in ENTRY_WORDS)
+
+
+def _location_ok(loc: str) -> bool:
+    return any(w in loc.lower() for w in LOCATION_WORDS)
 
 
 def parse_ats(provider: str, company: str, name: str) -> list[dict]:
@@ -90,9 +122,9 @@ def parse_ats(provider: str, company: str, name: str) -> list[dict]:
         data = requests.get(f"https://boards-api.greenhouse.io/v1/boards/{company}/jobs?content=true",
                             headers=HEADERS, timeout=30).json()
         for j in data.get("jobs", []):
-            out.append({"title": j["title"], "url": j["absolute_url"],
+            out.append({"title": j["title"], "url": j["absolute_url"], "date": j.get("updated_at"),
                         "location": (j.get("location") or {}).get("name", ""),
-                        "text": _strip_html(html_unescape(j.get("content", "")))})
+                        "text": lambda j=j: _strip_html(html_unescape(j.get("content", "")))})
     elif provider == "lever":
         data = requests.get(f"https://api.lever.co/v0/postings/{company}?mode=json",
                             headers=HEADERS, timeout=30).json()
@@ -101,7 +133,7 @@ def parse_ats(provider: str, company: str, name: str) -> list[dict]:
             locs = " / ".join([cats.get("location") or ""] + list(cats.get("allLocations") or []))
             text = (j.get("descriptionPlain") or "") + " " + " ".join(
                 f"{l.get('text')}: {_strip_html(l.get('content'), 1500)}" for l in j.get("lists", []))
-            out.append({"title": j["text"], "url": j["hostedUrl"], "location": locs,
+            out.append({"title": j["text"], "url": j["hostedUrl"], "location": locs, "date": j.get("createdAt"),
                         "text": text[:5000], "workplace": j.get("workplaceType", "")})
     elif provider == "ashby":
         data = requests.get(f"https://api.ashbyhq.com/posting-api/job-board/{company}",
@@ -109,21 +141,30 @@ def parse_ats(provider: str, company: str, name: str) -> list[dict]:
         for j in data.get("jobs", []):
             locs = j.get("location", "") + " " + " ".join(
                 str(s.get("location", "")) for s in j.get("secondaryLocations") or [])
-            out.append({"title": j["title"], "url": j["jobUrl"], "location": locs,
+            out.append({"title": j["title"], "url": j["jobUrl"], "location": locs, "date": j.get("publishedAt"),
                         "text": (j.get("descriptionPlain") or "")[:5000],
                         "workplace": "remote" if j.get("isRemote") else ""})
+    elif provider == "smartrecruiters":
+        base = f"https://api.smartrecruiters.com/v1/companies/{company}/postings"
+        data = requests.get(base, params={"limit": 100, "country": "in"}, headers=HEADERS, timeout=30).json()
+        for j in data.get("content", []):
+            loc = j.get("location") or {}
+            def details(j=j):
+                d = requests.get(f"{base}/{j['id']}", headers=HEADERS, timeout=30).json()
+                secs = (d.get("jobAd") or {}).get("sections") or {}
+                return _strip_html(" ".join(str((v or {}).get("text", "")) for v in secs.values()))
+            out.append({"title": j["name"], "url": f"https://jobs.smartrecruiters.com/{company}/{j['id']}",
+                        "location": f"{loc.get('city', '')}, {loc.get('country', '')}", "date": j.get("releasedDate"),
+                        "workplace": "remote" if loc.get("remote") else "", "text": details})
     items = []
     for j in out:
-        t, loc = j["title"].lower(), (j["location"] + " " + j.get("workplace", "")).lower()
-        if not any(w in loc for w in LOCATION_WORDS):
+        loc = j["location"] + " " + j.get("workplace", "")
+        if not _location_ok(loc) or not _entry_level(j["title"]) or _too_old(j.get("date")):
             continue
-        if "remote" in loc and "india" not in loc and not any(w in loc for w in LOCATION_WORDS[:2]):
-            continue  # remote but not open to India
-        if any(w in f" {t} " for w in SENIOR_WORDS) or not any(w in t for w in ENTRY_WORDS):
-            continue
+        text = j["text"]() if callable(j["text"]) else j["text"]
         items.append({"title": f"{name} hiring {j['title']} ({j['location'][:60]})", "url": j["url"],
-                      "summary": f"Official {provider} posting. Location: {j['location'][:80]}",
-                      "full_text": j["text"]})
+                      "summary": f"Official {provider} posting. Location: {loc.strip()[:80]}",
+                      "full_text": text})
     return items
 
 
@@ -173,6 +214,9 @@ def scan() -> int:
                             items += parse_ats(src["provider"], slug, cname)
                         except Exception as exc:  # noqa: BLE001
                             log(f"watchdog: {src['provider']}/{slug} failed: {exc}")
+                elif kind == "email":
+                    from email_alerts import fetch_alerts
+                    items = fetch_alerts(src)
                 else:
                     text = fetch(src["url"])
                     items = parse_feed(text) if kind == "rss" else parse_page(text, src["url"], src.get("link_pattern"))
@@ -191,12 +235,13 @@ def scan() -> int:
                 seen.add(jid)
                 if baseline:
                     continue
-                if kind != "ats" and not keyword_ok(it["title"] + " " + it["summary"]):
+                if kind not in ("ats", "email") and not keyword_ok(it["title"] + " " + it["summary"]):
                     continue
                 dup = is_duplicate(it["title"], jobs, slugs)
                 jobs[jid] = {
                     "id": jid, "title": it["title"], "url": it["url"], "summary": it["summary"],
                     "source": name, "source_hint": src.get("hint", ""), "source_type": kind,
+                    "official": bool(src.get("official") or kind == "ats"),
                     "full_text": it.get("full_text", ""),
                     "status": "rejected" if dup else "candidate",
                     "reason": dup or "", "found_at": now_iso(), "updated_at": now_iso(),

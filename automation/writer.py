@@ -88,11 +88,31 @@ def prefetch(job: dict) -> dict:
     if job.get("source_type") == "ats":
         return {"lead_text": "", "links": [(job["url"], "official posting")],
                 "excerpts": [(job["url"], job.get("full_text") or fetch_text(job["url"], 5000))]}
-    if job.get("source", "").startswith("manual"):
+    if job.get("official"):  # official govt/bank/PSU page or PDF: the lead itself is the source
+        return {"lead_text": "", "links": [(job["url"], "official notice")],
+                "excerpts": [(job["url"], fetch_text(job["url"], 5000))]}
+    if job.get("source", "").startswith("manual") or job.get("source_type") == "email":
+        # You sent it (Telegram / forwarded WhatsApp post) or it came from a LinkedIn/Naukri alert.
+        # Never skip: the writer searches for the official posting itself if needed.
+        pre = {"lead_text": "", "links": [], "excerpts": []}
+        if not job.get("url"):
+            return pre
         try:
-            return {"lead_text": fetch_text(job["url"], 4000), "links": [], "excerpts": []}
-        except Exception:  # noqa: BLE001
-            return {"lead_text": "", "links": [], "excerpts": []}
+            r = requests.get(job["url"], headers=HEADERS, timeout=30)
+            r.raise_for_status()
+            pre["lead_text"] = fetch_text(job["url"], 4000)
+            pre["links"] = official_links(r.text, job["url"])
+            for href, _label in pre["links"][:3]:
+                try:
+                    txt = fetch_text(href, 3500)
+                    if len(txt) > 200:
+                        pre["excerpts"].append((href, txt))
+                        break
+                except Exception:  # noqa: BLE001
+                    pass
+        except Exception as exc:  # noqa: BLE001
+            log(f"writer: prefetch {job['url']} failed: {exc}")
+        return pre
     r = requests.get(job["url"], headers=HEADERS, timeout=30)
     r.raise_for_status()
     lead_text = fetch_text(job["url"], 2500)
@@ -124,6 +144,9 @@ def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
     ]
     if job.get("source_hint"):
         parts.append(f"HINT: {job['source_hint']}")
+    if job.get("forwarded_text"):
+        parts.append("POST THE OWNER FORWARDED (from a WhatsApp/Telegram channel, NOT a fact source; "
+                     "use it to identify the job, then verify on the official site):\n" + job["forwarded_text"][:1500])
     if pre["lead_text"]:
         parts.append("LEAD PAGE TEXT (aggregator, NOT a fact source):\n" + pre["lead_text"])
     if pre["links"]:

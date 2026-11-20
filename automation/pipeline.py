@@ -71,11 +71,11 @@ def git_pull() -> bool:
 
 def send_lead(job: dict) -> None:
     """Telegram: a new lead passed the filter. You decide whether to spend a draft on it."""
-    text = (f"🆕 NEW LEAD ({job.get('score', '-')}/10) · {job.get('category', '')}\n"
-            f"{job.get('company', '')} - {job.get('role', '')}\n\n"
-            f"{job.get('title', '')}\n\n"
+    text = (f"🆕 NEW LEAD ({job.get('score', '-')}/10) · {job.get('category') or job.get('source', '')}\n"
+            + (f"{job.get('company', '')} - {job.get('role', '')}\n" if job.get("company") else "")
+            + f"\n{job.get('title', '')}\n\n"
             f"💡 {job.get('reason', '')}\n"
-            f"🔗 {job.get('url', '')}")
+            f"🔗 {job.get('url') or '(no link - the writer will search for the official notice)'}")
     buttons = [[{"text": "✍️ Write draft", "callback_data": f"draft:{job['id']}"},
                 {"text": "❌ Ignore", "callback_data": f"ign:{job['id']}"}]]
     try:

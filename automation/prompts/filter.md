@@ -3,12 +3,13 @@ Below are raw items found by a scraper. Decide which ones deserve a full blog po
 
 ## What we publish (ALL rules in a group must hold)
 
-A) Private jobs / internships / apprenticeships
+A) Private jobs / internships / apprenticeships  (IT/EC ONLY)
    - Entry level only: freshers, 0-1 year experience, current students, or 2025-2027 passouts.
-   - Only for IT (CSE/IT/ISE/MCA/BCA/B.Sc CS) or EC (Electronics & Communication / ECE / EEE-electronics)
-     candidates: software, web, data, testing, cloud, embedded, VLSI, electronics, telecom, IT support roles.
-   - Location must be Work From Home / Remote (India) OR Bengaluru / Bangalore.
-     Other cities (Hyderabad, Pune, Chennai, Noida, Gurugram, ...) = reject, unless Bengaluru or remote is one option.
+   - Only when the role is clearly IT (CSE/IT/ISE/MCA/BCA/B.Sc CS) or EC (Electronics & Communication /
+     ECE / EEE-electronics): software, web, data, testing, cloud, embedded, VLSI, electronics, telecom,
+     IT support. Non-IT private roles (sales, BPO voice, marketing, HR, finance, mechanical) = reject.
+   - Location: Bengaluru / Bangalore, OR any Remote / Work From Home role (any country is fine).
+     Other cities only (Hyderabad, Pune, Chennai, Noida, Gurugram, ...) = reject.
    - Apprenticeships count (e.g. BEL / HAL / ISRO / NATS apprentice) if IT/EC and Bengaluru or all-India.
 
 B) Government jobs
@@ -21,6 +22,9 @@ B) Government jobs
    - Direct recruitment of engineering/any graduates (Assistant Engineer, Junior Engineer, GET, Officer,
      Clerk/PO, Group B/C) IS entry level: score 7+ when it is central or Karnataka and has 100+ posts or
      takes EC/IT/CS graduates, even if civil/electrical branches are also included.
+   - BANK JOBS (any degree is fine, no IT requirement): IBPS PO/Clerk/SO/RRB, SBI, RBI, NABARD, SIDBI,
+     public sector banks (Canara, Bank of Baroda, Union, PNB, ...), and Karnataka banks / Grameena banks
+     (Karnataka Bank, Karnataka Gramin Bank, KVGB, Karnataka State Co-operative Apex Bank). Score 7+.
    - REJECT other states' government jobs (Odisha, Assam, UP, Bihar, Telangana, ...).
    - REJECT medical/nursing/doctor/faculty/professor/senior posts, and police/army posts that need
      only 10th/12th unless they are large all-India exams.

@@ -1,6 +1,6 @@
 [
   {
-    "name": "Official ATS: Greenhouse (Bengaluru tech)",
+    "name": "Official ATS: Greenhouse",
     "type": "ats",
     "provider": "greenhouse",
     "enabled": true,
@@ -28,12 +28,128 @@
       {
         "slug": "hackerrank",
         "name": "HackerRank"
+      },
+      {
+        "slug": "stripe",
+        "name": "Stripe"
+      },
+      {
+        "slug": "cloudflare",
+        "name": "Cloudflare"
+      },
+      {
+        "slug": "mongodb",
+        "name": "MongoDB"
+      },
+      {
+        "slug": "gitlab",
+        "name": "GitLab"
+      },
+      {
+        "slug": "coinbase",
+        "name": "Coinbase"
+      },
+      {
+        "slug": "twilio",
+        "name": "Twilio"
+      },
+      {
+        "slug": "okta",
+        "name": "Okta"
+      },
+      {
+        "slug": "elastic",
+        "name": "Elastic"
+      },
+      {
+        "slug": "airbnb",
+        "name": "Airbnb"
+      },
+      {
+        "slug": "dropbox",
+        "name": "Dropbox"
+      },
+      {
+        "slug": "pinterest",
+        "name": "Pinterest"
+      },
+      {
+        "slug": "figma",
+        "name": "Figma"
+      },
+      {
+        "slug": "samsara",
+        "name": "Samsara"
+      },
+      {
+        "slug": "razorpaysoftwareprivatelimited",
+        "name": "Razorpay"
+      },
+      {
+        "slug": "inmobi",
+        "name": "InMobi"
+      },
+      {
+        "slug": "datadog",
+        "name": "Datadog"
+      },
+      {
+        "slug": "newrelic",
+        "name": "New Relic"
+      },
+      {
+        "slug": "purestorage",
+        "name": "Pure Storage"
+      },
+      {
+        "slug": "anthropic",
+        "name": "Anthropic"
+      },
+      {
+        "slug": "scaleai",
+        "name": "Scale AI"
+      },
+      {
+        "slug": "robinhood",
+        "name": "Robinhood"
+      },
+      {
+        "slug": "discord",
+        "name": "Discord"
+      },
+      {
+        "slug": "reddit",
+        "name": "Reddit"
+      },
+      {
+        "slug": "grafanalabs",
+        "name": "Grafana Labs"
+      },
+      {
+        "slug": "canonical",
+        "name": "Canonical"
+      },
+      {
+        "slug": "vercel",
+        "name": "Vercel"
+      },
+      {
+        "slug": "duolingo",
+        "name": "Duolingo"
+      },
+      {
+        "slug": "lyft",
+        "name": "Lyft"
+      },
+      {
+        "slug": "instacart",
+        "name": "Instacart"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
   },
   {
-    "name": "Official ATS: Lever (Bengaluru tech)",
+    "name": "Official ATS: Lever",
     "type": "ats",
     "provider": "lever",
     "enabled": true,
@@ -53,12 +169,32 @@
       {
         "slug": "paytm",
         "name": "Paytm"
+      },
+      {
+        "slug": "fi",
+        "name": "Fi Money"
+      },
+      {
+        "slug": "spotify",
+        "name": "Spotify"
+      },
+      {
+        "slug": "palantir",
+        "name": "Palantir"
+      },
+      {
+        "slug": "mindtickle",
+        "name": "Mindtickle"
+      },
+      {
+        "slug": "porter",
+        "name": "Porter"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
   },
   {
-    "name": "Official ATS: Ashby (Bengaluru tech)",
+    "name": "Official ATS: Ashby",
     "type": "ats",
     "provider": "ashby",
     "enabled": true,
@@ -66,9 +202,175 @@
       {
         "slug": "sarvam",
         "name": "Sarvam AI"
+      },
+      {
+        "slug": "notion",
+        "name": "Notion"
+      },
+      {
+        "slug": "openai",
+        "name": "OpenAI"
+      },
+      {
+        "slug": "ramp",
+        "name": "Ramp"
+      },
+      {
+        "slug": "linear",
+        "name": "Linear"
+      },
+      {
+        "slug": "vanta",
+        "name": "Vanta"
+      },
+      {
+        "slug": "posthog",
+        "name": "PostHog"
+      },
+      {
+        "slug": "supabase",
+        "name": "Supabase"
+      },
+      {
+        "slug": "replit",
+        "name": "Replit"
+      },
+      {
+        "slug": "cohere",
+        "name": "Cohere"
+      },
+      {
+        "slug": "elevenlabs",
+        "name": "ElevenLabs"
+      },
+      {
+        "slug": "perplexity",
+        "name": "Perplexity"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
+    "name": "Official ATS: SmartRecruiters",
+    "type": "ats",
+    "provider": "smartrecruiters",
+    "enabled": true,
+    "companies": [
+      {
+        "slug": "Freshworks",
+        "name": "Freshworks"
+      },
+      {
+        "slug": "ServiceNow",
+        "name": "ServiceNow"
+      },
+      {
+        "slug": "Visa",
+        "name": "Visa"
+      },
+      {
+        "slug": "Bosch",
+        "name": "Bosch"
+      }
+    ],
+    "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
+    "name": "Job alert emails (LinkedIn, Naukri, Indeed...)",
+    "type": "email",
+    "enabled": true,
+    "folder": "INBOX",
+    "hint": "From a LinkedIn/Naukri/Indeed job alert. That site is NOT the official source: find the company's own careers page or official notice and verify there."
+  },
+  {
+    "name": "Official: KEA (Karnataka)",
+    "type": "page",
+    "url": "https://cetonline.karnataka.gov.in/kea/",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: SBI careers",
+    "type": "page",
+    "url": "https://sbi.co.in/web/careers/current-openings",
+    "link_pattern": "recruit|notif|advt|advertis|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: ISRO careers",
+    "type": "page",
+    "url": "https://www.isro.gov.in/Careers.html",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: Canara Bank recruitment",
+    "type": "page",
+    "url": "https://www.canarabank.com/pages/Recruitment",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: Karnataka Bank careers",
+    "type": "page",
+    "url": "https://karnatakabank.com/careers",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: ECIL jobs",
+    "type": "page",
+    "url": "https://www.ecil.co.in/jobs.html",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: ONGC careers",
+    "type": "page",
+    "url": "https://www.ongcindia.com/web/eng/career",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: Bank of Baroda careers",
+    "type": "page",
+    "url": "https://www.bankofbaroda.in/career",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: IBPS recruitment",
+    "type": "page",
+    "url": "https://www.ibps.in/index.php/recruitment/",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: C-DAC jobs",
+    "type": "page",
+    "url": "https://www.cdac.in/index.aspx?id=current_jobs",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
   },
   {
     "name": "OffCampusJobs4u (IT freshers)",

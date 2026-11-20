@@ -1,11 +1,13 @@
 """Telegram bot (runs 24/7 as a systemd service).
 
 Buttons:   ✅ Publish / ❌ Skip on each draft
-Commands:  /start  /help  /status  /pending  /run  /post <url> [note]
+Commands:  /start  /help  /status  /pending  /run  /post <url> [note]  /index <url>
+Forwarded / pasted job posts become leads.
 Only messages from TELEGRAM_CHAT_ID are obeyed.
 """
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 import threading
@@ -22,7 +24,8 @@ HELP = (
     "/run     - check sources for new leads now\n"
     "/post <url> [note] - write a blog for this job link right away\n"
     "/index <url> - tell Google + Bing about a post you published by hand\n"
-    "/help    - this message"
+    "/help    - this message\n\n"
+    "Forward or paste any job post (WhatsApp channel, LinkedIn, Telegram...) and I'll offer to draft it."
 )
 
 
@@ -117,8 +120,43 @@ def cmd_post(arg: str) -> None:
     run_pipeline_bg("--write", jid)
 
 
+URL_RE = re.compile(r"https?://[^\s<>\"')\]]+")
+NOT_JOB_LINK = ("whatsapp.com", "wa.me", "t.me/", "telegram.", "instagram.", "youtube.", "youtu.be",
+                "facebook.", "chat.whatsapp")
+
+
+def handle_forward(msg: dict, text: str) -> None:
+    """A job post you forwarded or pasted (WhatsApp channel, Telegram, LinkedIn, anywhere).
+    Becomes a lead with ✍️ / ❌ buttons. No AI tokens are used until you tap ✍️."""
+    from pipeline import send_lead
+    from watchdog import is_duplicate
+    from common import existing_blog_slugs
+    urls = URL_RE.findall(text)
+    for ent in (msg.get("entities") or []) + (msg.get("caption_entities") or []):
+        if ent.get("type") == "text_link":
+            urls.append(ent["url"])
+    urls = [u.rstrip(".,;") for u in urls if not any(b in u.lower() for b in NOT_JOB_LINK)]
+    first_line = next((l.strip(" *_-•📢🔥✅") for l in text.splitlines() if len(l.strip()) > 8), text[:120])
+    url = urls[0] if urls else ""
+    jid = url_id(url or text[:300])
+    jobs = load_jobs()
+    if jid in jobs and jobs[jid].get("status") not in ("rejected", "failed", "skipped"):
+        tg.send_message(f"Already have this one (status: {jobs[jid].get('status')}).")
+        return
+    dup = is_duplicate(first_line, jobs, existing_blog_slugs())
+    update_job(jid, title=first_line[:160], url=url, summary=text[:300], source="manual (forwarded by you)",
+               source_type="manual", forwarded_text=text[:3000], status="lead_pending", score=8,
+               category="", reason=f"Forwarded by you{' - looks ' + dup if dup else ''}",
+               found_at=now_iso(), lead_notified=False)
+    send_lead(load_jobs()[jid])
+
+
 def handle_message(msg: dict) -> None:
-    text = (msg.get("text") or "").strip()
+    text = (msg.get("text") or msg.get("caption") or "").strip()
+    if not text.startswith("/"):
+        if len(text) > 20:
+            handle_forward(msg, text)
+        return
     cmd, _, arg = text.partition(" ")
     cmd = cmd.split("@")[0].lower()
     if cmd in ("/start", "/help"):
