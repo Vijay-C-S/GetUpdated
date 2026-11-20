@@ -566,7 +566,8 @@
     "type": "rss",
     "url": "https://www.freshersnow.com/feed/",
     "hint": "Aggregator article; open it and follow its official apply link.",
-    "enabled": true
+    "enabled": false,
+    "note": "feed removed by the site (404 since Nov 2026)"
   },
   {
     "name": "FresherOpenings (IT freshers)",
@@ -679,7 +680,7 @@
     "name": "Official: NPCIL opportunities",
     "type": "page",
     "url": "https://www.npcil.nic.in/content/302_1_Opportunities.aspx",
-    "link_pattern": "recruit|notif|advt|vacanc|apprentic|trainee|stipend",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|intern|\\.pdf",
     "official": true,
     "enabled": true,
     "hint": "Official recruitment page / notification of the organisation itself."
