@@ -15,7 +15,7 @@ from xml.etree import ElementTree
 import requests
 
 import telegram_api as tg
-from common import (CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, get_job, git_is_clean, log, now_iso,
+from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, get_job, git_is_clean, log, now_iso,
                     run, today_ist, update_job)
 
 
@@ -161,6 +161,39 @@ def notify_search_engines(urls: list[str]) -> str:
         return "IndexNow: failed ⚠️"
 
 
+GOOGLE_KEY_FILE = AUTO_DIR / "google-indexing.json"  # service-account key, gitignored
+
+
+def google_index(url: str) -> str:
+    """Google Indexing API (free, 200 URLs/day). Officially meant for JobPosting pages,
+    which is what every auto post is. Needs the service account added as Owner in Search Console."""
+    if not GOOGLE_KEY_FILE.exists():
+        return "Google: not set up"
+    try:
+        from google.auth.transport.requests import AuthorizedSession
+        from google.oauth2 import service_account
+        creds = service_account.Credentials.from_service_account_file(
+            str(GOOGLE_KEY_FILE), scopes=["https://www.googleapis.com/auth/indexing"])
+        r = AuthorizedSession(creds).post("https://indexing.googleapis.com/v3/urlNotifications:publish",
+                                          json={"url": url, "type": "URL_UPDATED"}, timeout=30)
+        log(f"publisher: Google Indexing {r.status_code} for {url}: {r.text[:200]}")
+        if r.status_code == 200:
+            return "Google: submitted ✅"
+        if r.status_code == 403:
+            return "Google: 403 ⚠️ (add the service account as Owner in Search Console)"
+        if r.status_code == 429:
+            return "Google: daily quota used ⚠️"
+        return f"Google: HTTP {r.status_code} ⚠️"
+    except Exception as exc:  # noqa: BLE001
+        log(f"publisher: Google Indexing failed: {exc}")
+        return "Google: failed ⚠️"
+
+
+def seo_ping(post_url: str) -> str:
+    site = CONFIG["site_url"].rstrip("/")
+    return google_index(post_url) + " · " + notify_search_engines([post_url, f"{site}/", f"{site}/blogs.html"])
+
+
 def wait_until_live(url: str, slug: str) -> bool:
     """GitHub Pages returns 404 until the new build is deployed."""
     deadline = time.time() + CONFIG["live_check_timeout_sec"]
@@ -230,9 +263,8 @@ def publish(job_id: str) -> str:
     live = wait_until_live(url, slug)
     pack = share_pack(meta, url)
     note = "" if live else "\n\n⚠️ Not live yet after waiting; GitHub Pages may still be building."
-    site = CONFIG["site_url"].rstrip("/")
-    seo = notify_search_engines([url, f"{site}/", f"{site}/blogs.html"]) if live else "IndexNow: skipped (not live)"
-    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}\n🔎 Sitemap updated · {seo}{note}")
+    seo = seo_ping(url) if live else "search engines: skipped (not live yet, use /index later)"
+    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}\n🔎 Sitemap updated\n{seo}{note}")
     tg.send_message(pack)  # plain text: long-press -> copy -> paste into WhatsApp channel
     return url
 

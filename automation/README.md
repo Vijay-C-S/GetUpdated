@@ -64,6 +64,7 @@ bot.py (always on)
 | Command | What it does |
 |---|---|
 | `/post <url> [note]` | Write a blog for this job link now. Skips the filter and the daily cap. |
+| `/index <url>` | Tell Google (Indexing API) and Bing (IndexNow) about a post you published by hand |
 | `/run` | Check sources for new leads now |
 | `/status` | Today's counts and the queue |
 | `/pending` | Re-send leads and drafts waiting for you |
@@ -87,3 +88,12 @@ journalctl -u getupdated-bot -f              # bot service
 ## Keep Oracle free
 Stay within the Always Free A1 shape (4 OCPU / 24 GB) and 200 GB of total block storage. In
 Billing, set a budget alert of ₹1 so you're warned if anything starts costing money.
+
+## Google Indexing API (optional, free)
+Gets new posts into Google within hours instead of days. 200 URLs a day are free.
+1. In console.cloud.google.com, create a project and enable the **Web Search Indexing API**.
+2. Go to **IAM & Admin → Service accounts → Create**. No roles are needed. Open the account, then **Keys → Add key → JSON**.
+3. In Search Console (property `https://www.getupdated.in/`), go to **Settings → Users and permissions → Add user**. Paste the
+   service account email and set it as **Owner**.
+4. Copy the JSON to the VM: `scp key.json ubuntu@VM:~/GetUpdated/automation/google-indexing.json`,
+   then `chmod 600` it. Each publish then reports `Google: submitted ✅`.

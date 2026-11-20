@@ -29,6 +29,7 @@ npm-debug.log*
 # Automation (secrets, runtime state, local venv)
 automation/.env
 automation/config.json
+automation/google-indexing.json
 automation/state/
 automation/.venv/
 .venv/

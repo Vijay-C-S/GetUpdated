@@ -13,7 +13,7 @@ import time
 
 import telegram_api as tg
 from common import AUTO_DIR, load_jobs, log, now_iso, today_ist, update_job, url_id
-from publisher import publish
+from publisher import publish, seo_ping
 
 HELP = (
     "GetUpdated automation bot\n\n"
@@ -21,6 +21,7 @@ HELP = (
     "/pending - re-send leads and drafts waiting for you\n"
     "/run     - check sources for new leads now\n"
     "/post <url> [note] - write a blog for this job link right away\n"
+    "/index <url> - tell Google + Bing about a post you published by hand\n"
     "/help    - this message"
 )
 
@@ -131,6 +132,13 @@ def handle_message(msg: dict) -> None:
         run_pipeline_bg()
     elif cmd == "/post":
         cmd_post(arg.strip())
+    elif cmd == "/index":
+        urls = [u for u in arg.split() if u.startswith("https://www.getupdated.in/")]
+        if not urls:
+            tg.send_message("Usage: /index <getupdated.in post url> [more urls]\n"
+                            "Use it after you publish a post by hand.")
+        for u in urls[:10]:
+            tg.send_message(f"🔎 {u}\n{seo_ping(u)}")
 
 
 def main() -> None:
