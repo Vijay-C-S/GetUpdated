@@ -188,8 +188,12 @@ def today_ist():
     return datetime.now(IST).date()
 
 
+ID_PARAMS = re.compile(r"[?&](jk|gh_jid|jobid|job_id)=([^&#]+)", re.I)  # job number lives in the query
+
+
 def url_id(url: str) -> str:
-    norm = re.sub(r"[#?].*$", "", url.strip().lower()).rstrip("/")
+    keep = "".join(f"|{k.lower()}={v}" for k, v in ID_PARAMS.findall(url))
+    norm = re.sub(r"[#?].*$", "", url.strip().lower()).rstrip("/") + keep.lower()
     norm = re.sub(r"^https?://(www\.)?", "", norm)
     return hashlib.sha1(norm.encode()).hexdigest()[:12]
 
