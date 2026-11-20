@@ -10,6 +10,7 @@ Token-saving defaults:
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -22,7 +23,9 @@ class UsageLimitError(RuntimeError):
 
 def run_claude(prompt: str, model: str, tools: list[str] | None = None, timeout: int = 600,
                cwd: Path = REPO_DIR, effort: str | None = None, system_prompt: str | None = None,
-               budget_usd: float | None = None) -> str:
+               budget_usd: float | None = None, cache: bool = True) -> str:
+    """cache=False for one-shot calls that repeat less than hourly: writing the prompt cache costs
+    more than plain input, and a 2-hourly run never reads it back before it expires."""
     cmd = [CONFIG["claude_bin"], "-p", "--model", model, "--output-format", "json",
            "--strict-mcp-config", "--no-session-persistence", "--disable-slash-commands",
            "--tools", ",".join(tools or [])]
@@ -36,8 +39,9 @@ def run_claude(prompt: str, model: str, tools: list[str] | None = None, timeout:
         cmd += ["--max-budget-usd", str(budget_usd)]
     cmd += list(CONFIG.get("claude_extra_args", []))
     log(f"claude: model={model} effort={effort or 'default'} tools={tools or 'none'}")
+    env = None if cache else {**os.environ, "DISABLE_PROMPT_CACHING": "1"}
     proc = subprocess.run(cmd, input=prompt, cwd=str(cwd), capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", timeout=timeout)
+                          encoding="utf-8", errors="replace", timeout=timeout, env=env)
     out = proc.stdout.strip()
     try:
         data = json.loads(out)
