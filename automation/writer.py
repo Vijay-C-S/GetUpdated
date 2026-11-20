@@ -138,8 +138,8 @@ def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
     parts = [
         f"TODAY: {d.isoformat()} (IST)",
         f"DRAFT FOLDER (write body.html and meta.json here, nowhere else): {draft_dir.as_posix()}",
-        "LEAD: " + json.dumps({k: job.get(k) for k in ("title", "url", "source", "company", "role",
-                                                        "category", "manual_note") if job.get(k)},
+        "LEAD: " + json.dumps({k: job.get(k) for k in ("title", "url", "source", "summary", "company",
+                                                        "role", "category", "manual_note") if job.get(k)},
                               ensure_ascii=False),
     ]
     if job.get("source_hint"):

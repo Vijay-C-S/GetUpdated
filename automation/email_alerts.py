@@ -18,6 +18,7 @@ import os
 import re
 from email.header import decode_header, make_header
 
+import requests
 from bs4 import BeautifulSoup
 
 from common import log
@@ -28,7 +29,7 @@ SENDERS = ("linkedin.com", "naukri.com", "indeed.com", "indeedemail.com", "found
 JOB_LINKS = [
     (re.compile(r"linkedin\.com/(?:comm/)?jobs/view/(\d+)"), lambda m: f"https://www.linkedin.com/jobs/view/{m.group(1)}"),
     (re.compile(r"naukri\.com/job-listings-[^?\s\"']+"), lambda m: "https://www." + m.group(0)),
-    (re.compile(r"indeed\.com/(?:rc/clk|viewjob|pagead/clk)\?[^\s\"']*?jk=([0-9a-f]+)"),
+    (re.compile(r"indeed\.com/(?:rc/clk(?:/dl)?|viewjob|pagead/clk|m/viewjob)\?[^\s\"']*?jk=([0-9a-f]+)"),
      lambda m: f"https://in.indeed.com/viewjob?jk={m.group(1)}"),
     (re.compile(r"internshala\.com/(?:internship|job)/detail/[^?\s\"']+"), lambda m: "https://" + m.group(0)),
     (re.compile(r"foundit\.in/job/[^?\s\"']+"), lambda m: "https://www." + m.group(0)),
@@ -49,24 +50,55 @@ def _html_of(msg) -> str:
     return ""
 
 
-def parse_alert(html: str, sender: str) -> list[dict]:
+FOOTER = re.compile(r"privacy|terms|help|unsubscribe|manage|edit|settings|create your|download|app store|"
+                    r"google play|view all|see all|since yesterday|last \d+ days|preferences|feedback", re.I)
+TRACKERS = ("engage.indeed.com", "link.internshala.com", "click.", "email.", "links.", "trk.", "/track", "emailclick")
+
+
+def _resolve(url: str, cache: dict) -> str:
+    """Alert emails wrap job links in click-tracking redirects; follow them like a click would."""
+    if url not in cache:
+        try:
+            r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15, allow_redirects=True, stream=True)
+            cache[url] = r.url
+            r.close()
+        except Exception:  # noqa: BLE001
+            cache[url] = url
+    return cache[url]
+
+
+def _canonical(href: str):
+    for pat, canon in JOB_LINKS:
+        m = pat.search(href)
+        if m:
+            return canon(m)
+    return None
+
+
+def parse_alert(html: str, sender: str, max_resolve: int = 25) -> list[dict]:
     soup = BeautifulSoup(html, "html.parser")
     found: dict[str, dict] = {}
+    cache: dict[str, str] = {}
     for a in soup.find_all("a", href=True):
-        for pat, canon in JOB_LINKS:
-            m = pat.search(a["href"])
-            if not m:
+        href, text = a["href"], a.get_text(" ", strip=True)
+        url = _canonical(href)
+        if not url:
+            if len(text) < 6 or NOISE.match(text) or FOOTER.search(text):
                 continue
-            url = canon(m)
-            text = a.get_text(" ", strip=True)
-            item = found.setdefault(url, {"url": url, "title": "", "summary": ""})
-            if text and not NOISE.match(text) and len(text) > len(item["title"]):
-                item["title"] = text[:160]
-                # company · location usually sits right next to the title in these emails
-                box = a.find_parent(["td", "div", "tr"])
-                ctx = box.get_text(" · ", strip=True) if box else ""
-                item["summary"] = ctx.replace(text, "", 1).strip(" ·")[:200]
-            break
+            if not any(t in href for t in TRACKERS) or len(cache) >= max_resolve:
+                continue
+            url = _canonical(_resolve(href, cache))
+            if not url:
+                continue
+        item = found.setdefault(url, {"url": url, "title": "", "summary": ""})
+        if text and not NOISE.match(text) and (not item["title"] or len(text) < len(item["title"])):
+            # the shortest non-empty anchor is usually the clean job title
+            if not item["summary"] and item["title"]:
+                item["summary"] = item["title"]
+            item["title"] = text[:160]
+        if not item["summary"]:
+            box = a.find_parent(["td", "div", "tr"])
+            item["summary"] = (box.get_text(" · ", strip=True) if box else "")[:200]
     site = sender.split("@")[-1].split(">")[0]
     return [dict(i, title=i["title"] or "Job from alert", summary=f"{site} alert: {i['summary']}")
             for i in found.values()]
