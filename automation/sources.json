@@ -144,6 +144,70 @@
       {
         "slug": "instacart",
         "name": "Instacart"
+      },
+      {
+        "slug": "fivetran",
+        "name": "Fivetran"
+      },
+      {
+        "slug": "toast",
+        "name": "Toast"
+      },
+      {
+        "slug": "sigmoid",
+        "name": "Sigmoid"
+      },
+      {
+        "slug": "neo4j",
+        "name": "Neo4j"
+      },
+      {
+        "slug": "netskope",
+        "name": "Netskope"
+      },
+      {
+        "slug": "mixpanel",
+        "name": "Mixpanel"
+      },
+      {
+        "slug": "observeai",
+        "name": "Observe.AI"
+      },
+      {
+        "slug": "turing",
+        "name": "Turing"
+      },
+      {
+        "slug": "sumologic",
+        "name": "Sumo Logic"
+      },
+      {
+        "slug": "yugabyte",
+        "name": "YugabyteDB"
+      },
+      {
+        "slug": "cockroachlabs",
+        "name": "Cockroach Labs"
+      },
+      {
+        "slug": "mozilla",
+        "name": "Mozilla"
+      },
+      {
+        "slug": "tailscale",
+        "name": "Tailscale"
+      },
+      {
+        "slug": "wikimedia",
+        "name": "Wikimedia Foundation"
+      },
+      {
+        "slug": "intercom",
+        "name": "Intercom"
+      },
+      {
+        "slug": "airtable",
+        "name": "Airtable"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
@@ -189,6 +253,10 @@
       {
         "slug": "porter",
         "name": "Porter"
+      },
+      {
+        "slug": "fampay",
+        "name": "FamPay"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
@@ -246,6 +314,58 @@
       {
         "slug": "perplexity",
         "name": "Perplexity"
+      },
+      {
+        "slug": "clickhouse",
+        "name": "ClickHouse"
+      },
+      {
+        "slug": "snowflake",
+        "name": "Snowflake"
+      },
+      {
+        "slug": "tekion",
+        "name": "Tekion"
+      },
+      {
+        "slug": "amplitude",
+        "name": "Amplitude"
+      },
+      {
+        "slug": "anyscale",
+        "name": "Anyscale"
+      },
+      {
+        "slug": "redis",
+        "name": "Redis"
+      },
+      {
+        "slug": "docker",
+        "name": "Docker"
+      },
+      {
+        "slug": "writer",
+        "name": "Writer"
+      },
+      {
+        "slug": "zapier",
+        "name": "Zapier"
+      },
+      {
+        "slug": "pinecone",
+        "name": "Pinecone"
+      },
+      {
+        "slug": "thoughtworks",
+        "name": "Thoughtworks"
+      },
+      {
+        "slug": "modal",
+        "name": "Modal"
+      },
+      {
+        "slug": "gitbook",
+        "name": "GitBook"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
@@ -271,6 +391,67 @@
       {
         "slug": "Bosch",
         "name": "Bosch"
+      },
+      {
+        "slug": "Swiggy",
+        "name": "Swiggy"
+      },
+      {
+        "slug": "Endava",
+        "name": "Endava"
+      },
+      {
+        "slug": "Grab",
+        "name": "Grab"
+      },
+      {
+        "slug": "Continental",
+        "name": "Continental"
+      },
+      {
+        "slug": "Unacademy",
+        "name": "Unacademy"
+      },
+      {
+        "slug": "Westerndigital",
+        "name": "Western Digital"
+      },
+      {
+        "slug": "Whatfix",
+        "name": "Whatfix"
+      },
+      {
+        "slug": "Upstox",
+        "name": "Upstox"
+      },
+      {
+        "slug": "Lendingkart",
+        "name": "Lendingkart"
+      },
+      {
+        "slug": "Cars24",
+        "name": "Cars24"
+      },
+      {
+        "slug": "Ixigo",
+        "name": "ixigo"
+      },
+      {
+        "slug": "Nobroker",
+        "name": "NoBroker"
+      }
+    ],
+    "hint": "This IS the company's official job posting (ATS)."
+  },
+  {
+    "name": "Official ATS: Workable",
+    "type": "ats",
+    "provider": "workable",
+    "enabled": true,
+    "companies": [
+      {
+        "slug": "huggingface",
+        "name": "Hugging Face"
       }
     ],
     "hint": "This IS the company's official job posting (ATS)."
@@ -421,6 +602,114 @@
     "url": "https://news.google.com/rss/search?q=(SSC+OR+UPSC+OR+RRB+OR+IBPS+OR+SBI+OR+RBI+OR+ISRO+OR+DRDO+OR+BEL+OR+HAL+OR+NIC+OR+C-DOT)+recruitment+2026+notification+when:1d&hl=en-IN&gl=IN&ceid=IN:en",
     "hint": "Headline only; WebSearch the headline and find the official notification.",
     "enabled": false
+  },
+  {
+    "name": "Official: CSIR-NAL Bengaluru",
+    "type": "page",
+    "url": "https://www.nal.res.in/en/career",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|intern|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: Karnataka Gramin Bank recruitment",
+    "type": "page",
+    "url": "https://karnatakagb.bank.in/recruitment",
+    "link_pattern": "recruitment-files",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: RBI vacancies",
+    "type": "page",
+    "url": "https://www.rbi.org.in/Scripts/Vacancies.aspx",
+    "link_pattern": "vacanc|recruit|notif|advt|intern|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: NABARD careers",
+    "type": "page",
+    "url": "https://www.nabard.org/careers-notices1.aspx?cid=693&id=26",
+    "link_pattern": "recruit|notif|advt|vacanc|intern|apprentic|engag",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: SIDBI careers",
+    "type": "page",
+    "url": "https://www.sidbi.in/en/careers",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|intern|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: LIC careers",
+    "type": "page",
+    "url": "https://www.licindia.in/careers",
+    "link_pattern": "recruit|notif|advt|vacanc|apprentic|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: PNB recruitment",
+    "type": "page",
+    "url": "https://pnbindia.in/Recruitments.aspx",
+    "link_pattern": "recruit|notif|advt|vacanc|apprentic|engag",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: POWERGRID jobs",
+    "type": "page",
+    "url": "https://www.powergrid.in/job-opportunities",
+    "link_pattern": "recruit|notif|advt|vacanc|apprentic|trainee|engag",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: NPCIL opportunities",
+    "type": "page",
+    "url": "https://www.npcil.nic.in/content/302_1_Opportunities.aspx",
+    "link_pattern": "recruit|notif|advt|vacanc|apprentic|trainee|stipend",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: C-DOT careers",
+    "type": "page",
+    "url": "https://www.cdot.in/cdotweb/web/careers.php",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|intern|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: IIIT Bangalore careers",
+    "type": "page",
+    "url": "https://www.iiitb.ac.in/careers",
+    "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|intern|\\.pdf",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
+  },
+  {
+    "name": "Official: BEML careers",
+    "type": "page",
+    "url": "https://www.bemlindia.in/careers",
+    "link_pattern": "recruit|advt|vacanc|apprentic|trainee|engag|notification",
+    "official": true,
+    "enabled": true,
+    "hint": "Official recruitment page / notification of the organisation itself."
   },
   {
     "name": "EXAMPLE careers page (edit me)",

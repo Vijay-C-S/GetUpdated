@@ -24,7 +24,8 @@ from bs4 import BeautifulSoup
 from common import log
 
 SENDERS = ("linkedin.com", "naukri.com", "indeed.com", "indeedemail.com", "foundit.in", "instahyre.com",
-           "internshala.com", "wellfound.com", "cutshort.io", "hirist", "glassdoor")
+           "internshala.com", "wellfound.com", "cutshort.io", "hirist", "glassdoor", "unstop.com",
+           "shine.com", "apna.co", "timesjobs.com", "aicte-india.org", "simplyhired")
 # (pattern that marks a job link, function to turn it into a clean canonical URL)
 JOB_LINKS = [
     (re.compile(r"linkedin\.com/(?:comm/)?jobs/view/(\d+)"), lambda m: f"https://www.linkedin.com/jobs/view/{m.group(1)}"),
@@ -35,6 +36,12 @@ JOB_LINKS = [
     (re.compile(r"foundit\.in/job/[^?\s\"']+"), lambda m: "https://www." + m.group(0)),
     (re.compile(r"instahyre\.com/job-[^?\s\"']+"), lambda m: "https://www." + m.group(0)),
     (re.compile(r"wellfound\.com/jobs/\d+[^?\s\"']*"), lambda m: "https://" + m.group(0)),
+    (re.compile(r"unstop\.com/(?:o/|jobs/|internships/)[^?\s\"']*?\d{5,}"), lambda m: "https://" + m.group(0)),
+    (re.compile(r"shine\.com/jobs/[^?\s\"']+/\d+"), lambda m: "https://www." + m.group(0)),
+    (re.compile(r"apna\.co/job/[^?\s\"']+"), lambda m: "https://" + m.group(0)),
+    (re.compile(r"timesjobs\.com/job-detail/[^?\s\"']+"), lambda m: "https://www." + m.group(0)),
+    (re.compile(r"internship\.aicte-india\.org/(?:internship|internships)/(?:details?/)?[\w-]*\d+[^?\s\"']*"),
+     lambda m: "https://" + m.group(0)),
 ]
 NOISE = re.compile(r"^(view job|apply|see all jobs|easy apply|view all|unsubscribe|search jobs|save)\b", re.I)
 

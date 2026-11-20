@@ -1,7 +1,7 @@
 """Watchdog: scan job sources for new postings and record them as candidates.
 
 No AI is used here. Source types (see sources.json):
-  ats   - official company job boards (Greenhouse, Lever, Ashby, SmartRecruiters APIs).
+  ats   - official company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workable APIs).
   email - LinkedIn / Naukri / Indeed job-alert emails read from an inbox (email_alerts.py).
   rss  - RSS/Atom feed; every new item is a candidate.
   page - an HTML page (careers / notifications list); every NEW link whose text
@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 import time
 import xml.etree.ElementTree as ET
-from urllib.parse import urljoin
+from urllib.parse import unquote, urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -64,6 +64,8 @@ def parse_page(html: str, base_url: str, link_pattern: str | None) -> list[dict]
     for a in soup.find_all("a", href=True):
         text = a.get_text(" ", strip=True)
         href = urljoin(base_url, a["href"].strip())
+        if len(text) < 8 and href.lower().endswith(".pdf"):  # icon-only PDF links: use the file name
+            text = re.sub(r"[-_+]+", " ", unquote(href.rsplit("/", 1)[-1][:-4])).strip()
         if len(text) < 8 or not href.startswith("http") or href in seen:
             continue
         if link_pattern and not re.search(link_pattern, href + " " + text, re.I):
@@ -156,6 +158,15 @@ def parse_ats(provider: str, company: str, name: str) -> list[dict]:
             out.append({"title": j["name"], "url": f"https://jobs.smartrecruiters.com/{company}/{j['id']}",
                         "location": f"{loc.get('city', '')}, {loc.get('country', '')}", "date": j.get("releasedDate"),
                         "workplace": "remote" if loc.get("remote") else "", "text": details})
+    elif provider == "workable":
+        data = requests.get(f"https://apply.workable.com/api/v1/widget/accounts/{company}",
+                            headers=HEADERS, timeout=30).json()
+        for j in data.get("jobs", []):
+            out.append({"title": j["title"], "url": j.get("shortlink") or j.get("url"),
+                        "location": f"{j.get('city', '')}, {j.get('country', '')}",
+                        "date": j.get("published_on") or j.get("created_at"),
+                        "workplace": "remote" if j.get("telecommuting") else "",
+                        "text": _strip_html(j.get("description", ""))})
     items = []
     for j in out:
         loc = j["location"] + " " + j.get("workplace", "")
