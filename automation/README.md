@@ -22,6 +22,9 @@ bot.py (always on)
 - No daily cap by default (`max_posts_per_day: 0`).
 - House rules enforced in code: clickable official links only in the "Official Links" section;
   vacancy counts below 100 are never mentioned.
+- SEO on every post: sitemap.xml entry (validated before commit), canonical, OG/Twitter tags,
+  Article + JobPosting + FAQ + Breadcrumb JSON-LD, and an IndexNow ping (Bing, Yandex, ChatGPT search)
+  once the page is live. Google picks up the sitemap from robots.txt and Search Console.
 - The writer must confirm the job on an official source, or it gives up and tells you why.
 - The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
 - Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.

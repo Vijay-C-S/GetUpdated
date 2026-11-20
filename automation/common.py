@@ -38,6 +38,7 @@ DEFAULT_CONFIG = {
     "filter_timeout_sec": 300,
     "live_check_timeout_sec": 900,
     "homepage_cards": 3,
+    "indexnow_key": "7bf26478889ac3c995b47255c1f82385",  # file <key>.txt sits in the site root
     "keywords_include": [
         "hiring", "recruitment", "fresher", "freshers", "intern", "internship",
         "vacancy", "vacancies", "off campus", "off-campus", "graduate", "trainee",

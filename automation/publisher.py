@@ -10,6 +10,7 @@ import json
 import re
 import shutil
 import time
+from xml.etree import ElementTree
 
 import requests
 
@@ -134,7 +135,30 @@ def wire_sitemap(meta: dict) -> None:
     for page in (f"{site}/", f"{site}/blogs.html"):
         text = re.sub(rf"(<loc>{re.escape(page)}</loc>\s*<lastmod>)[^<]+(</lastmod>)",
                       rf"\g<1>{today}\g<2>", text, count=1)
+    # A broken sitemap hurts every page's SEO, so refuse to commit one.
+    root = ElementTree.fromstring(text.encode("utf-8"))
+    locs = [e.text for e in root.iter("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")]
+    if locs.count(loc) != 1:
+        raise RuntimeError(f"sitemap check failed: {loc} appears {locs.count(loc)} times")
     write_site_file(path, text, eol)
+
+
+def notify_search_engines(urls: list[str]) -> str:
+    """IndexNow: tells Bing, Yandex, Seznam, Naver (and through Bing, ChatGPT/Copilot search)
+    about new URLs right away. Google has no ping; it reads sitemap.xml (listed in robots.txt)."""
+    key = CONFIG.get("indexnow_key")
+    if not key:
+        return "IndexNow: off"
+    site = CONFIG["site_url"].rstrip("/")
+    body = {"host": site.split("://", 1)[1], "key": key, "keyLocation": f"{site}/{key}.txt", "urlList": urls}
+    try:
+        r = requests.post("https://api.indexnow.org/indexnow", json=body, timeout=30)
+        ok = r.status_code in (200, 202)
+        log(f"publisher: IndexNow {r.status_code} for {len(urls)} url(s)")
+        return "IndexNow: submitted ✅" if ok else f"IndexNow: HTTP {r.status_code} ⚠️"
+    except Exception as exc:  # noqa: BLE001
+        log(f"publisher: IndexNow failed: {exc}")
+        return "IndexNow: failed ⚠️"
 
 
 def wait_until_live(url: str, slug: str) -> bool:
@@ -206,7 +230,9 @@ def publish(job_id: str) -> str:
     live = wait_until_live(url, slug)
     pack = share_pack(meta, url)
     note = "" if live else "\n\n⚠️ Not live yet after waiting; GitHub Pages may still be building."
-    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}{note}")
+    site = CONFIG["site_url"].rstrip("/")
+    seo = notify_search_engines([url, f"{site}/", f"{site}/blogs.html"]) if live else "IndexNow: skipped (not live)"
+    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}\n🔎 Sitemap updated · {seo}{note}")
     tg.send_message(pack)  # plain text: long-press -> copy -> paste into WhatsApp channel
     return url
 
