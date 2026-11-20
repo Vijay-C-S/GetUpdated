@@ -42,7 +42,7 @@ def filter_candidates() -> int:
               + "\n\nCANDIDATES (id | title | src | note):\n" + "\n".join(lines))
     system = (AUTO_DIR / "prompts" / "filter.md").read_text(encoding="utf-8")
 
-    reply = run_claude(prompt, CONFIG["filter_model"], tools=[], system_prompt=system,
+    reply = run_claude(prompt, CONFIG["filter_model"], tools=[], system_prompt=system, effort=CONFIG.get("filter_effort"),
                        timeout=CONFIG["filter_timeout_sec"], budget_usd=CONFIG.get("filter_budget_usd"))
     verdicts = {v["id"]: v for v in extract_json(reply) if isinstance(v, dict) and "id" in v}
 

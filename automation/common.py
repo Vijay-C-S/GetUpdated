@@ -31,6 +31,7 @@ DEFAULT_CONFIG = {
     "filter_model": "haiku",
     "writer_model": "sonnet",
     "writer_effort": "low",
+    "filter_effort": "low",  # no thinking needed for yes/no sorting (~70% fewer output tokens)
     "writer_budget_usd": 0.8,
     "filter_budget_usd": 0.1,
     "claude_extra_args": [],

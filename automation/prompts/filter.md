@@ -18,6 +18,9 @@ B) Government jobs
      district-level Karnataka posts.
    - Entry level (direct recruitment for freshers/graduates, apprentices, trainees, Group B/C posts,
      PSU graduate engineer trainee). Prefer posts open to IT/EC/engineering or any graduate.
+   - Direct recruitment of engineering/any graduates (Assistant Engineer, Junior Engineer, GET, Officer,
+     Clerk/PO, Group B/C) IS entry level: score 7+ when it is central or Karnataka and has 100+ posts or
+     takes EC/IT/CS graduates, even if civil/electrical branches are also included.
    - REJECT other states' government jobs (Odisha, Assam, UP, Bihar, Telangana, ...).
    - REJECT medical/nursing/doctor/faculty/professor/senior posts, and police/army posts that need
      only 10th/12th unless they are large all-India exams.
