@@ -178,6 +178,70 @@ def post_title(path: Path) -> str:
     return re.sub(r"\s+", " ", m.group(1)).strip() if m else path.stem.replace("-", " ").title()
 
 
+def post_info(path: Path) -> dict:
+    """Title + banner image of an existing post, for Recent Posts / Read Next blocks."""
+    text = path.read_text(encoding="utf-8")
+    img = ""
+    for tag in re.findall(r"<img\b[^>]*>", text):
+        if 'class="featured-image"' in tag:
+            m = re.search(r'src="([^"]+)"', tag)
+            img = m.group(1) if m else ""
+            break
+    if not img:
+        m = re.search(r'<meta property="og:image" content="[^"]*/images/([^"/]+)"', text)
+        img = f"../images/{m.group(1)}" if m else "../images/favicon.jpg"
+    return {"href": path.name, "title": post_title(path), "img": img}
+
+
+def read_next_box(p: dict, ind: str) -> str:
+    """Mid-article 'Also Read' card (styled by .also-read in blog-styles.css)."""
+    t = p["title"]  # already HTML from the source <h1>
+    alt = html.escape(re.sub(r"<[^>]+>", "", html.unescape(t)), quote=True)
+    return (f'{ind}<div class="also-read">\n'
+            f'{ind}    <span class="also-read-label">&#128073; Also Read</span>\n'
+            f'{ind}    <div class="also-read-content">\n'
+            f'{ind}        <img src="{p["img"]}" alt="{alt}" class="also-read-image" width="100" height="80" loading="lazy" decoding="async">\n'
+            f'{ind}        <div class="also-read-text"><a href="{p["href"]}">{t}</a></div>\n'
+            f'{ind}    </div>\n'
+            f'{ind}</div>\n')
+
+
+def insert_mid_reads(body: str, posts: list[dict], ind: str) -> str:
+    """Drop Read Next boxes before the <h2> at ~1/3 and ~2/3 of the article,
+    so readers get a hop to another post while they are still scrolling."""
+    starts = [m.start() for m in re.finditer(r"<h2\b", body)]
+    if len(starts) < 4 or not posts:
+        return body
+    picks = sorted({len(starts) // 3, (2 * len(starts)) // 3})
+    for i, pos_idx in reversed(list(enumerate(picks))):
+        if i < len(posts):
+            at = starts[pos_idx]
+            body = body[:at] + read_next_box(posts[i], ind) + "\n" + body[at:]
+    return body
+
+
+def read_next_grid(posts: list[dict], ind: str) -> str:
+    """End-of-article 'Also Read' card grid + a button to the full blog list."""
+    cards = "".join(
+        f'{ind}    <a href="{p["href"]}" class="recent-post-card" style="text-decoration:none;">\n'
+        f'{ind}        <img src="{p["img"]}" alt="{html.escape(re.sub(r"<[^>]+>", "", html.unescape(p["title"])), quote=True)}" width="400" height="140" loading="lazy" decoding="async">\n'
+        f'{ind}        <div class="recent-post-content" style="text-align:left;"><h4>{p["title"]}</h4><span>Read now &rarr;</span></div>\n'
+        f'{ind}    </a>\n' for p in posts)
+    return (f"\n{ind}<h2>Also Read</h2>\n{ind}<div class=\"recent-posts-grid\">\n{cards}{ind}</div>\n"
+            f'{ind}<p style="text-align:center;margin-top:1.5rem;">'
+            f'<a href="../blogs.html" class="cta-btn" style="text-decoration:none;border:1px solid var(--blog-border);">'
+            f'Browse all latest jobs &amp; updates &rarr;</a></p>\n')
+
+
+def sidebar_recent(posts: list[dict]) -> str:
+    ind = "                    "
+    return "".join(
+        f'{ind}<a href="{p["href"]}" class="sidebar-post">\n'
+        f'{ind}    <img src="{p["img"]}" alt="{html.escape(re.sub(r"<[^>]+>", "", html.unescape(p["title"])), quote=True)}" width="200" height="133" loading="lazy" decoding="async">\n'
+        f'{ind}    <div class="sidebar-post-content">\n{ind}        <h4>{p["title"]}</h4>\n{ind}    </div>\n'
+        f'{ind}</a>\n' for p in posts).rstrip("\n")
+
+
 def jsonld(obj: dict) -> str:
     return ('    <script type="application/ld+json">\n'
             + json.dumps(obj, indent=4, ensure_ascii=False) + "\n    </script>\n")
@@ -237,10 +301,10 @@ def assemble(meta: dict, body: str) -> str:
            + f"{ind}    </ol>\n{ind}</div>\n")
     first = body.find("<h2")
     body = (body[:first] + "\n" + toc + "\n" + body[first:]) if first != -1 else toc + body
-    also = [p for p in latest_posts() if not p.endswith(f"{slug}.html")][:5]
-    body += (f"\n{ind}<h2>Also Read</h2>\n{ind}<ul>\n"
-             + "".join(f'{ind}    <li><a href="{Path(p).name}">{post_title(REPO_DIR / p)}</a></li>\n' for p in also)
-             + f"{ind}</ul>\n")
+    recent = [post_info(REPO_DIR / p) for p in latest_posts(12) if not p.endswith(f"{slug}.html")]
+    # newest previous posts go mid-article (most clicked), the next ones in the end grid
+    body = insert_mid_reads(body, recent[:2], ind)
+    body += read_next_grid(recent[2:6], ind)
     if faqs:
         body += f"\n{ind}<h2>FAQs</h2>\n" + "".join(
             f"{ind}<h2>{i}. {html.escape(f['q'])}</h2>\n{ind}<p>{html.escape(f['a'])}</p>\n\n"
@@ -258,6 +322,7 @@ def assemble(meta: dict, body: str) -> str:
         "{{DATE_ISO}}": d.isoformat(), "{{DATE_LONG}}": f"{d:%B} {d.day}, {d.year}",
         "{{URL}}": url, "{{IMAGE_URL}}": img, "{{SLUG}}": slug,
         "{{JSONLD}}": "".join(blocks).rstrip("\n"), "{{ARTICLE_CONTENT}}": body, "{{TAGS}}": tags,
+        "{{RECENT_POSTS}}": sidebar_recent(recent[:8]),
     }
     for k, v in fills.items():
         page = page.replace(k, v)
