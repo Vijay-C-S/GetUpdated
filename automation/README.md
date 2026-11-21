@@ -64,8 +64,8 @@ bot.py (always on)
 - **Official company portals (60 companies):** Greenhouse, Lever, Ashby and SmartRecruiters job APIs. Only entry-level
   Bengaluru or remote roles posted in the last 21 days are kept. Workday portals (NVIDIA, Intel, Qualcomm, TI...) block
   datacenter IPs, so they can't be used.
-- **Official govt/bank pages:** KEA, SBI, ISRO, Canara Bank, Karnataka Bank, ECIL, ONGC, Bank of Baroda, C-DAC. A new link
-  on the page becomes a lead. KPSC, BEL, DRDO, RRB and IBPS refuse the VM, so those come through the feeds below.
+- **Official govt/bank pages:** KEA, SBI, ISRO, Canara Bank, Karnataka Bank, ECIL, Bank of Baroda, C-DAC. A new link
+  on the page becomes a lead. KPSC, BEL, DRDO, RRB, IBPS and ONGC refuse the VM, so those come through the feeds below.
 - **Aggregator feeds:** FreeJobAlert, KarnatakaCareers, FreshersNow, OffCampusJobs4u, FresherOpenings.
 - **LinkedIn / Naukri / Indeed / Internshala job alerts:** read from an email inbox (`email_alerts.py`). The sites
   themselves are never scraped (their terms forbid it). Setup: a separate Gmail account, 2-Step Verification, an App

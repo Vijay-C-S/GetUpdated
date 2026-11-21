@@ -385,11 +385,7 @@
         "name": "ServiceNow"
       },
       {
-        "slug": "Visa",
-        "name": "Visa"
-      },
-      {
-        "slug": "Bosch",
+        "slug": "BoschGroup",
         "name": "Bosch"
       },
       {
@@ -523,7 +519,7 @@
     "url": "https://www.ongcindia.com/web/eng/career",
     "link_pattern": "recruit|notif|advt|advertis|vacanc|apprentic|engag|\\.pdf",
     "official": true,
-    "enabled": true,
+    "enabled": false,
     "hint": "Official recruitment page / notification of the organisation itself."
   },
   {

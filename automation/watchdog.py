@@ -77,8 +77,11 @@ def parse_page(html: str, base_url: str, link_pattern: str | None) -> list[dict]
 
 ENTRY_WORDS = ("intern", "graduate", "fresher", "trainee", "new grad", "apprentice", "entry",
                "associate software", "sde 1", "sde i", "sde-1", "engineer i", "engineer 1",
-               "software engineer - i", "junior", "campus", "university", "early career", "new college",
-               "2025", "2026", "2027")
+               "software engineer - i", "junior", "campus", "university", "early career", "new college")
+# A bare year only counts next to batch/passout/grads: Bosch-style job codes ("BGSW_2026_SAP_Consultant",
+# "2026/02: HW Developer") carry the year on experienced roles.
+BATCH_YEAR_RE = re.compile(r"(?:batch|pass\s*-?\s*outs?|class of|graduates?|grads?|freshers?)\W{0,3}20(?:2[5-9])\b"
+                           r"|\b20(?:2[5-9])\W{0,3}(?:batch|pass\s*-?\s*outs?|graduates?|grads?|freshers?)")
 SENIOR_WORDS = ("senior", "sr.", "sr ", "lead", "staff", "principal", "manager", "director", "head",
                 " ii", " iii", " iv", "architect", "vp", "specialist ii", "engineer 2", "engineer 3")
 # Bengaluru, or remote/WFH from anywhere (you asked for any remote role).
@@ -110,7 +113,8 @@ def _too_old(stamp) -> bool:
 
 def _entry_level(title: str) -> bool:
     t = f" {title.lower()} "
-    return not any(w in t for w in SENIOR_WORDS) and any(w in t for w in ENTRY_WORDS)
+    return not any(w in t for w in SENIOR_WORDS) and (any(w in t for w in ENTRY_WORDS)
+                                                      or bool(BATCH_YEAR_RE.search(t)))
 
 
 def _location_ok(loc: str) -> bool:
@@ -148,8 +152,16 @@ def parse_ats(provider: str, company: str, name: str) -> list[dict]:
                         "workplace": "remote" if j.get("isRemote") else ""})
     elif provider == "smartrecruiters":
         base = f"https://api.smartrecruiters.com/v1/companies/{company}/postings"
-        data = requests.get(base, params={"limit": 100, "country": "in"}, headers=HEADERS, timeout=30).json()
-        for j in data.get("content", []):
+        postings, offset = [], 0
+        while offset < 2000:  # API pages are capped at 100; BoschGroup alone lists hundreds in India
+            page = requests.get(base, params={"limit": 100, "offset": offset, "country": "in"},
+                                headers=HEADERS, timeout=30).json()
+            content = page.get("content") or []
+            postings += content
+            offset += 100
+            if not content or offset >= page.get("totalFound", 0):
+                break
+        for j in postings:
             loc = j.get("location") or {}
             def details(j=j):
                 d = requests.get(f"{base}/{j['id']}", headers=HEADERS, timeout=30).json()
