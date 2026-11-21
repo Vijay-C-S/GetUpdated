@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -259,6 +259,16 @@
     <image:image>
       <image:loc>https://www.getupdated.in/images/CloudSek.webp</image:loc>
       <image:title>CloudSEK SDE Intern Frontend Bengaluru 2026 | Apply Now</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/blogs/codemonk-hiring-freshers-machine-learning-intern-ai-ml-bengaluru-2026.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.getupdated.in/images/codemonk-hiring-freshers-machine-learning-intern-ai-ml-bengaluru-2026.webp</image:loc>
+      <image:title>Codemonk ML Intern Hiring 2026</image:title>
     </image:image>
   </url>
   <url>
