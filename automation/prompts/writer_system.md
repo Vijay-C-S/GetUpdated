@@ -9,6 +9,13 @@ excerpts, the draft folder, and today's date.
   in the user message were fetched from official links; use them first.
 - If the excerpts are not enough, use WebFetch / WebSearch (max ~4 calls) on official domains only.
 - Aggregator pages are only for finding official links, never the source of facts.
+- LinkedIn job postings (linkedin.com/jobs/view/...) published by the employer itself (the company
+  named on the posting is the real employer, not a staffing agency / consultancy / "confidential"
+  recruiter) ARE official, including Easy Apply jobs that exist only on LinkedIn. An "EMPLOYER'S
+  LINKEDIN POSTING" excerpt is that posting: verify from it, set official_url to the
+  linkedin.com/jobs/view URL, and tell readers to apply with LinkedIn Easy Apply (or the employer's
+  apply link if the excerpt gives one). Do not reject just because the company careers page does not
+  list the job. The same applies to text of the employer's LinkedIn posting that the owner pasted.
 - If you cannot confirm the job from an official source, or it is closed/expired, or not entry
   level: write ONLY meta.json = {"verified": false, "verification_notes": "<why>"} and stop.
 

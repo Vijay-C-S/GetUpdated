@@ -110,3 +110,12 @@ Gets new posts into Google within hours instead of days. 200 URLs a day are free
    service account email and set it as **Owner**.
 4. Copy the JSON to the VM: `scp key.json ubuntu@VM:~/GetUpdated/automation/google-indexing.json`,
    then `chmod 600` it. Each publish then reports `Google: submitted ✅`.
+5. Sitemap auto-submit: in the same Cloud project also enable the **Google Search Console API**. Each publish (and
+   `/index`) then re-submits `sitemap.xml` and reports `Sitemap: submitted to Google ✅`. If your Search Console
+   property is a Domain property, set `"search_console_property": "sc-domain:getupdated.in"` in `config.json`.
+   (Google retired the old sitemap "ping" URL in 2023, so this API is the only automatic way.)
+
+## LinkedIn Easy Apply jobs
+A LinkedIn posting made by the employer itself counts as the official source, even when the job exists only on
+LinkedIn (Easy Apply). The writer reads that one posting through LinkedIn's public guest view, because the normal page
+is a login wall from the VM, and links the post to the LinkedIn job.

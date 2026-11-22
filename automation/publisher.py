@@ -189,9 +189,39 @@ def google_index(url: str) -> str:
         return "Google: failed ⚠️"
 
 
+def google_submit_sitemap() -> str:
+    """Re-submit sitemap.xml through the Search Console API. Google retired the old
+    /ping?sitemap= URL in 2023, so this is the only automatic way. Uses the same service
+    account as the Indexing API (it is already an Owner of the Search Console property);
+    the "Google Search Console API" must be enabled in that Cloud project."""
+    if not GOOGLE_KEY_FILE.exists():
+        return "Sitemap: not set up"
+    from urllib.parse import quote
+    site = CONFIG["site_url"].rstrip("/")
+    prop = CONFIG.get("search_console_property") or f"{site}/"  # or "sc-domain:getupdated.in"
+    try:
+        from google.auth.transport.requests import AuthorizedSession
+        from google.oauth2 import service_account
+        creds = service_account.Credentials.from_service_account_file(
+            str(GOOGLE_KEY_FILE), scopes=["https://www.googleapis.com/auth/webmasters"])
+        r = AuthorizedSession(creds).put(
+            f"https://www.googleapis.com/webmasters/v3/sites/{quote(prop, safe='')}"
+            f"/sitemaps/{quote(site + '/sitemap.xml', safe='')}", timeout=30)
+        log(f"publisher: Search Console sitemap submit {r.status_code}: {r.text[:200]}")
+        if r.status_code in (200, 204):
+            return "Sitemap: submitted to Google ✅"
+        if r.status_code == 403:
+            return "Sitemap: 403 ⚠️ (enable 'Google Search Console API' / check Owner + property name)"
+        return f"Sitemap: HTTP {r.status_code} ⚠️"
+    except Exception as exc:  # noqa: BLE001
+        log(f"publisher: sitemap submit failed: {exc}")
+        return "Sitemap: failed ⚠️"
+
+
 def seo_ping(post_url: str) -> str:
     site = CONFIG["site_url"].rstrip("/")
-    return google_index(post_url) + " · " + notify_search_engines([post_url, f"{site}/", f"{site}/blogs.html"])
+    return " · ".join([google_index(post_url), google_submit_sitemap(),
+                       notify_search_engines([post_url, f"{site}/", f"{site}/blogs.html"])])
 
 
 def wait_until_live(url: str, slug: str) -> bool:
@@ -264,7 +294,7 @@ def publish(job_id: str) -> str:
     pack = share_pack(meta, url)
     note = "" if live else "\n\n⚠️ Not live yet after waiting; GitHub Pages may still be building."
     seo = seo_ping(url) if live else "search engines: skipped (not live yet, use /index later)"
-    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}\n🔎 Sitemap updated\n{seo}{note}")
+    tg.send_photo(draft / "banner.webp", caption=f"✅ Published: {meta['title']}\n🔎 sitemap.xml updated\n{seo}{note}")
     tg.send_message(pack)  # plain text: long-press -> copy -> paste into WhatsApp channel
     return url
 

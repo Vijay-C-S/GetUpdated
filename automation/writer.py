@@ -83,6 +83,36 @@ def official_links(page_html: str, base: str) -> list[tuple[str, str]]:
     return [(h, l) for _, h, l in scored[:6]]
 
 
+LINKEDIN_JOB = re.compile(r"linkedin\.com/(?:comm/)?jobs/view/(?:[^/?#]*?-)?(\d{6,})", re.I)
+
+
+def linkedin_posting(url: str) -> tuple[str, str, str] | None:
+    """(canonical view URL, posting text, external apply URL or "") for a LinkedIn job link.
+    The normal /jobs/view page is often a login wall from a server IP; LinkedIn's public guest view
+    of the same single posting is not. One fetch per lead you approved, nothing is crawled."""
+    m = LINKEDIN_JOB.search(url or "")
+    if not m:
+        return None
+    jid = m.group(1)
+    r = requests.get(f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{jid}", headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, "html.parser")
+    pick = lambda sel: (soup.select_one(sel).get_text(" ", strip=True) if soup.select_one(sel) else "")  # noqa: E731
+    criteria = " | ".join(li.get_text(": ", strip=True) for li in soup.select(".description__job-criteria-item"))
+    desc = pick(".show-more-less-html__markup") or pick(".description__text")
+    apply = ""
+    code = soup.find("code", id="applyUrl")
+    if code:
+        found = re.search(r"https?://[^\"'<>\s]+", code.decode_contents())
+        apply = html.unescape(found.group(0)) if found else ""
+    text = (f"Title: {pick('.top-card-layout__title')}\nCompany: {pick('.topcard__org-name-link')}\n"
+            f"Location: {pick('.topcard__flavor--bullet')}\nPosted: {pick('.posted-time-ago__text')}\n"
+            f"{criteria}\nApply: {'external link ' + apply if apply else 'LinkedIn Easy Apply'}\n\n{desc}")
+    if len(desc) < 150:
+        raise ValueError("LinkedIn posting text not available (closed or blocked)")
+    return f"https://www.linkedin.com/jobs/view/{jid}", re.sub(r"[ \t]+", " ", text)[:6000], apply
+
+
 def prefetch(job: dict) -> dict:
     """Return {'lead_text', 'links', 'excerpts'}; raise ValueError if no official source is reachable."""
     if job.get("source_type") == "ats":
@@ -95,6 +125,16 @@ def prefetch(job: dict) -> dict:
         # You sent it (Telegram / forwarded WhatsApp post) or it came from a LinkedIn/Naukri alert.
         # Never skip: the writer searches for the official posting itself if needed.
         pre = {"lead_text": "", "links": [], "excerpts": []}
+        li_url = job.get("url") or next((u for u in re.findall(r"https?://\S+", job.get("forwarded_text", ""))
+                                         if LINKEDIN_JOB.search(u)), "")
+        if LINKEDIN_JOB.search(li_url):
+            try:
+                view, text, apply = linkedin_posting(li_url)
+                pre["links"] = [(view, "employer's LinkedIn posting")] + ([(apply, "employer's apply link")] if apply else [])
+                pre["excerpts"] = [(view + " (EMPLOYER'S LINKEDIN POSTING)", text)]
+                return pre
+            except Exception as exc:  # noqa: BLE001
+                log(f"writer: LinkedIn posting fetch failed for {li_url}: {exc}")
         if not job.get("url"):
             return pre
         try:
