@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-11-21</lastmod>
+    <lastmod>2026-11-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -289,6 +289,16 @@
     <image:image>
       <image:loc>https://www.getupdated.in/images/cognizant-hiring-2026.jpg</image:loc>
       <image:title>Cognizant Hiring 2026 — Freshers Complete Guide | GetUpdated</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/blogs/deltek-associate-software-engineer-hiring-freshers-remote-india-wfh-2026.html</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.getupdated.in/images/deltek-associate-software-engineer-hiring-freshers-remote-india-wfh-2026.webp</image:loc>
+      <image:title>Deltek Associate Software Engineer Remote Hiring 2026</image:title>
     </image:image>
   </url>
   <url>
