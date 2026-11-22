@@ -88,15 +88,27 @@ LINKEDIN_JOB = re.compile(r"linkedin\.com/(?:comm/)?jobs/view/(?:[^/?#]*?-)?(\d{
 
 def linkedin_posting(url: str) -> tuple[str, str, str] | None:
     """(canonical view URL, posting text, external apply URL or "") for a LinkedIn job link.
-    The normal /jobs/view page is often a login wall from a server IP; LinkedIn's public guest view
-    of the same single posting is not. One fetch per lead you approved, nothing is crawled."""
+    Tries the public logged-out /jobs/view page, then LinkedIn's guest view of the same posting.
+    One posting per lead you approved, nothing is crawled."""
     m = LINKEDIN_JOB.search(url or "")
     if not m:
         return None
     jid = m.group(1)
-    r = requests.get(f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{jid}", headers=HEADERS, timeout=30)
-    r.raise_for_status()
-    soup = BeautifulSoup(r.text, "html.parser")
+    hdrs = {**HEADERS, "Accept-Language": "en-US,en;q=0.9"}
+    soup, errors = None, []
+    for u in (f"https://www.linkedin.com/jobs/view/{jid}",  # public page (logged-out view)
+              f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{jid}"):  # rate-limited from the VM
+        try:
+            r = requests.get(u, headers=hdrs, timeout=30)
+            r.raise_for_status()
+            if "show-more-less-html__markup" in r.text or "description__text" in r.text:
+                soup = BeautifulSoup(r.text, "html.parser")
+                break
+            errors.append(f"{u}: no posting text (login wall?)")
+        except requests.RequestException as exc:
+            errors.append(str(exc)[:120])
+    if soup is None:
+        raise ValueError("; ".join(errors))
     pick = lambda sel: (soup.select_one(sel).get_text(" ", strip=True) if soup.select_one(sel) else "")  # noqa: E731
     criteria = " | ".join(li.get_text(": ", strip=True) for li in soup.select(".description__job-criteria-item"))
     desc = pick(".show-more-less-html__markup") or pick(".description__text")
