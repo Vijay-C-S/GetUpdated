@@ -4,6 +4,8 @@ No AI is used here. Source types (see sources.json):
   ats   - official company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workable APIs).
   email - LinkedIn / Naukri / Indeed job-alert emails read from an inbox (email_alerts.py).
   rss  - RSS/Atom feed; every new item is a candidate.
+  rrb  - RRB (Railways) notices from the rrbapply.gov.in portal's public JSON list (rrb.py);
+         each lead is the official CEN PDF.
   page - an HTML page (careers / notifications list); every NEW link whose text
          matches the keywords is a candidate. The first scan of a page only
          records a baseline, so you are not flooded with old postings.
@@ -240,6 +242,9 @@ def scan() -> int:
                 elif kind == "email":
                     from email_alerts import fetch_alerts
                     items = fetch_alerts(src)
+                elif kind == "rrb":
+                    from rrb import notices
+                    items = [{"title": n["title"], "url": n["url"], "summary": n["summary"]} for n in notices()]
                 else:
                     text = fetch(src["url"])
                     items = parse_feed(text) if kind == "rss" else parse_page(text, src["url"], src.get("link_pattern"))
@@ -258,7 +263,7 @@ def scan() -> int:
                 seen.add(jid)
                 if baseline:
                     continue
-                if kind not in ("ats", "email") and not keyword_ok(it["title"] + " " + it["summary"]):
+                if kind not in ("ats", "email", "rrb") and not keyword_ok(it["title"] + " " + it["summary"]):
                     continue
                 key = it["title"]
                 if kind == "email":  # alert titles are generic ("Graduate Trainee Engineer"): add the company

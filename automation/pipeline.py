@@ -16,7 +16,7 @@ from common import CONFIG, DRAFTS_DIR, FileLock, get_job, load_jobs, log, run, t
 from filter_jobs import filter_candidates
 from publisher import publish
 from watchdog import scan
-from writer import write_job
+from writer import NeedsOwnerConfirm, write_job
 
 
 def posts_today() -> int:
@@ -46,6 +46,9 @@ def write_and_dispatch(job_id: str) -> None:
     try:
         write_job(job_id)
         send_for_approval(job_id)
+    except NeedsOwnerConfirm as exc:
+        update_job(job_id, status="confirm_pending", error=str(exc)[:500])
+        ask_owner(job_id)
     except UsageLimitError as exc:
         update_job(job_id, status="queued")
         tg.notify(f"⏸ Claude usage limit reached; will retry next run.\n{str(exc)[:300]}")
@@ -55,6 +58,21 @@ def write_and_dispatch(job_id: str) -> None:
         job = get_job(job_id) or {}
         tg.notify(f"⚠️ Skipped: {job.get('title', job_id)}\nReason: {str(exc)[:500]}")
         log(f"pipeline: job {job_id} failed: {exc}")
+
+
+def ask_owner(job_id: str) -> None:
+    """No official source found: you check whether the job is real, the writer then uses the job-site text."""
+    job = get_job(job_id) or {}
+    text = (f"❓ CAN'T CONFIRM: {job.get('title', job_id)}\n\n"
+            f"Why: {job.get('error') or 'no official link found'}\n"
+            f"🔗 {job.get('url') or '(no link)'}\n\n"
+            "Does this job really exist and is it open? ✅ = write it from the job-site text.")
+    buttons = [[{"text": "✅ Exists, write it", "callback_data": f"ok:{job_id}"},
+                {"text": "❌ No / fake", "callback_data": f"no:{job_id}"}]]
+    try:
+        tg.send_message(text, buttons=buttons)
+    except Exception as exc:  # noqa: BLE001
+        log(f"pipeline: could not ask owner about {job_id}: {exc}")
 
 
 def git_pull() -> bool:

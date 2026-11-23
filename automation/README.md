@@ -25,7 +25,9 @@ bot.py (always on)
 - SEO on every post: sitemap.xml entry (validated before commit), canonical, OG/Twitter tags,
   Article + JobPosting + FAQ + Breadcrumb JSON-LD, and an IndexNow ping (Bing, Yandex, ChatGPT search)
   once the page is live. Google picks up the sitemap from robots.txt and Search Console.
-- The writer must confirm the job on an official source, or it gives up and tells you why.
+- PDFs are never read (too many tokens): facts come from official HTML pages and the job-site article; PDF
+  links go in the post as links. If no official link/source confirms the job, the bot asks you
+  `❓ CAN'T CONFIRM [✅ Exists, write it] [❌ No / fake]` and writes from the job-site text on ✅.
 - The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
 - Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.
 - Duplicate checks run against existing `blogs/` slugs and earlier leads.

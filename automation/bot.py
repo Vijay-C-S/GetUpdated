@@ -66,6 +66,16 @@ def handle_callback(cb: dict) -> None:
         tg.send_message(f"✍️ Writing draft: {job.get('company') or ''} - {job.get('role') or job.get('title')}\n"
                         "I'll send it here for Publish / Skip in a few minutes.")
         run_pipeline_bg("--write", job_id)
+    elif action == "ok":  # you confirmed a job the writer couldn't confirm officially
+        if job.get("status") != "confirm_pending":
+            tg.send_message(f"Job is '{job.get('status')}' already.")
+            return
+        update_job(job_id, status="queued", owner_confirmed=True, priority=5)
+        tg.send_message(f"✍️ Confirmed. Writing from the job-site text: {job.get('title')}")
+        run_pipeline_bg("--write", job_id)
+    elif action == "no":
+        update_job(job_id, status="rejected", reason="you said it doesn't exist")
+        tg.send_message(f"🗑 Dropped: {job.get('title')}")
     elif action == "ign":
         update_job(job_id, status="rejected", reason="ignored by you")
         tg.send_message(f"🙈 Ignored: {job.get('company') or ''} - {job.get('role') or job.get('title')}")
@@ -95,16 +105,19 @@ def cmd_status() -> str:
 
 
 def cmd_pending() -> None:
-    from pipeline import send_for_approval, send_lead
+    from pipeline import ask_owner, send_for_approval, send_lead
     jobs = load_jobs().values()
     leads = [j for j in jobs if j.get("status") == "lead_pending"]
     drafts = [j for j in jobs if j.get("status") == "draft_ready"]
-    if not leads and not drafts:
+    confirms = [j for j in jobs if j.get("status") == "confirm_pending"]
+    if not leads and not drafts and not confirms:
         tg.send_message("Nothing waiting for you.")
     for j in sorted(leads, key=lambda j: -int(j.get("score", 0))):
         send_lead(j)
     for j in drafts:
         send_for_approval(j["id"])
+    for j in confirms:
+        ask_owner(j["id"])
 
 
 def cmd_post(arg: str) -> None:

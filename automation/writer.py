@@ -1,7 +1,7 @@
 """Writer: Sonnet verifies a queued job and writes the article; Python builds the page.
 
 Token savers:
-- Python pre-fetches the lead page and the official links (incl. PDF text via pypdf),
+- Python pre-fetches the lead page and official HTML pages. PDFs are never read (links only);
   so the model needs few or no web calls; leads with no official link are dropped before
   any model call.
 - The model writes only body.html (article) + meta.json. The head, SEO tags, JSON-LD,
@@ -13,7 +13,6 @@ Output: automation/state/drafts/<id>/{post.html, meta.json, banner.webp}
 from __future__ import annotations
 
 import html
-import io
 import json
 import re
 from pathlib import Path
@@ -22,6 +21,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+import rrb
 from banner import company_image, make_banner
 from claude_cli import run_claude
 from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, existing_blog_slugs, get_job,
@@ -46,16 +46,23 @@ def _domain(url: str) -> str:
     return urlparse(url).netloc.lower().removeprefix("www.")
 
 
+def is_pdf(url: str) -> bool:
+    return url.lower().split("?")[0].split("#")[0].endswith(".pdf")
+
+
+class NeedsOwnerConfirm(Exception):
+    """No official source could be found/confirmed: ask the owner on Telegram whether the job is real."""
+
+
 def fetch_text(url: str, limit: int = 3500) -> str:
-    """Readable text of an HTML page or PDF (first pages). Raises on failure."""
+    """Readable text of an HTML page. PDFs are never downloaded or read (too many tokens): they are
+    passed to the writer as links only. Raises on failure."""
+    if is_pdf(url):
+        raise ValueError("PDF: link only, not read")
     r = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True)
     r.raise_for_status()
-    ctype = r.headers.get("content-type", "").lower()
-    if "pdf" in ctype or url.lower().split("?")[0].endswith(".pdf"):
-        from pypdf import PdfReader
-        reader = PdfReader(io.BytesIO(r.content))
-        text = " ".join((p.extract_text() or "") for p in reader.pages[:6])
-        return re.sub(r"\s+", " ", text)[:limit * 2]
+    if "pdf" in r.headers.get("content-type", "").lower():
+        raise ValueError("PDF: link only, not read")
     soup = BeautifulSoup(r.text, "html.parser")
     for tag in soup(["script", "style", "nav", "header", "footer", "aside", "form", "noscript"]):
         tag.decompose()
@@ -125,8 +132,49 @@ def linkedin_posting(url: str) -> tuple[str, str, str] | None:
     return f"https://www.linkedin.com/jobs/view/{jid}", re.sub(r"[ \t]+", " ", text)[:6000], apply
 
 
+def _rrb_lead(job: dict) -> bool:
+    """Railway Recruitment Board lead (not IBPS 'RRB' = Regional Rural Banks)."""
+    if rrb.is_rrb_url(job.get("url", "")):
+        return True
+    t = " ".join(str(job.get(k) or "") for k in ("title", "summary", "forwarded_text", "manual_note")).lower()
+    if "ibps" in t or "rural bank" in t:
+        return False
+    return "railway recruitment" in t or bool(rrb.cen_key(t)) or bool(re.search(r"\brrb\b", t))
+
+
+def _add_rrb_notices(pre: dict, job: dict) -> None:
+    """rrbapply.gov.in is a JS app the fetchers can't read; its public notice list (small JSON) confirms
+    the CEN exists and gives the official dates + PDF link. The PDF itself is not read."""
+    text = " ".join(str(job.get(k) or "") for k in ("title", "url", "summary", "forwarded_text", "manual_note"))
+    try:
+        found = rrb.match(text, rrb.notices())
+    except Exception as exc:  # noqa: BLE001
+        log(f"writer: RRB notice list failed: {exc}")
+        return
+    if not found:
+        return
+    listing = "\n".join(f"- {n['title']} | apply {n['start']} to {n['end']} | notification PDF: {n['url']}"
+                        for n in found)
+    pre["links"] = ([(n["url"], f"official RRB notification PDF: {n['title']}") for n in found]
+                    + [(rrb.PORTAL, "official RRB apply portal")] + pre["links"])
+    pre["excerpts"].insert(0, (rrb.WHATS_NEW + " (official RRB apply portal notice list)", listing))
+
+
 def prefetch(job: dict) -> dict:
-    """Return {'lead_text', 'links', 'excerpts'}; raise ValueError if no official source is reachable."""
+    """Return {'lead_text', 'links', 'excerpts'}. Raises NeedsOwnerConfirm when a job-site lead has no
+    official link (you confirm on Telegram), ValueError when the lead page itself can't be read."""
+    if not _rrb_lead(job):
+        return _prefetch(job)
+    try:
+        pre = _prefetch(job)
+    except Exception as exc:  # noqa: BLE001  (lead page had nothing usable; the RRB API may)
+        log(f"writer: prefetch {job.get('url')} failed, trying RRB notices: {exc}")
+        pre = {"lead_text": "", "links": [], "excerpts": []}
+    _add_rrb_notices(pre, job)
+    return pre
+
+
+def _prefetch(job: dict) -> dict:
     if job.get("source_type") == "ats":
         return {"lead_text": "", "links": [(job["url"], "official posting")],
                 "excerpts": [(job["url"], job.get("full_text") or fetch_text(job["url"], 5000))]}
@@ -140,8 +188,13 @@ def prefetch(job: dict) -> dict:
             log(f"writer: prefetch {job['url']} failed: {exc}")
         return pre
     if job.get("official"):  # official govt/bank/PSU page or PDF: the lead itself is the source
-        return {"lead_text": "", "links": [(job["url"], "official notice")],
-                "excerpts": [(job["url"], fetch_text(job["url"], 5000))]}
+        pre = {"lead_text": "", "links": [(job["url"], "official notice")], "excerpts": []}
+        if not is_pdf(job["url"]):  # a PDF stays a link: the writer reads a job site's summary instead
+            try:
+                pre["excerpts"].append((job["url"], fetch_text(job["url"], 5000)))
+            except Exception as exc:  # noqa: BLE001
+                log(f"writer: prefetch {job['url']} failed: {exc}")
+        return pre
     if job.get("source", "").startswith("manual") or job.get("source_type") == "email":
         # You sent it (Telegram / forwarded WhatsApp post) or it came from a LinkedIn/Naukri alert.
         # Never skip: the writer searches for the official posting itself if needed.
@@ -163,9 +216,9 @@ def prefetch(job: dict) -> dict:
             r.raise_for_status()
             pre["lead_text"] = fetch_text(job["url"], 4000)
             pre["links"] = official_links(r.text, job["url"])
-            for href, _label in pre["links"][:3]:
+            for href, _label in [x for x in pre["links"] if not is_pdf(x[0])][:3]:
                 try:
-                    txt = fetch_text(href, 3500)
+                    txt = fetch_text(href, 3000)
                     if len(txt) > 200:
                         pre["excerpts"].append((href, txt))
                         break
@@ -174,26 +227,32 @@ def prefetch(job: dict) -> dict:
         except Exception as exc:  # noqa: BLE001
             log(f"writer: prefetch {job['url']} failed: {exc}")
         return pre
+    # Job-site lead (FreeJobAlert, FreshersNow, ...): its text is the fact source. Official links are
+    # collected; only one official HTML page is read (to confirm), PDFs are never read.
     r = requests.get(job["url"], headers=HEADERS, timeout=30)
     r.raise_for_status()
-    lead_text = fetch_text(job["url"], 2500)
+    lead_text = fetch_text(job["url"], 5000)
     links = official_links(r.text, job["url"])
-    if not links:
-        raise ValueError("lead page has no official link to verify against (skipped before writing)")
+    if not links and not job.get("owner_confirmed"):
+        raise NeedsOwnerConfirm("the job site gives no official link")
     excerpts = []
-    for href, _label in links[:4]:
+    for href, _label in [x for x in links if not is_pdf(x[0])][:3]:
         try:
-            txt = fetch_text(href, 3500)
+            txt = fetch_text(href, 3000)
             if len(txt) > 200:
                 excerpts.append((href, txt))
+                break
         except Exception as exc:  # noqa: BLE001
             log(f"writer: prefetch {href} failed: {exc}")
-        if len(excerpts) == 2:
-            break
     return {"lead_text": lead_text, "links": links, "excerpts": excerpts}
 
 
 # --------------------------------------------------------------------------- prompt
+def owner_confirmed(job: dict) -> bool:
+    """You tapped ✅ 'Exists' on Telegram, or sent the lead yourself (/post, forward)."""
+    return bool(job.get("owner_confirmed")) or job.get("source", "").startswith("manual")
+
+
 def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
     d = today_ist()
     parts = [
@@ -206,16 +265,23 @@ def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
     if job.get("source_hint"):
         parts.append(f"HINT: {job['source_hint']}")
     if job.get("forwarded_text"):
-        parts.append("POST THE OWNER FORWARDED (from a WhatsApp/Telegram channel, NOT a fact source; "
-                     "use it to identify the job, then verify on the official site):\n" + job["forwarded_text"][:1500])
+        parts.append("POST THE OWNER FORWARDED (from a WhatsApp/Telegram channel; use it to identify the job "
+                     "and as a fact source if no job-site/official text is given):\n" + job["forwarded_text"][:1500])
+    if owner_confirmed(job):
+        parts.append("OWNER CONFIRMED: the site owner has checked that this job is real and open. Do NOT mark it "
+                     "unverified for lack of an official page; write it from the text given here (or one job-site "
+                     "article found with WebSearch). Use the official link if one is known, else the organisation's "
+                     "official website as official_url.")
     if pre["lead_text"]:
-        parts.append("LEAD PAGE TEXT (aggregator, NOT a fact source):\n" + pre["lead_text"])
+        parts.append("JOB-SITE PAGE TEXT (fact source; prefer official text where both are given):\n" + pre["lead_text"])
     if pre["links"]:
-        parts.append("CANDIDATE OFFICIAL LINKS:\n" + "\n".join(f"- {h} ({l})" for h, l in pre["links"]))
+        parts.append("OFFICIAL LINKS (for the Official Links section; PDFs are NOT to be opened):\n"
+                     + "\n".join(f"- {h} ({l})" for h, l in pre["links"]))
     for href, txt in pre["excerpts"]:
         parts.append(f"OFFICIAL PAGE EXCERPT from {href}:\n{txt}")
-    if not pre["excerpts"]:
-        parts.append("No official page could be pre-fetched: find and read it with WebFetch/WebSearch.")
+    if not pre["excerpts"] and not pre["lead_text"]:
+        parts.append("No page text was pre-fetched: WebSearch for ONE job-site article (e.g. freejobalert, "
+                     "freshersnow, sarkari sites) or the official HTML page, and read it. Never open PDFs.")
     recent = sorted(existing_blog_slugs())
     parts.append("SLUGS ALREADY USED (pick a new one): " + ", ".join(recent[-120:]))
     return "\n\n".join(parts)
@@ -396,6 +462,13 @@ REQUIRED_META = ["slug", "seo_title", "meta_description", "h1", "og_title", "og_
                  "whatsapp_text", "faqs"]
 
 
+def _read_meta(draft_dir: Path) -> dict:
+    try:
+        return json.loads((draft_dir / "meta.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return {}
+
+
 def load_and_check(draft_dir: Path) -> tuple[dict, str]:
     meta_path, body_path = draft_dir / "meta.json", draft_dir / "body.html"
     if not meta_path.exists():
@@ -528,7 +601,7 @@ def write_job(job_id: str) -> dict:
         f.unlink()
     update_job(job_id, status="writing", started_at=now_iso())
 
-    pre = prefetch(job)  # raises ValueError -> job fails cheaply, no model call
+    pre = prefetch(job)  # ValueError -> job fails cheaply; NeedsOwnerConfirm -> asks you; no model call
     log(f"writer: prefetched {len(pre['links'])} official link(s), {len(pre['excerpts'])} excerpt(s)")
     system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
     try:
@@ -546,6 +619,9 @@ def write_job(job_id: str) -> dict:
     try:
         meta, body = load_and_check(draft_dir)
     except ValueError as exc:
+        m = _read_meta(draft_dir)
+        if m.get("verified") is not True and m.get("unconfirmed") and not owner_confirmed(job):
+            raise NeedsOwnerConfirm(m.get("verification_notes") or "no official source found") from exc
         if not re.search(r"too short|fewer than 7", str(exc)):
             raise
         expand(draft_dir, str(exc))  # one cheap retry instead of discarding the research

@@ -460,6 +460,14 @@
     "hint": "From a LinkedIn/Naukri/Indeed job alert. That site is NOT the official source: find the company's own careers page or official notice and verify there."
   },
   {
+    "name": "Official: RRB apply portal (Railways CEN)",
+    "type": "rrb",
+    "url": "https://www.rrbapply.gov.in/",
+    "official": true,
+    "enabled": true,
+    "hint": "Official Railway Recruitment Board CEN notification PDF from rrbapply.gov.in. The portal is a JavaScript app; the PDF is the official source."
+  },
+  {
     "name": "Official: KEA (Karnataka)",
     "type": "page",
     "url": "https://cetonline.karnataka.gov.in/kea/",

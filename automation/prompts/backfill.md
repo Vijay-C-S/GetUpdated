@@ -34,11 +34,11 @@ our blog has NOT covered yet. They may have been notified weeks or months ago; t
      KPTCL / BESCOM / ESCOMs, KPCL, BMRCL, BWSSB, KSRTC/BMTC, Karnataka Police civil posts,
      Karnataka High Court / district courts (Karnataka only), Karnataka Gramin Bank, Karnataka State
      Co-operative Apex Bank, DCC banks, other Karnataka departments and boards
-- Use WebFetch to open the OFFICIAL notification or official recruitment page (gov.in / nic.in /
-  the org's own domain, kea.kar.nic.in, kpsc.kar.nic.in, ssc.gov.in, ibps.in, ...) for every item you
-  return, to confirm it is open and to read the last date and eligibility. Set "confirmed_official" true
-  only when you read it on the official site, and give that exact page/PDF as official_url (not just a homepage).
-  Aggregators (freejobalert, sarkariresult, etc.) may be used only to discover leads.
+- NEVER open or read PDFs (too expensive). Confirm each item from search results / job-site articles
+  (freejobalert, freshersnow, sarkari sites, etc.) or an official HTML recruitment page (gov.in / nic.in /
+  the org's own domain). Read the last date and eligibility from those. Set "confirmed_official" true only
+  when an official HTML page lists it; otherwise false (the owner confirms on Telegram). official_url = the
+  official notification PDF or recruitment page link as given by the job site / official page (link only).
 - Priority: posts for engineering (CS/IT/EC/EEE) or any graduate, bank exams, big all-India exams,
   Karnataka posts. 10th/ITI-only posts score 7 at most, and only for large intakes (1000+).
 - The last date must be ON OR AFTER the "earliest last date" given in the user message. If the
