@@ -70,6 +70,9 @@ bot.py (always on)
 - **LinkedIn / Naukri / Indeed / Internshala job alerts:** read from an email inbox (`email_alerts.py`). The sites
   themselves are never scraped (their terms forbid it). Setup: a separate Gmail account, 2-Step Verification, an App
   Password, then `ALERTS_IMAP_USER` and `ALERTS_IMAP_PASSWORD` in `.env`, then subscribe that account to job alerts.
+- **Backfill (daily, 09:15 IST):** `backfill.py` has Sonnet web-search central + Karnataka govt recruitments
+  notified earlier that are still open (last date at least `backfill_min_days_left` days away, fresher-eligible
+  posts only) and that we haven't covered. Each one arrives as a normal lead, closing soonest first.
 - **WhatsApp channels / anything else:** forward or paste the post to the bot. It becomes a lead with ✍️/❌ buttons.
   WhatsApp has no API for reading channels, and unofficial readers get numbers banned.
 
@@ -79,6 +82,7 @@ bot.py (always on)
 | `/post <url> [note]` | Write a blog for this job link now. Skips the filter and the daily cap. |
 | `/index <url>` | Tell Google (Indexing API) and Bing (IndexNow) about a post you published by hand |
 | `/run` | Check sources for new leads now |
+| `/backfill` | Search older central/Karnataka govt recruitments that are still open and not yet covered |
 | `/status` | Today's counts and the queue |
 | `/pending` | Re-send leads and drafts waiting for you |
 

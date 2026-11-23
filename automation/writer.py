@@ -130,6 +130,15 @@ def prefetch(job: dict) -> dict:
     if job.get("source_type") == "ats":
         return {"lead_text": "", "links": [(job["url"], "official posting")],
                 "excerpts": [(job["url"], job.get("full_text") or fetch_text(job["url"], 5000))]}
+    if job.get("source_type") == "backfill":  # found by web research; many govt sites refuse the VM
+        pre = {"lead_text": "", "links": [(job["url"], "official notice (found by backfill research)")], "excerpts": []}
+        try:
+            txt = fetch_text(job["url"], 5000)
+            if len(txt) > 200:
+                pre["excerpts"].append((job["url"], txt))
+        except Exception as exc:  # noqa: BLE001
+            log(f"writer: prefetch {job['url']} failed: {exc}")
+        return pre
     if job.get("official"):  # official govt/bank/PSU page or PDF: the lead itself is the source
         return {"lead_text": "", "links": [(job["url"], "official notice")],
                 "excerpts": [(job["url"], fetch_text(job["url"], 5000))]}

@@ -1,7 +1,7 @@
 """Telegram bot (runs 24/7 as a systemd service).
 
 Buttons:   ✅ Publish / ❌ Skip on each draft
-Commands:  /start  /help  /status  /pending  /run  /post <url> [note]  /index <url>
+Commands:  /start  /help  /status  /pending  /run  /backfill  /post <url> [note]  /index <url>
 Forwarded / pasted job posts become leads.
 Only messages from TELEGRAM_CHAT_ID are obeyed.
 """
@@ -168,6 +168,11 @@ def handle_message(msg: dict) -> None:
     elif cmd == "/run":
         tg.send_message("🔍 Running watchdog + writer now...")
         run_pipeline_bg()
+    elif cmd == "/backfill":
+        tg.send_message("🔎 Searching older central + Karnataka govt recruitments that are still open "
+                        "(takes 5-15 min)...")
+        subprocess.Popen([sys.executable, str(AUTO_DIR / "backfill.py")], cwd=str(AUTO_DIR),
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     elif cmd == "/post":
         cmd_post(arg.strip())
     elif cmd == "/index":
