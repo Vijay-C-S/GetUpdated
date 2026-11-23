@@ -31,6 +31,9 @@ B) Government jobs
      (freshers / fresh graduates / apprentices can apply), keep the lead, score it on those posts only,
      and put only those fresher posts in "role". Reject only when EVERY post needs experience.
      "Experience desirable/preferred" (not mandatory) does not count as required.
+     Example: SSC Selection Post / KPSC / BEL notifications with many posts where some ask 2-3 years
+     experience and others take fresh graduates or 10th/12th pass = KEEP (cover the no-experience posts).
+     A title or note mentioning experience is NOT a reason to reject unless it clearly applies to every post.
    - REJECT other states' government jobs (Odisha, Assam, UP, Bihar, Telangana, ...).
    - REJECT medical/nursing/doctor/faculty/professor/senior posts, and police/army posts that need
      only 10th/12th unless they are large all-India exams.

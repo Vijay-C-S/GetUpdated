@@ -50,10 +50,10 @@ CENTRAL = re.compile(r"\b(iit|nit|iiit|iim|iisc|iiser|aiims|icmr|csir|icar|isro|
 ENTRY_HINT = re.compile(r"\b(assistant|trainee|junior|apprentice|clerk|intern|graduate|fresher|technician|"
                         r"multi tasking|mts|constable|probationary)", re.I)
 BIG_COUNT = re.compile(r"\b([1-9],?\d{3}|[1-9]\d{2})\b")  # 100+ posts in the title
-# Govt posts filled only from serving employees / experienced people (no fresher can apply).
-EXPERIENCE_ONLY = re.compile(r"\b(deputation|absorption|lateral entry|re-?employment|retired|ex-?employees?|"
-                             r"experienced (professionals?|candidates?)|"
-                             r"\d+\+? ?(years?|yrs) (of )?(experience|exp))\b", re.I)
+# Govt posts filled only from serving employees (no fresher can apply). "N years experience" in a title is
+# NOT enough: big notifications (SSC Selection Post, KPSC...) mix experience posts with fresher posts, and
+# the writer covers the fresher ones after reading the notification.
+EXPERIENCE_ONLY = re.compile(r"\b(deputation|absorption|lateral entry|re-?employment|retired|ex-?employees?)\b", re.I)
 DIRECT_RECRUIT = re.compile(r"\b(direct recruitment|freshers?|graduates?|apprentices?|trainees?)\b", re.I)
 
 

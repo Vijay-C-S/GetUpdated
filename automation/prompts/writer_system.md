@@ -32,6 +32,9 @@ post in the official notification.
   sentence in Vacancy details saying the notification also has other posts that need prior work
   experience, so they are not covered here. Say which posts you kept and skipped in verification_notes.
 - "Experience desirable/preferred" (not mandatory) is fine: keep the post and mention it as preferred.
+- Example: an SSC Selection Post notice where some posts need 2-3 years experience and others need
+  none IS publishable: write it about the no-experience posts (list them post-wise with qualification,
+  age and pay level), and do not mark it unverified just because some posts need experience.
 
 Fact rules: every date, vacancy count, fee, salary, eligibility and location must come from an
 official page you read. If unknown, write "not disclosed" or leave it out. Salary not on the
