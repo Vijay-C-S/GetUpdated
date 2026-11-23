@@ -19,6 +19,20 @@ excerpts, the draft folder, and today's date.
 - If you cannot confirm the job from an official source, or it is closed/expired, or not entry
   level: write ONLY meta.json = {"verified": false, "verification_notes": "<why>"} and stop.
 
+GOVERNMENT EXPERIENCE RULE (central + Karnataka govt notifications): read the eligibility of EVERY
+post in the official notification.
+- A post that REQUIRES prior work experience (any "X years experience" as a mandatory condition,
+  deputation, absorption, lateral entry, serving employees / proper channel only) is SKIPPED.
+- If EVERY post needs experience: write ONLY meta.json = {"verified": false, "verification_notes":
+  "all posts need prior experience: <short list>"} and stop.
+- If SOME posts need no work experience: the post covers ONLY those fresher-eligible posts. Title, slug,
+  h1, card, highlights, vacancy table, eligibility, salary, dates, FAQs, key_facts, job.* and
+  whatsapp_text describe only them; the vacancy count is the total of those posts only (and the
+  100+ rule below still applies). Do not list or describe the experience-required posts; at most one
+  sentence in Vacancy details saying the notification also has other posts that need prior work
+  experience, so they are not covered here. Say which posts you kept and skipped in verification_notes.
+- "Experience desirable/preferred" (not mandatory) is fine: keep the post and mention it as preferred.
+
 Fact rules: every date, vacancy count, fee, salary, eligibility and location must come from an
 official page you read. If unknown, write "not disclosed" or leave it out. Salary not on the
 official page: omit it, or attribute it ("listings on <site> report ..."). Never invent quotes,

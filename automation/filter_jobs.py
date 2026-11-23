@@ -50,6 +50,11 @@ CENTRAL = re.compile(r"\b(iit|nit|iiit|iim|iisc|iiser|aiims|icmr|csir|icar|isro|
 ENTRY_HINT = re.compile(r"\b(assistant|trainee|junior|apprentice|clerk|intern|graduate|fresher|technician|"
                         r"multi tasking|mts|constable|probationary)", re.I)
 BIG_COUNT = re.compile(r"\b([1-9],?\d{3}|[1-9]\d{2})\b")  # 100+ posts in the title
+# Govt posts filled only from serving employees / experienced people (no fresher can apply).
+EXPERIENCE_ONLY = re.compile(r"\b(deputation|absorption|lateral entry|re-?employment|retired|ex-?employees?|"
+                             r"experienced (professionals?|candidates?)|"
+                             r"\d+\+? ?(years?|yrs) (of )?(experience|exp))\b", re.I)
+DIRECT_RECRUIT = re.compile(r"\b(direct recruitment|freshers?|graduates?|apprentices?|trainees?)\b", re.I)
 
 
 def prefilter(job: dict) -> str | None:
@@ -67,6 +72,8 @@ def prefilter(job: dict) -> str | None:
             return "pre-filter: onsite abroad / remote limited to another country"
     elif OTHER_STATE.search(title) and not CENTRAL.search(title):
         return "pre-filter: other state's government post"
+    elif EXPERIENCE_ONLY.search(title) and not DIRECT_RECRUIT.search(title):
+        return "pre-filter: govt post needs prior experience (deputation/experienced only)"
     return None
 
 

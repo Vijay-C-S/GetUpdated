@@ -25,6 +25,12 @@ B) Government jobs
    - BANK JOBS (any degree is fine, no IT requirement): IBPS PO/Clerk/SO/RRB, SBI, RBI, NABARD, SIDBI,
      public sector banks (Canara, Bank of Baroda, Union, PNB, ...), and Karnataka banks / Grameena banks
      (Karnataka Bank, Karnataka Gramin Bank, KVGB, Karnataka State Co-operative Apex Bank). Score 7+.
+   - EXPERIENCE RULE (central + Karnataka govt): a post that REQUIRES prior work experience (e.g. "X years
+     experience", deputation, absorption, lateral entry, serving employees only, ex-servicemen re-employment)
+     is NOT for us. One notification often has several posts: if AT LEAST ONE post needs no work experience
+     (freshers / fresh graduates / apprentices can apply), keep the lead, score it on those posts only,
+     and put only those fresher posts in "role". Reject only when EVERY post needs experience.
+     "Experience desirable/preferred" (not mandatory) does not count as required.
    - REJECT other states' government jobs (Odisha, Assam, UP, Bihar, Telangana, ...).
    - REJECT medical/nursing/doctor/faculty/professor/senior posts, and police/army posts that need
      only 10th/12th unless they are large all-India exams.
