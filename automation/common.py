@@ -35,8 +35,8 @@ DEFAULT_CONFIG = {
     "writer_budget_usd": 0.8,
     "filter_budget_usd": 0.1,
     "backfill_model": "sonnet",      # daily search for older govt recruitments still open
-    "backfill_effort": "low",
-    "backfill_budget_usd": 1.5,
+    "backfill_effort": "medium",
+    "backfill_budget_usd": 3.0,
     "backfill_timeout_sec": 1800,
     "backfill_min_days_left": 3,     # skip recruitments closing sooner than this
     "claude_extra_args": [],

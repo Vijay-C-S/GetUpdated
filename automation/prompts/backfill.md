@@ -19,12 +19,28 @@ our blog has NOT covered yet. They may have been notified weeks or months ago; t
 - Skip medical/nursing/doctor/faculty/professor/senior posts.
 - Prefer posts open to IT/EC/CS/engineering graduates or any graduate, bank jobs, and big exams.
 
-## How to search
-- Use WebSearch, then WebFetch to open the OFFICIAL notification or official recruitment page
-  (gov.in / nic.in / org's own domain, kea.kar.nic.in, kpsc.kar.nic.in, ssc.gov.in, ibps.in, ...).
-  Aggregators (freejobalert, sarkariresult, etc.) may be used only to discover leads; the last date
-  you report must be confirmed on the official page whenever possible.
-- Spend at most ~20 tool calls in total. Cover both central and Karnataka.
+## How to search (be thorough: this runs once a day, quality matters more than speed)
+- Work through EVERY group in this checklist with its own searches (e.g. "<org> recruitment 2026 apply
+  online last date", "<org> notification 2026"), at least 15 searches in total:
+  1. SSC (CGL, CHSL, JE, Stenographer, MTS, GD) and UPSC (ESE, CSE, EPFO, CAPF, CDS, IES/ISS)
+  2. Railways: RRB NTPC / JE / ALP / Technician / Section Controller, RRC apprentices
+  3. Banks: IBPS PO/Clerk/SO/RRB, SBI PO/Clerk/SO, RBI Grade B/Assistant, NABARD, SIDBI, EXIM, LIC AAO/ADO,
+     public sector banks (Canara, BoB, Union, PNB, Indian Bank, BoI...)
+  4. Central PSUs / labs hiring engineers or graduates: BEL, HAL, ISRO (ICRB, URSC, VSSC), DRDO (CEPTAM, RAC),
+     BHEL, IOCL, NTPC, POWERGRID, ONGC, GAIL, BSNL, ECIL, NIC, C-DAC, C-DOT, BEML, AAI, NPCIL, CSIR labs
+     (GET / Engineer Trainee / Scientist B / Junior Engineer / Technician / Assistant)
+  5. Graduate / diploma apprenticeships (NATS) at central PSUs, especially Bengaluru units
+  6. Karnataka: KPSC (Group A/B/C, AE, FDA/SDA), KEA (recruitments it conducts for boards and corporations),
+     KPTCL / BESCOM / ESCOMs, KPCL, BMRCL, BWSSB, KSRTC/BMTC, Karnataka Police civil posts,
+     Karnataka High Court / district courts (Karnataka only), Karnataka Gramin Bank, Karnataka State
+     Co-operative Apex Bank, DCC banks, other Karnataka departments and boards
+- Use WebFetch to open the OFFICIAL notification or official recruitment page (gov.in / nic.in /
+  the org's own domain, kea.kar.nic.in, kpsc.kar.nic.in, ssc.gov.in, ibps.in, ...) for every item you
+  return, to confirm it is open and to read the last date and eligibility. Set "confirmed_official" true
+  only when you read it on the official site, and give that exact page/PDF as official_url (not just a homepage).
+  Aggregators (freejobalert, sarkariresult, etc.) may be used only to discover leads.
+- Priority: posts for engineering (CS/IT/EC/EEE) or any graduate, bank exams, big all-India exams,
+  Karnataka posts. 10th/ITI-only posts score 7 at most, and only for large intakes (1000+).
 - The last date must be ON OR AFTER the "earliest last date" given in the user message. If the
   application window is closed, not yet open with no dates, or you cannot find the last date, skip it.
 
