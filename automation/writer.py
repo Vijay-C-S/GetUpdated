@@ -645,7 +645,7 @@ def links_only_in_official_section(body: str) -> str:
 
 
 # a 1-2 digit number (not part of a bigger number like 1,265 or 3047) followed by posts/vacancies/...
-SMALL_COUNT_RE = re.compile(r"(?<![\d,.])\b([1-9]\d?)\s*(\+\s*)?(posts?|vacanc\w*|openings?|seats?|positions?)\b", re.I)
+SMALL_COUNT_RE = re.compile(r"(?<![\d,./-])\b([1-9]\d?)[ \t]*(\+[ \t]*)?(posts?|vacanc\w*|openings?|seats?|positions?)\b", re.I)
 
 
 def small_count_mentions(meta: dict, body: str) -> list[str]:
@@ -681,6 +681,44 @@ def expand(draft_dir: Path, problem: str) -> None:
                        effort=CONFIG.get("writer_effort"), system_prompt=system,
                        budget_usd=CONFIG.get("writer_budget_usd"))
     save_reply(draft_dir, reply, need_meta=False)
+
+
+PATCH_RE = re.compile(r"<<<\n?(.*?)\n?===\n?(.*?)\n?>>>", re.S)
+
+
+def patch_fix(draft_dir: Path, problem: str) -> bool:
+    """Small fix as find/replace pairs instead of a full rewrite (~200 output tokens instead of ~7,000).
+    False if the reply can't be applied cleanly (the caller then does a full rewrite)."""
+    md_path, meta_path = draft_dir / "body.md", draft_dir / "meta.json"
+    if not md_path.exists():
+        return False
+    md, meta = md_path.read_text(encoding="utf-8"), meta_path.read_text(encoding="utf-8")
+    log(f"writer: patching draft ({problem[:120]})")
+    prompt = (f"Fix this in the post: {problem}\nReply ONLY with find/replace pairs, nothing else:\n<<<\nexact old "
+              "text copied from ARTICLE or META (a short unique phrase)\n===\nnew text\n>>>\nOne pair per place. "
+              "In META keep valid JSON.\n\nMETA:\n" + meta + "\n\nARTICLE:\n" + md)
+    reply = run_claude(prompt, CONFIG["writer_model"], [], timeout=CONFIG["writer_timeout_sec"],
+                       effort=CONFIG.get("writer_effort"), system_prompt="You fix small issues in a blog draft. "
+                       "Change only what the problem needs.", budget_usd=CONFIG.get("writer_budget_usd"), cache=False)
+    pairs = PATCH_RE.findall(reply)
+    if not pairs:
+        return False
+    for old, new in pairs:
+        if old and old in md:
+            md = md.replace(old, new)
+        elif old and old in meta:
+            meta = meta.replace(old, new)
+        else:
+            log(f"writer: patch text not found: {old[:80]!r}")
+            return False
+    try:
+        json.loads(meta)
+    except ValueError:
+        return False
+    md_path.write_text(md, encoding="utf-8")
+    (draft_dir / "body.html").write_text(to_html(md), encoding="utf-8")
+    meta_path.write_text(meta, encoding="utf-8")
+    return True
 
 
 # --------------------------------------------------------------------------- main
@@ -778,8 +816,10 @@ def finalize(job: dict, draft_dir: Path, meta: dict, body: str) -> dict:
     job_id = draft_dir.name
     small = small_count_mentions(meta, body)
     if small:
-        expand(draft_dir, f"house rule broken: vacancy counts below 100 must not be mentioned, found {small}; "
-                          "remove them from body.html AND rewrite meta.json without them")
+        problem = (f"house rule broken: vacancy counts below 100 must not be mentioned, found {small}. Rephrase "
+                   "each place without the number (e.g. 'multiple posts'); drop per-state/category count rows.")
+        if not patch_fix(draft_dir, problem):
+            expand(draft_dir, problem + " Fix it in the article AND send a corrected ===META===.")
         meta, body = load_and_check(draft_dir)
         if small_count_mentions(meta, body):
             meta["verification_notes"] = (meta.get("verification_notes", "") +
