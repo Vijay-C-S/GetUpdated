@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 
 import telegram_api as tg
 from claude_cli import UsageLimitError
@@ -47,28 +48,48 @@ def write_and_dispatch(job_id: str) -> None:
         write_job(job_id)
         send_for_approval(job_id)
     except NeedsOwnerConfirm as exc:
-        update_job(job_id, status="confirm_pending", error=str(exc)[:500])
+        update_job(job_id, status="confirm_pending", error=str(exc)[:500], confirm_kind=exc.kind)
         ask_owner(job_id)
     except UsageLimitError as exc:
         update_job(job_id, status="queued")
         tg.notify(f"⏸ Claude usage limit reached; will retry next run.\n{str(exc)[:300]}")
         raise
     except Exception as exc:  # noqa: BLE001
-        update_job(job_id, status="failed", error=str(exc)[:1000])
-        job = get_job(job_id) or {}
-        tg.notify(f"⚠️ Skipped: {job.get('title', job_id)}\nReason: {str(exc)[:500]}")
         log(f"pipeline: job {job_id} failed: {exc}")
+        job = get_job(job_id) or {}
+        if not job.get("owner_override") and not NO_RETRY.search(str(exc)):
+            # Ask once (Try again / Skip) instead of dropping it silently.
+            update_job(job_id, status="confirm_pending", error=str(exc)[:1000], confirm_kind="failed")
+            ask_owner(job_id)
+            return
+        update_job(job_id, status="failed", error=str(exc)[:1000])
+        tg.notify(f"⚠️ Skipped: {job.get('title', job_id)}\nReason: {str(exc)[:500]}")
+
+
+# Failures where "try again" can't help: just report them.
+NO_RETRY = re.compile(r"blog already exists|uncommitted changes|unknown job", re.I)
+
+ASK = {
+    "unconfirmed": ("❓ CAN'T CONFIRM", "Does this job really exist and is it open? ✅ = write it from the job-site text.",
+                    "✅ Exists, write it", "❌ No / fake"),
+    "rejected": ("🤔 WRITER WANTS TO SKIP", "Is it actually fine to post? ✅ = write it anyway.",
+                 "✅ Write it anyway", "❌ Skip"),
+    "failed": ("⚠️ WRITING FAILED", "✅ = try once more (the writer searches for the job itself if needed).",
+               "🔁 Try again", "❌ Skip"),
+}
 
 
 def ask_owner(job_id: str) -> None:
-    """No official source found: you check whether the job is real, the writer then uses the job-site text."""
+    """The writer would drop this job: you decide once. ✅ reruns it with your override, ❌ skips it."""
     job = get_job(job_id) or {}
-    text = (f"❓ CAN'T CONFIRM: {job.get('title', job_id)}\n\n"
+    head, question, yes, no = ASK.get(job.get("confirm_kind") or "unconfirmed", ASK["unconfirmed"])
+    text = (f"{head}: {job.get('title', job_id)}\n\n"
             f"Why: {job.get('error') or 'no official link found'}\n"
-            f"🔗 {job.get('url') or '(no link)'}\n\n"
-            "Does this job really exist and is it open? ✅ = write it from the job-site text.")
-    buttons = [[{"text": "✅ Exists, write it", "callback_data": f"ok:{job_id}"},
-                {"text": "❌ No / fake", "callback_data": f"no:{job_id}"}]]
+            f"🔗 {job.get('url') or '(no link)'}\n\n{question}\n"
+            "🔗 = you send the official apply link and I write it from that.")
+    buttons = [[{"text": yes, "callback_data": f"ok:{job_id}"},
+                {"text": no, "callback_data": f"no:{job_id}"}],
+               [{"text": "🔗 I'll send the link", "callback_data": f"link:{job_id}"}]]
     try:
         tg.send_message(text, buttons=buttons)
     except Exception as exc:  # noqa: BLE001

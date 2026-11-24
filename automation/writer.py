@@ -51,7 +51,12 @@ def is_pdf(url: str) -> bool:
 
 
 class NeedsOwnerConfirm(Exception):
-    """No official source could be found/confirmed: ask the owner on Telegram whether the job is real."""
+    """The writer would drop this job: ask the owner once on Telegram instead of skipping silently.
+    kind: 'unconfirmed' (no official source) or 'rejected' (writer thinks closed / not entry level / ...)."""
+
+    def __init__(self, reason: str, kind: str = "unconfirmed"):
+        super().__init__(reason)
+        self.kind = kind
 
 
 def fetch_text(url: str, limit: int = 3500) -> str:
@@ -163,6 +168,21 @@ def _add_rrb_notices(pre: dict, job: dict) -> None:
 def prefetch(job: dict) -> dict:
     """Return {'lead_text', 'links', 'excerpts'}. Raises NeedsOwnerConfirm when a job-site lead has no
     official link (you confirm on Telegram), ValueError when the lead page itself can't be read."""
+    pre = _prefetch_lead(job)
+    if job.get("owner_link"):  # the official link you sent on Telegram: the top fact source
+        url = job["owner_link"]
+        pre["links"] = [(url, "official link given by the owner")] + [l for l in pre["links"] if l[0] != url]
+        if not is_pdf(url):
+            try:
+                txt = fetch_text(url, 4000)
+                if len(txt) > 200:
+                    pre["excerpts"].insert(0, (url + " (OFFICIAL LINK GIVEN BY THE OWNER)", txt))
+            except Exception as exc:  # noqa: BLE001
+                log(f"writer: owner link {url} could not be read: {exc}")
+    return pre
+
+
+def _prefetch_lead(job: dict) -> dict:
     if not _rrb_lead(job):
         return _prefetch(job)
     try:
@@ -229,8 +249,13 @@ def _prefetch(job: dict) -> dict:
         return pre
     # Job-site lead (FreeJobAlert, FreshersNow, ...): its text is the fact source. Official links are
     # collected; only one official HTML page is read (to confirm), PDFs are never read.
-    r = requests.get(job["url"], headers=HEADERS, timeout=30)
-    r.raise_for_status()
+    try:
+        r = requests.get(job["url"], headers=HEADERS, timeout=30)
+        r.raise_for_status()
+    except Exception:
+        if job.get("owner_override"):  # you said write it: the writer searches for the job itself
+            return {"lead_text": "", "links": [], "excerpts": []}
+        raise
     lead_text = fetch_text(job["url"], 5000)
     links = official_links(r.text, job["url"])
     if not links and not job.get("owner_confirmed"):
@@ -272,6 +297,17 @@ def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
                      "unverified for lack of an official page; write it from the text given here (or one job-site "
                      "article found with WebSearch). Use the official link if one is known, else the organisation's "
                      "official website as official_url.")
+    if job.get("owner_link"):
+        parts.append(f"OFFICIAL LINK FROM THE OWNER: {job['owner_link']}\nThe owner found this official apply / "
+                     "notification link. Use it as official_url and as the apply link in How to Apply and Official "
+                     "Links. If it is a PDF, only link it (never open it) and take the facts from the other text.")
+    if job.get("owner_override"):
+        parts.append("OWNER OVERRIDE: an earlier run wanted to skip this job"
+                     + (f" ({job['override_reason'][:300]})" if job.get("override_reason") else "")
+                     + ". The owner checked it and said WRITE IT. Do NOT write verified:false for any reason "
+                     "(closed, not entry level, experience, unconfirmed): write the full post with verified:true "
+                     "from the best text available, state dates exactly as the sources give them, and if some "
+                     "posts need experience, say so clearly in the eligibility section.")
     if pre["lead_text"]:
         parts.append("JOB-SITE PAGE TEXT (fact source; prefer official text where both are given):\n" + pre["lead_text"])
     if pre["links"]:
@@ -620,8 +656,11 @@ def write_job(job_id: str) -> dict:
         meta, body = load_and_check(draft_dir)
     except ValueError as exc:
         m = _read_meta(draft_dir)
-        if m.get("verified") is not True and m.get("unconfirmed") and not owner_confirmed(job):
-            raise NeedsOwnerConfirm(m.get("verification_notes") or "no official source found") from exc
+        if m.get("verified") is False and not job.get("owner_override"):
+            # Never skip on the writer's word alone: ask you once (Write anyway / Skip).
+            unconfirmed = bool(m.get("unconfirmed"))
+            raise NeedsOwnerConfirm(m.get("verification_notes") or "no reason given",
+                                    "unconfirmed" if unconfirmed else "rejected") from exc
         if not re.search(r"too short|fewer than 7", str(exc)):
             raise
         expand(draft_dir, str(exc))  # one cheap retry instead of discarding the research

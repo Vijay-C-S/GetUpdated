@@ -28,6 +28,13 @@ bot.py (always on)
 - PDFs are never read (too many tokens): facts come from official HTML pages and the job-site article; PDF
   links go in the post as links. If no official link/source confirms the job, the bot asks you
   `❓ CAN'T CONFIRM [✅ Exists, write it] [❌ No / fake]` and writes from the job-site text on ✅.
+- The writer never skips a job on its own. If it thinks a job is closed / not entry level / needs
+  experience, or writing fails, the bot asks once: `🤔 WRITER WANTS TO SKIP [✅ Write it anyway] [❌ Skip]`
+  (or `⚠️ WRITING FAILED [🔁 Try again] [❌ Skip]`). ✅ reruns it with your override and the writer
+  must write it; ❌ skips it. You are asked only once per job.
+- Every such question also has `🔗 I'll send the link`: tap it, paste the official apply link as your
+  next message, and the writer uses that link as the official source and apply link (`/cancel` brings
+  the question back).
 - The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
 - Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.
 - Duplicate checks run against existing `blogs/` slugs and earlier leads.

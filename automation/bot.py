@@ -24,6 +24,7 @@ HELP = (
     "/run     - check sources for new leads now\n"
     "/post <url> [note] - write a blog for this job link right away\n"
     "/index <url> - tell Google + Bing about a post you published by hand\n"
+    "/cancel  - stop waiting for an official link you said you'd send\n"
     "/help    - this message\n\n"
     "Forward or paste any job post (WhatsApp channel, LinkedIn, Telegram...) and I'll offer to draft it."
 )
@@ -66,16 +67,24 @@ def handle_callback(cb: dict) -> None:
         tg.send_message(f"✍️ Writing draft: {job.get('company') or ''} - {job.get('role') or job.get('title')}\n"
                         "I'll send it here for Publish / Skip in a few minutes.")
         run_pipeline_bg("--write", job_id)
-    elif action == "ok":  # you confirmed a job the writer couldn't confirm officially
+    elif action == "ok":  # the writer wanted to skip it; you said write it (asked only once)
         if job.get("status") != "confirm_pending":
             tg.send_message(f"Job is '{job.get('status')}' already.")
             return
-        update_job(job_id, status="queued", owner_confirmed=True, priority=5)
-        tg.send_message(f"✍️ Confirmed. Writing from the job-site text: {job.get('title')}")
+        update_job(job_id, status="queued", owner_confirmed=True, owner_override=True,
+                   override_reason=job.get("error", ""), priority=5)
+        tg.send_message(f"✍️ OK, writing it: {job.get('title')}")
         run_pipeline_bg("--write", job_id)
+    elif action == "link":  # you'll paste the official apply link as your next message
+        if job.get("status") != "confirm_pending":
+            tg.send_message(f"Job is '{job.get('status')}' already.")
+            return
+        update_job(job_id, status="link_pending", link_asked_at=now_iso())
+        tg.send_message(f"🔗 Send me the official apply link for:\n{job.get('title')}\n\n"
+                        "Just paste the link as your next message (/cancel to go back).")
     elif action == "no":
-        update_job(job_id, status="rejected", reason="you said it doesn't exist")
-        tg.send_message(f"🗑 Dropped: {job.get('title')}")
+        update_job(job_id, status="skipped", reason="you said skip / doesn't exist")
+        tg.send_message(f"🗑 Skipped: {job.get('title')}")
     elif action == "ign":
         update_job(job_id, status="rejected", reason="ignored by you")
         tg.send_message(f"🙈 Ignored: {job.get('company') or ''} - {job.get('role') or job.get('title')}")
@@ -98,6 +107,8 @@ def cmd_status() -> str:
             f"Published today: {pub_today}\n"
             f"Leads waiting for you: {count('lead_pending')}\n"
             f"Drafts waiting approval: {count('draft_ready')}\n"
+            f"Skips waiting for your OK: {count('confirm_pending')}\n"
+            f"Waiting for your link: {count('link_pending')}\n"
             f"Writing now: {count('writing')}\n"
             f"Queued to write: {count('queued')}\n"
             f"New candidates: {count('candidate')}\n"
@@ -110,8 +121,12 @@ def cmd_pending() -> None:
     leads = [j for j in jobs if j.get("status") == "lead_pending"]
     drafts = [j for j in jobs if j.get("status") == "draft_ready"]
     confirms = [j for j in jobs if j.get("status") == "confirm_pending"]
-    if not leads and not drafts and not confirms:
+    links = [j for j in jobs if j.get("status") == "link_pending"]
+    if not leads and not drafts and not confirms and not links:
         tg.send_message("Nothing waiting for you.")
+    for j in links:
+        tg.send_message(f"🔗 Still waiting for the official link for:\n{j.get('title')}\n"
+                        "Paste it as a message, or /cancel.")
     for j in sorted(leads, key=lambda j: -int(j.get("score", 0))):
         send_lead(j)
     for j in drafts:
@@ -164,9 +179,32 @@ def handle_forward(msg: dict, text: str) -> None:
     send_lead(load_jobs()[jid])
 
 
+def waiting_for_link() -> list[dict]:
+    return sorted((j for j in load_jobs().values() if j.get("status") == "link_pending"),
+                  key=lambda j: j.get("link_asked_at", ""), reverse=True)
+
+
+def take_owner_link(msg: dict, text: str) -> bool:
+    """You tapped 🔗 and then pasted the official link: attach it and write the job from it."""
+    waiting = waiting_for_link()
+    if not waiting:
+        return False
+    urls = URL_RE.findall(text) + [e["url"] for e in (msg.get("entities") or []) if e.get("type") == "text_link"]
+    if not urls:
+        return False
+    job, url = waiting[0], urls[0].rstrip(".,;")
+    update_job(job["id"], owner_link=url, status="queued", owner_confirmed=True, owner_override=True,
+               override_reason=job.get("error", ""), priority=5)
+    tg.send_message(f"✍️ Got it. Writing from your link:\n{job.get('title')}\n{url}")
+    run_pipeline_bg("--write", job["id"])
+    return True
+
+
 def handle_message(msg: dict) -> None:
     text = (msg.get("text") or msg.get("caption") or "").strip()
     if not text.startswith("/"):
+        if take_owner_link(msg, text):
+            return
         if len(text) > 20:
             handle_forward(msg, text)
         return
@@ -178,6 +216,14 @@ def handle_message(msg: dict) -> None:
         tg.send_message(cmd_status())
     elif cmd == "/pending":
         cmd_pending()
+    elif cmd == "/cancel":  # stop waiting for a link; the question comes back with its buttons
+        from pipeline import ask_owner
+        waiting = waiting_for_link()
+        if not waiting:
+            tg.send_message("Not waiting for any link.")
+        for j in waiting:
+            update_job(j["id"], status="confirm_pending")
+            ask_owner(j["id"])
     elif cmd == "/run":
         tg.send_message("🔍 Running watchdog + writer now...")
         run_pipeline_bg()

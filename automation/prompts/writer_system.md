@@ -26,6 +26,8 @@ excerpts, the draft folder, and today's date.
 - If the ONLY problem is that no official source confirms the job exists (and there is no OWNER
   CONFIRMED line): write ONLY meta.json = {"verified": false, "unconfirmed": true,
   "verification_notes": "<what you checked>"} and stop. The owner will be asked on Telegram.
+- Any verified:false is shown to the owner, who may overrule it. If the user message has an OWNER
+  OVERRIDE line, the rules above that make you stop do not apply: write the full post (verified:true).
 
 GOVERNMENT EXPERIENCE RULE (central + Karnataka govt notifications): check the eligibility of EVERY
 post in the text you have (official excerpt or job-site text; do not open the PDF for this).
