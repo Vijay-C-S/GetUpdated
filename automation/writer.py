@@ -24,10 +24,12 @@ from bs4 import BeautifulSoup
 import rrb
 from banner import company_logo, make_banner
 from claude_cli import run_claude
-from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, existing_blog_slugs, get_job,
+from gumd import to_html
+from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, get_job,
                     git_is_clean, log, now_iso, run, today_ist, update_job)
 
-WRITER_TOOLS = ["WebFetch", "WebSearch", "Write"]
+WEB_TOOLS = ["WebFetch", "WebSearch"]  # loaded only when too little page text was pre-fetched
+ENOUGH_TEXT = 1500  # chars of pre-fetched lead/official text that make web tools unnecessary
 SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"}
 AGGREGATORS = ("freejobalert", "freshersnow", "offcampusjobs4u", "fresheropenings", "karnatakacareers",
@@ -294,11 +296,14 @@ def owner_confirmed(job: dict) -> bool:
     return bool(job.get("owner_confirmed")) or job.get("source", "").startswith("manual")
 
 
-def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
+def prefetched_chars(pre: dict) -> int:
+    return len(pre["lead_text"]) + sum(len(t) for _, t in pre["excerpts"])
+
+
+def build_user_prompt(job: dict, pre: dict) -> str:
     d = today_ist()
     parts = [
         f"TODAY: {d.isoformat()} (IST)",
-        f"DRAFT FOLDER (write body.html and meta.json here, nowhere else): {draft_dir.as_posix()}",
         "LEAD: " + json.dumps({k: job.get(k) for k in ("title", "url", "source", "summary", "company",
                                                         "role", "category", "manual_note") if job.get(k)},
                               ensure_ascii=False),
@@ -331,12 +336,48 @@ def build_user_prompt(job: dict, draft_dir: Path, pre: dict) -> str:
                      + "\n".join(f"- {h} ({l})" for h, l in pre["links"]))
     for href, txt in pre["excerpts"]:
         parts.append(f"OFFICIAL PAGE EXCERPT from {href}:\n{txt}")
-    if not pre["excerpts"] and not pre["lead_text"]:
-        parts.append("No page text was pre-fetched: WebSearch for ONE job-site article (e.g. freejobalert, "
+    if prefetched_chars(pre) < ENOUGH_TEXT:
+        parts.append("Too little page text was pre-fetched: WebSearch for ONE job-site article (e.g. freejobalert, "
                      "freshersnow, sarkari sites) or the official HTML page, and read it. Never open PDFs.")
-    recent = sorted(existing_blog_slugs())
-    parts.append("SLUGS ALREADY USED (pick a new one): " + ", ".join(recent[-120:]))
+    else:
+        parts.append("You have no web tools: write from the text above.")
     return "\n\n".join(parts)
+
+
+def save_reply(draft_dir: Path, reply: str, need_meta: bool = True) -> None:
+    """The model answers in ONE message: ===META=== {json} ===BODY=== GU-markdown (no Write tool:
+    fewer turns, no JSON-escaped HTML). Saves meta.json, body.md and body.html (house HTML)."""
+    m = re.search(r"===\s*META\s*===(.*?)(?====\s*BODY\s*===|$)", reply, re.S)
+    b = re.search(r"===\s*BODY\s*===(.*)$", reply, re.S)
+    if m:
+        raw = m.group(1)
+        meta = json.loads(raw[raw.find("{"):raw.rfind("}") + 1])
+        (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+    elif need_meta:
+        raise ValueError("writer reply has no ===META=== block: " + reply[:300])
+    if b:
+        md = re.sub(r"^```\w*\s*|\s*```$", "", b.group(1).strip())
+        (draft_dir / "body.md").write_text(md, encoding="utf-8")
+        (draft_dir / "body.html").write_text(to_html(md), encoding="utf-8")
+
+
+def fill_derived_meta(meta: dict) -> dict:
+    """Fields the model no longer writes (saves output tokens): copied from the ones it does."""
+    meta.setdefault("og_title", meta.get("seo_title"))
+    meta.setdefault("og_description", meta.get("meta_description"))
+    meta.setdefault("card_title", meta.get("seo_title"))
+    meta.setdefault("image_alt", meta.get("seo_title") or meta.get("h1"))
+    meta.setdefault("image_caption", f"{meta.get('company', '')} {meta.get('role', '')} {today_ist().year}".strip())
+    meta.setdefault("sitemap_image_title", meta.get("seo_title"))
+    return meta
+
+
+def free_slug(slug: str) -> str:
+    """The model no longer gets the list of used slugs (saves ~2k input tokens): de-clash here."""
+    base, n = slug, 2
+    while (REPO_DIR / "blogs" / f"{slug}.html").exists():
+        slug, n = f"{base[:105]}-{n}", n + 1
+    return slug
 
 
 # --------------------------------------------------------------------------- page assembly
@@ -509,9 +550,8 @@ def assemble(meta: dict, body: str) -> str:
 
 
 # --------------------------------------------------------------------------- validation
-REQUIRED_META = ["slug", "seo_title", "meta_description", "h1", "og_title", "og_description",
-                 "card_title", "card_excerpt", "tag", "image_alt", "company", "role", "official_url",
-                 "whatsapp_text", "faqs"]
+REQUIRED_META = ["slug", "seo_title", "meta_description", "h1", "card_excerpt", "tag", "company", "role",
+                 "official_url", "whatsapp_text", "faqs"]
 
 
 def _read_meta(draft_dir: Path) -> dict:
@@ -528,6 +568,9 @@ def load_and_check(draft_dir: Path) -> tuple[dict, str]:
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     if meta.get("verified") is not True:
         raise ValueError(f"not verified: {meta.get('verification_notes') or 'no reason given'}")
+    fill_derived_meta(meta)
+    if SLUG_RE.match(str(meta.get("slug") or "")):
+        meta["slug"] = free_slug(meta["slug"])
     missing = [k for k in REQUIRED_META if not meta.get(k)]
     if missing:
         raise ValueError(f"meta.json missing fields: {missing}")
@@ -623,19 +666,21 @@ def validate_page(page: str) -> None:
 
 def expand(draft_dir: Path, problem: str) -> None:
     """Ask the model to fix a rejected draft (too short / house rule), reusing the facts already gathered."""
-    body = (draft_dir / "body.html").read_text(encoding="utf-8")
+    md_path = draft_dir / "body.md"
+    body = (md_path if md_path.exists() else draft_dir / "body.html").read_text(encoding="utf-8")
     meta = (draft_dir / "meta.json").read_text(encoding="utf-8")
     log(f"writer: expanding draft ({problem})")
-    prompt = (f"The article draft was rejected: {problem}. Rewrite {draft_dir.as_posix()}/body.html "
-              "with the Write tool so it has 9-13 <h2> sections and 1,500-2,200 words (12,000-18,000 characters). "
-              "Keep every fact, link and class exactly as verified; add depth only with genuinely useful, "
-              "non-factual guidance (preparation, what the work involves, how to apply well, mistakes to avoid). "
-              "Do not invent facts. Only rewrite meta.json if the problem says so (keep it valid JSON with "
-              "every field).\n\nMETA.JSON:\n" + meta + "\n\nCURRENT BODY.HTML:\n" + body)
+    prompt = (f"The article draft was rejected: {problem}. Reply with ===BODY=== and the full rewritten article "
+              "(same markup) with 9-13 ## sections and 1,500-2,200 words. Keep every fact and link exactly as "
+              "verified; add depth only with genuinely useful, non-factual guidance (preparation, what the work "
+              "involves, how to apply well, mistakes to avoid). Do not invent facts. Put a ===META=== block "
+              "(complete JSON) before ===BODY=== ONLY if the problem says meta.json must change."
+              "\n\nMETA.JSON:\n" + meta + "\n\nCURRENT ARTICLE:\n" + body)
     system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
-    run_claude(prompt, CONFIG["writer_model"], ["Write"], timeout=CONFIG["writer_timeout_sec"],
-               effort=CONFIG.get("writer_effort"), system_prompt=system,
-               budget_usd=CONFIG.get("writer_budget_usd"))
+    reply = run_claude(prompt, CONFIG["writer_model"], [], timeout=CONFIG["writer_timeout_sec"],
+                       effort=CONFIG.get("writer_effort"), system_prompt=system,
+                       budget_usd=CONFIG.get("writer_budget_usd"))
+    save_reply(draft_dir, reply, need_meta=False)
 
 
 # --------------------------------------------------------------------------- main
@@ -656,10 +701,12 @@ def write_job(job_id: str) -> dict:
     pre = prefetch(job)  # ValueError -> job fails cheaply; NeedsOwnerConfirm -> asks you; no model call
     log(f"writer: prefetched {len(pre['links'])} official link(s), {len(pre['excerpts'])} excerpt(s)")
     system = (AUTO_DIR / "prompts" / "writer_system.md").read_text(encoding="utf-8")
+    tools = [] if prefetched_chars(pre) >= ENOUGH_TEXT else WEB_TOOLS
     try:
-        run_claude(build_user_prompt(job, draft_dir, pre), CONFIG["writer_model"], WRITER_TOOLS,
-                   timeout=CONFIG["writer_timeout_sec"], effort=CONFIG.get("writer_effort"),
-                   system_prompt=system, budget_usd=CONFIG.get("writer_budget_usd"))
+        reply = run_claude(build_user_prompt(job, pre), CONFIG["writer_model"], tools,
+                           timeout=CONFIG["writer_timeout_sec"], effort=CONFIG.get("writer_effort"),
+                           system_prompt=system, budget_usd=CONFIG.get("writer_budget_usd"))
+        save_reply(draft_dir, reply)
     finally:
         # Safety net: the writer must only write into the draft dir. Undo anything else.
         with FileLock("git", wait=900):

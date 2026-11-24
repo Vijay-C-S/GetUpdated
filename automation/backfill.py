@@ -46,7 +46,7 @@ def backfill() -> int:
         reply = run_claude(prompt, CONFIG.get("backfill_model", "sonnet"), tools=["WebSearch", "WebFetch"],
                            system_prompt=system, effort=CONFIG.get("backfill_effort", "low"),
                            timeout=int(CONFIG.get("backfill_timeout_sec", 1800)),
-                           budget_usd=CONFIG.get("backfill_budget_usd", 1.5), cache=False)
+                           budget_usd=CONFIG.get("backfill_budget_usd", 1.5))  # cached: ~37 turns re-read the same context
         found = [x for x in extract_json(reply) if isinstance(x, dict)]
 
         new_ids, skipped = [], []
