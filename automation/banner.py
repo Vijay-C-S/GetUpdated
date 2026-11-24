@@ -7,6 +7,7 @@ when one is found, and the key facts (stipend, posts, eligibility) and last date
 from __future__ import annotations
 
 import math
+import re
 import sys
 import zlib
 from pathlib import Path
@@ -124,7 +125,7 @@ def _icon(d: ImageDraw.ImageDraw, kind: str, cx: int, cy: int, s: int, bg) -> No
         d.rounded_rectangle((cx - .14 * s, cy - .1 * s, cx + .14 * s, cy + .14 * s), radius=6, fill=soft)
 
 
-def _logo_badge(logo: Image.Image, max_w: int = 300, max_h: int = 210) -> Image.Image:
+def _logo_badge(logo: Image.Image, max_w: int = 330, max_h: int = 230) -> Image.Image:
     """Logo on a white rounded card with a soft shadow (RGBA)."""
     logo = logo.convert("RGBA")
     scale = min(max_w / logo.width, max_h / logo.height, 3.0)
@@ -277,10 +278,71 @@ def _usable(img) -> bool:
     return bool(img) and (min(img.width, img.height) >= 90 or (img.width >= 160 and img.height >= 40))
 
 
-def company_logo(page_urls: list[str]) -> Image.Image | None:
-    """The company's logo for the banner: from its website / official page, else Google's site icon
-    service (by domain only). None if nothing good enough is found."""
+WIKI_API = "https://en.wikipedia.org/w/api.php"
+WIKI_UA = {"User-Agent": "JobBlogLogoFetcher/1.0 (low-volume; one logo per article)"}
+LOGO_WORD = re.compile(r"logo|emblem|seal|insignia|crest", re.I)
+
+
+def _norm(s: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", s.lower())
+
+
+def _wiki(params: dict) -> dict:
+    import time
+
+    import requests
+    for wait in (4, 12, 30, 0):  # Wikipedia rate-limits bursts (429): wait and retry
+        r = requests.get(WIKI_API, params={**params, "format": "json", "formatversion": 2}, headers=WIKI_UA, timeout=20)
+        if r.status_code != 429 or not wait:
+            break
+        time.sleep(wait)
+    r.raise_for_status()
+    return r.json()
+
+
+def wiki_logo(names: list[str]) -> Image.Image | None:
+    """Logo from the organisation's English Wikipedia infobox (PNG render, works for SVG logos).
+    Names are tried in order (full name, short name, parent organisation); a name must be a page or a
+    redirect to one (e.g. 'IOCL' -> Indian Oil Corporation), never a fuzzy search hit. Only the first
+    infobox image is used, and only if its file is clearly a logo (name says logo/emblem/seal or is the
+    organisation's own name), so photos of buildings / rockets are never used."""
+    for name in dict.fromkeys(n.strip() for n in names if n and n.strip()):
+        try:
+            pages = _wiki({"action": "query", "titles": name, "redirects": 1}).get("query", {}).get("pages", [])
+            if not pages or pages[0].get("missing") or pages[0].get("invalid"):
+                continue
+            title = pages[0]["title"]
+            text = _wiki({"action": "parse", "page": title, "prop": "text", "section": 0}).get("parse", {}).get("text", "")
+        except Exception:  # noqa: BLE001
+            continue
+        from bs4 import BeautifulSoup
+        box = BeautifulSoup(text, "html.parser").select_one("table.infobox")
+        img = box and next((i for i in box.find_all("img") if int(i.get("width") or 0) >= 60), None)
+        if not img:
+            continue
+        src = "https:" + img["src"] if img["src"].startswith("//") else img["src"]
+        file = re.sub(r"^\d+px-", "", src.split("?")[0].rsplit("/", 1)[-1])
+        stem = _norm(re.sub(r"\.(svg|png|jpe?g|webp|gif)$", "", re.sub(r"\.(svg|png|jpe?g|webp|gif)$", "", file, flags=re.I), flags=re.I))
+        if not (LOGO_WORD.search(file) or stem in {_norm(title), _norm(name)}):
+            continue
+        for url in (re.sub(r"/\d+px-", "/600px-", src), src):  # bigger render first; original if too small
+            try:
+                logo = _get_image(url)
+                if _usable(logo):
+                    return logo
+            except Exception:  # noqa: BLE001
+                pass
+    return None
+
+
+def company_logo(page_urls: list[str], names: list[str] | None = None) -> Image.Image | None:
+    """The company's logo for the post image, best source first: its Wikipedia infobox logo (clean,
+    high resolution), its website / official page header logo, Google's site icon (by domain).
+    None if nothing good enough is found."""
     from urllib.parse import urlparse
+    logo = wiki_logo(names or [])
+    if logo is not None:
+        return logo
     pages = [u for u in page_urls if u and u.startswith("http")]
     for page in [u for u in pages if not u.lower().split("?")[0].endswith(".pdf")]:
         try:

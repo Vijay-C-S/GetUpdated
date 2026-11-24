@@ -746,7 +746,7 @@ def finalize(job: dict, draft_dir: Path, meta: dict, body: str) -> dict:
     img_pages = [meta.get("company_url"), meta.get("official_url")]
     if job.get("source_type") == "ats":
         img_pages.append(job["url"])
-    logo = company_logo(img_pages)
+    logo = company_logo(img_pages, [*(meta.get("logo_names") or []), meta["company"]])
     log(f"writer: banner {'with company logo' if logo else 'with icon (no logo found)'}")
     make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"], meta.get("banner_extra", ""),
                 chips=banner_chips(meta), deadline=banner_deadline(meta), logo=logo)
