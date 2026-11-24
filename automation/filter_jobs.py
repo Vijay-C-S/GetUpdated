@@ -28,7 +28,11 @@ NOT_A_VACANCY = re.compile(r"time ?table|shortlist|selection list|merit list|fin
                            r"result|admit card|answer key|hall ticket|score ?card|download .* (list|marks)", re.I)
 SENIOR = re.compile(r"\b(senior|sr\.?|chief|general manager|deputy general|additional general|director|"
                     r"head|principal|technical lead|team lead|lead\b|vice president|vp)\b", re.I)
-NON_IT = re.compile(r"\b(hr|human resources?|recruiter|talent|payroll|sales|sdr|bdr|business development|"
+# HR freshers are published too, but only for Bengaluru or remote jobs, so HR words are not in NON_IT.
+HR_ROLE = re.compile(r"\b(hr|human resources?|recruit\w*|talent acquisition|people (ops|operations|team|partner)|"
+                     r"payroll)\b", re.I)
+BENGALURU_OR_REMOTE = re.compile(r"\b(bengaluru|bangalore|remote|work from home|wfh|anywhere|home[ -]based)\b", re.I)
+NON_IT = re.compile(r"\b(talent|sales|sdr|bdr|business development|"
                     r"marketing|seo|content|social media|copywrit\w*|procurement|purchase|customer success|"
                     r"compliance|legal|finance|accounting|accountant|strategy|operations associate|"
                     r"hvac|mep|civil|mechanical|architect(ure)? intern|interior|fashion|nursing|pharma\w*)\b", re.I)
@@ -66,7 +70,10 @@ def prefilter(job: dict) -> str | None:
     if SENIOR.search(title) and not ENTRY_HINT.search(title) and not BIG_COUNT.search(title):
         return "pre-filter: senior post"
     if kind in ("ats", "email"):  # private jobs must be IT/EC and Bengaluru/remote-from-anywhere
-        if NON_IT.search(title):
+        if HR_ROLE.search(title):  # HR freshers: Bengaluru or remote only (no other cities)
+            if not BENGALURU_OR_REMOTE.search(title + " " + job.get("summary", "")):
+                return "pre-filter: HR role not in Bengaluru / remote"
+        elif NON_IT.search(title):
             return "pre-filter: non-IT private role"
         if FOREIGN_ONLY.search(title + " " + job.get("summary", "")) and not re.search(r"india|bengaluru|bangalore", title + job.get("summary", ""), re.I):
             return "pre-filter: onsite abroad / remote limited to another country"

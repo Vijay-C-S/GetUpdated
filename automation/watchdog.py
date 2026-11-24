@@ -79,7 +79,9 @@ def parse_page(html: str, base_url: str, link_pattern: str | None) -> list[dict]
 
 ENTRY_WORDS = ("intern", "graduate", "fresher", "trainee", "new grad", "apprentice", "entry",
                "associate software", "sde 1", "sde i", "sde-1", "engineer i", "engineer 1",
-               "software engineer - i", "junior", "campus", "university", "early career", "new college")
+               "software engineer - i", "junior", "campus", "university", "early career", "new college",
+               "hr associate", "hr executive", "talent acquisition associate", "recruitment associate",
+               "people associate")
 # A bare year only counts next to batch/passout/grads: Bosch-style job codes ("BGSW_2026_SAP_Consultant",
 # "2026/02: HW Developer") carry the year on experienced roles.
 BATCH_YEAR_RE = re.compile(r"(?:batch|pass\s*-?\s*outs?|class of|graduates?|grads?|freshers?)\W{0,3}20(?:2[5-9])\b"

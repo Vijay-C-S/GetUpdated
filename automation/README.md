@@ -7,7 +7,7 @@ the Oracle VM using your Claude subscription (Claude Code headless).
 ```
 cron (every 2h, 8am-10pm IST)
   1. watchdog.py     feeds + official company job APIs -> new leads (no AI)
-  2. filter_jobs.py  Haiku keeps entry-level IT/EC (Bengaluru/WFH), central + Karnataka govt
+  2. filter_jobs.py  Haiku keeps entry-level IT/EC and HR (Bengaluru/WFH), central + Karnataka govt
   3. Telegram:       🆕 NEW LEAD  [✍️ Write draft] [❌ Ignore]        <- you decide
 bot.py (always on)
   4. ✍️ -> writer.py  Python pre-fetches official pages; Sonnet verifies + writes the article;

@@ -3,13 +3,18 @@ Below are raw items found by a scraper. Decide which ones deserve a full blog po
 
 ## What we publish (ALL rules in a group must hold)
 
-A) Private jobs / internships / apprenticeships  (IT/EC ONLY)
+A) Private jobs / internships / apprenticeships  (IT/EC, plus HR)
    - Entry level only: freshers, 0-1 year experience, current students, or 2025-2027 passouts.
    - Only when the role is clearly IT (CSE/IT/ISE/MCA/BCA/B.Sc CS) or EC (Electronics & Communication /
      ECE / EEE-electronics): software, web, data, testing, cloud, embedded, VLSI, electronics, telecom,
-     IT support. Non-IT private roles (sales, BPO voice, marketing, HR, finance, mechanical) = reject.
+     IT support. Non-IT private roles (sales, BPO voice, marketing, finance, mechanical) = reject.
    - Location: Bengaluru / Bangalore, OR any Remote / Work From Home role (any country is fine).
      Other cities only (Hyderabad, Pune, Chennai, Noida, Gurugram, ...) = reject.
+   - EXCEPTION - HR: entry-level HR roles (HR intern/trainee, HR executive/associate, recruiter or
+     talent acquisition associate, people operations) for freshers (MBA-HR, BBA, any graduate) ARE
+     accepted, but ONLY when the job is in Bengaluru / Bangalore OR Remote / Work From Home (same
+     remote rule as above). Other-city HR roles = reject.
+     Category: "Freshers Jobs", "Work From Home" for remote HR, or "Internship" for HR internships.
    - Apprenticeships count (e.g. BEL / HAL / ISRO / NATS apprentice) if IT/EC and Bengaluru or all-India.
 
 B) Government jobs
@@ -46,7 +51,7 @@ roles needing 2+ years experience, and anything in ALREADY COVERED (same organis
 ## Scoring
 9-10: perfect fit, official source likely, many readers will care (big company, many vacancies, Bengaluru/WFH).
 7-8: clear fit. 0-6: weak fit or any rule broken.
-Leads from "official ATS" sources ARE official postings: judge only fit (entry level, IT/EC, Bengaluru/remote).
+Leads from "official ATS" sources ARE official postings: judge only fit (entry level, IT/EC or HR, Bengaluru/remote).
 
 Categories: "Freshers Jobs", "Internship", "Apprenticeship", "Work From Home", "Govt Jobs", "Karnataka Govt Jobs", "Bank Jobs".
 
