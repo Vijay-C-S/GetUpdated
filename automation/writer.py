@@ -59,6 +59,22 @@ class NeedsOwnerConfirm(Exception):
         self.kind = kind
 
 
+def not_official_link(url: str, job: dict, known: set[str]) -> bool:
+    """official_url points at a job site (FreeJobAlert etc.), at the job-site article the lead came from,
+    or is just a homepage nobody gave us (no real apply link). The owner is asked for the real link
+    before the draft is shown. known = official links found by prefetch (trusted)."""
+    if (url or "").rstrip("/") in known:
+        return False
+    dom = _domain(url or "")
+    if not dom or any(g in dom for g in AGGREGATORS):
+        return True
+    if urlparse(url).path.strip("/") == "":  # bare homepage = writer fell back, no apply link known
+        return True
+    job_site_lead = not (job.get("official") or job.get("source_type") in ("ats", "backfill", "manual", "email")
+                         or job.get("source", "").startswith("manual"))
+    return job_site_lead and dom == _domain(job.get("url") or "")
+
+
 def fetch_text(url: str, limit: int = 3500) -> str:
     """Readable text of an HTML page. PDFs are never downloaded or read (too many tokens): they are
     passed to the writer as links only. Raises on failure."""
@@ -665,6 +681,32 @@ def write_job(job_id: str) -> dict:
             raise
         expand(draft_dir, str(exc))  # one cheap retry instead of discarding the research
         meta, body = load_and_check(draft_dir)
+    known = {h.rstrip("/") for h, _ in pre["links"]}
+    if not job.get("owner_link") and not_official_link(meta["official_url"], job, known):
+        # The apply link is someone else's blog (or only a homepage): keep the draft, ask you first.
+        raise NeedsOwnerConfirm(f"the apply link is not an official apply page: {meta['official_url']}", "link")
+    return finalize(job, draft_dir, meta, body)
+
+
+def finish_with_link(job_id: str) -> dict:
+    """You answered the 'apply link is not official' question: put your link (or keep the old one if you
+    said use it) into the draft that is already written, and finish the page. No model call."""
+    job = get_job(job_id)
+    draft_dir = DRAFTS_DIR / job_id
+    meta, body = load_and_check(draft_dir)
+    old, new = meta["official_url"], job.get("owner_link")
+    if new and new != old:
+        body = body.replace(old, new).replace(html.escape(old, quote=True), new)
+        meta = json.loads(json.dumps(meta, ensure_ascii=False).replace(json.dumps(old)[1:-1], json.dumps(new)[1:-1]))
+        meta["official_url"] = new
+        (draft_dir / "body.html").write_text(body, encoding="utf-8")
+        (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
+        meta, body = load_and_check(draft_dir)
+    return finalize(job, draft_dir, meta, body)
+
+
+def finalize(job: dict, draft_dir: Path, meta: dict, body: str) -> dict:
+    job_id = draft_dir.name
     small = small_count_mentions(meta, body)
     if small:
         expand(draft_dir, f"house rule broken: vacancy counts below 100 must not be mentioned, found {small}; "

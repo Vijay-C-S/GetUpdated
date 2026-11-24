@@ -80,6 +80,10 @@ House components (use these exact classes):
 Inline highlights: <span class="hl-green">good</span> <span class="hl-amber">caution</span> <span class="hl-red">deadline/risk</span>
 Official links: <a href="URL" class="official-link" target="_blank" rel="noopener">Label <i class="fas fa-external-link-alt"></i></a>
 (the apply link is shown in green automatically)
+official_url and the apply link must be the EMPLOYER's own page (notification PDF, apply portal, careers
+page, employer's LinkedIn posting). NEVER use a job-site / aggregator article (FreeJobAlert, FreshersNow,
+Sarkari sites, Adda247, etc.) as official_url or in Official Links. If no official apply/notification
+link is known, use the organisation's official website (the owner is asked on Telegram anyway).
 LINK RULE (house style): ALL clickable official links (apply link, notification PDF, official website)
 go ONLY in the "Official Links and Final Checklist" section, as a <ul> of official-link anchors.
 Everywhere else (intro, highlights table, how-to-apply steps, final takeaway) mention them as plain

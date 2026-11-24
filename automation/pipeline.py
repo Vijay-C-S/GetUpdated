@@ -17,7 +17,7 @@ from common import CONFIG, DRAFTS_DIR, FileLock, get_job, load_jobs, log, run, t
 from filter_jobs import filter_candidates
 from publisher import publish
 from watchdog import scan
-from writer import NeedsOwnerConfirm, write_job
+from writer import NeedsOwnerConfirm, finish_with_link, write_job
 
 
 def posts_today() -> int:
@@ -43,9 +43,9 @@ def send_for_approval(job_id: str) -> None:
         publish(job_id)
 
 
-def write_and_dispatch(job_id: str) -> None:
+def write_and_dispatch(job_id: str, finish: bool = False) -> None:
     try:
-        write_job(job_id)
+        finish_with_link(job_id) if finish else write_job(job_id)
         send_for_approval(job_id)
     except NeedsOwnerConfirm as exc:
         update_job(job_id, status="confirm_pending", error=str(exc)[:500], confirm_kind=exc.kind)
@@ -76,6 +76,9 @@ ASK = {
                  "✅ Write it anyway", "❌ Skip"),
     "failed": ("⚠️ WRITING FAILED", "✅ = try once more (the writer searches for the job itself if needed).",
                "🔁 Try again", "❌ Skip"),
+    "link": ("🔗 APPLY LINK IS NOT OFFICIAL", "The draft is written, but its apply link is another job site's "
+             "article. Send the official link (best), or ✅ = keep that link anyway.",
+             "✅ Keep that link", "❌ Skip"),
 }
 
 
@@ -128,14 +131,19 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--watch-only", action="store_true")
     ap.add_argument("--write", metavar="JOB_ID")
+    ap.add_argument("--finish", metavar="JOB_ID", help="finish a written draft with the owner's apply link")
     args = ap.parse_args()
 
-    # Approved drafts (--write) wait their turn; scheduled runs just skip if busy.
-    lock = FileLock("pipeline", wait=3 * 3600 if args.write else 0)
+    # Approved drafts (--write / --finish) wait their turn; scheduled runs just skip if busy.
+    lock = FileLock("pipeline", wait=3 * 3600 if (args.write or args.finish) else 0)
     if not lock.acquire():
         log("pipeline: another run is in progress; exiting")
         return
     try:
+        if args.finish:
+            git_pull()
+            write_and_dispatch(args.finish, finish=True)
+            return
         if args.write:
             git_pull()
             write_and_dispatch(args.write)

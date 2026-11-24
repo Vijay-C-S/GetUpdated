@@ -71,6 +71,11 @@ def handle_callback(cb: dict) -> None:
         if job.get("status") != "confirm_pending":
             tg.send_message(f"Job is '{job.get('status')}' already.")
             return
+        if job.get("confirm_kind") == "link":  # keep the job-site link the writer used; draft is already written
+            update_job(job_id, status="queued")
+            tg.send_message(f"OK, keeping that link. Finishing the draft: {job.get('title')}")
+            run_pipeline_bg("--finish", job_id)
+            return
         update_job(job_id, status="queued", owner_confirmed=True, owner_override=True,
                    override_reason=job.get("error", ""), priority=5)
         tg.send_message(f"✍️ OK, writing it: {job.get('title')}")
@@ -193,6 +198,11 @@ def take_owner_link(msg: dict, text: str) -> bool:
     if not urls:
         return False
     job, url = waiting[0], urls[0].rstrip(".,;")
+    if job.get("confirm_kind") == "link":  # draft already written: just swap in your link (no AI tokens)
+        update_job(job["id"], owner_link=url, status="queued")
+        tg.send_message(f"🔗 Got it. Putting your link in the draft:\n{job.get('title')}\n{url}")
+        run_pipeline_bg("--finish", job["id"])
+        return True
     update_job(job["id"], owner_link=url, status="queued", owner_confirmed=True, owner_override=True,
                override_reason=job.get("error", ""), priority=5)
     tg.send_message(f"✍️ Got it. Writing from your link:\n{job.get('title')}\n{url}")

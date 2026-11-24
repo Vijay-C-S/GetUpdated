@@ -35,6 +35,10 @@ bot.py (always on)
 - Every such question also has `🔗 I'll send the link`: tap it, paste the official apply link as your
   next message, and the writer uses that link as the official source and apply link (`/cancel` brings
   the question back).
+- If a finished draft's apply link is another job site's article (FreeJobAlert, FreshersNow, ...) or
+  just a homepage, you are asked before seeing the draft: `🔗 APPLY LINK IS NOT OFFICIAL
+  [✅ Keep that link] [❌ Skip] [🔗 I'll send the link]`. Your link is swapped into the written draft
+  (no new AI run), then the draft comes for Publish / Skip as usual.
 - The writer may only write in `state/drafts/`. Any other repo change is reverted automatically.
 - Drafts are validated before you see them: size, sections, slug, image path, valid JSON-LD, ads/analytics head.
 - Duplicate checks run against existing `blogs/` slugs and earlier leads.
