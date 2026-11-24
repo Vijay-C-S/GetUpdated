@@ -238,10 +238,17 @@ def wait_until_live(url: str, slug: str) -> bool:
     return False
 
 
+WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029Vb7OqCF3QxS6oVWKm83a"
+
+
 def share_pack(meta: dict, url: str) -> str:
+    """The message you paste into the WhatsApp channel."""
     text = meta["whatsapp_text"].strip()
     if url not in text:
         text += f"\n\n👉 Full details & apply link:\n{url}"
+    channel = CONFIG.get("whatsapp_channel_url") or WHATSAPP_CHANNEL
+    if channel not in text:
+        text += f"\n\nFollow for more updates:\n{channel}"
     return text
 
 

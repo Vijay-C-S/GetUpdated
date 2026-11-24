@@ -113,7 +113,16 @@ No "Apply Here" buttons or links anywhere else.
  "key_facts": ["Role: ...", "Eligibility: ...", "Location: ...", "Last date: ..."],
  "whatsapp_text": "see format"
 }
-whatsapp_text (WhatsApp *bold*, <= 600 chars, no URL; the link is appended automatically):
-🔥 *<Org> is Hiring <Role>!*\n\n🎓 Eligibility: ...\n📍 Location: ...\n💰 Salary/Stipend: ... (only if verified)\n🗓 Last date: ... (omit if none)\n\n✅ Full details, prep tips & apply link 👇
+whatsapp_text (WhatsApp *bold*, <= 600 chars, no URL; the blog link and the channel follow link are
+appended automatically). Exactly this shape, a blank line between every line:
+🔥 *<Org> is Hiring <Role>!*\n\n🎓 Eligibility: ...\n\nPassout Batch: ...\n\n📍 Location: ...\n\n💰 Stipend: ...\n\n🗓 Last date: ...\n\n✅ Full details, prep tips & apply link 👇
+- Title: short org name + plural role, e.g. "*DRDO VRDE is Hiring Paid Interns!*". For central govt /
+  PSU / central bank jobs add "(Central Government Job)" inside the bold, e.g. "*DRDO VRDE is Hiring Paid
+  Interns!(Central Government Job)*"; for Karnataka govt jobs add "(Karnataka Government Job)".
+- Eligibility: degree + branches in short form (ECE, CSE, EEE, Mech), plus "freshers or up to 1 year
+  experience" / "no backlogs" / "going to final year" when that matters.
+- Passout Batch: years newest first, e.g. "2026/2027" or "2026/2025". Omit the line if unknown.
+- 💰 line: "Stipend: ..." for internships/apprenticeships, "Salary: ..." for jobs; omit if not verified.
+- 🗓 Last date: omit the line if there is no last date.
 
 When done reply with one line: DONE <slug>
