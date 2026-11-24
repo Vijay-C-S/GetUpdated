@@ -1,91 +1,237 @@
-"""Generate a branded 1200x800 WebP banner for a post (no external images needed)."""
+"""Post banners (1200x800 WebP).
+
+Every post gets a designed banner. Colours and the icon change with the post type
+(govt / bank / internship / apprenticeship / WFH / jobs) and vary per post, the company logo is shown
+when one is found, and the key facts (stipend, posts, eligibility) and last date are on the banner.
+"""
 from __future__ import annotations
 
+import math
 import sys
-import textwrap
+import zlib
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H = 1200, 800
-FONT_CANDIDATES_BOLD = [
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-    "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
-    "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf",
-    "C:/Windows/Fonts/segoeuib.ttf",
-    "C:/Windows/Fonts/arialbd.ttf",
-]
-FONT_CANDIDATES_REG = [
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-    "/usr/share/fonts/dejavu/DejaVuSans.ttf",
-    "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf",
-    "C:/Windows/Fonts/segoeui.ttf",
-    "C:/Windows/Fonts/arial.ttf",
-]
+FONT_DIR = Path(__file__).resolve().parent / "fonts"
+FALLBACK = {"Regular": ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "C:/Windows/Fonts/segoeui.ttf"],
+            "Bold": ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "C:/Windows/Fonts/segoeuib.ttf"]}
 
 
-def _font(candidates: list[str], size: int):
-    for path in candidates:
-        if Path(path).exists():
-            return ImageFont.truetype(path, size)
+def _font(weight: str, size: int):
+    """Poppins (the site font, bundled in fonts/), else a system font."""
+    for path in [FONT_DIR / f"Poppins-{weight}.ttf"] + [Path(p) for p in
+                                                        FALLBACK["Regular" if weight == "Regular" else "Bold"]]:
+        if path.exists():
+            return ImageFont.truetype(str(path), size)
     return ImageFont.load_default(size=size)
 
 
-def _gradient() -> Image.Image:
-    top, bottom = (79, 70, 229), (124, 58, 237)  # indigo -> violet (site theme #6366f1)
-    img = Image.new("RGB", (W, H))
-    px = img.load()
-    for y in range(H):
-        for x in range(W):
-            t = (x / W) * 0.45 + (y / H) * 0.55
-            px[x, y] = tuple(int(top[i] + (bottom[i] - top[i]) * t) for i in range(3))
-    return img
+# (background from, background to, accent) per post type; a post picks one by its name hash
+THEMES = {
+    "govt": [((15, 23, 42), (30, 64, 175), (245, 158, 11)), ((30, 27, 75), (29, 78, 216), (251, 191, 36)),
+             ((12, 74, 110), (30, 58, 138), (253, 186, 116))],
+    "bank": [((6, 78, 59), (13, 148, 136), (250, 204, 21)), ((20, 83, 45), (21, 128, 61), (253, 224, 71))],
+    "intern": [((14, 116, 144), (37, 99, 235), (250, 204, 21)), ((15, 118, 110), (8, 145, 178), (254, 240, 138))],
+    "apprentice": [((154, 52, 18), (219, 39, 119), (254, 215, 170)), ((124, 45, 18), (234, 88, 12), (254, 240, 138))],
+    "wfh": [((6, 95, 70), (14, 116, 144), (167, 243, 208)), ((49, 46, 129), (13, 148, 136), (153, 246, 228))],
+    "jobs": [((67, 56, 202), (124, 58, 237), (250, 204, 21)), ((30, 41, 59), (79, 70, 229), (56, 189, 248)),
+             ((131, 24, 67), (76, 29, 149), (251, 207, 232)), ((17, 24, 39), (190, 24, 93), (253, 186, 116))],
+}
+ICON = {"govt": "building", "bank": "building", "intern": "cap", "apprentice": "gear", "wfh": "laptop",
+        "jobs": "briefcase"}
 
 
-def make_banner(out: Path, company: str, role: str, tag: str = "Freshers Jobs",
-                extra: str = "", site: str = "getupdated.in") -> Path:
-    img = _gradient()
+def _kind(tag: str) -> str:
+    t = (tag or "").lower()
+    for key, kind in (("govt", "govt"), ("government", "govt"), ("bank", "bank"), ("intern", "intern"),
+                      ("apprentic", "apprentice"), ("home", "wfh"), ("remote", "wfh")):
+        if key in t:
+            return kind
+    return "jobs"
+
+
+def _gradient(c1, c2) -> Image.Image:
+    mask = Image.linear_gradient("L").rotate(-50, expand=True)
+    m = mask.width // 2
+    mask = mask.crop((m - 90, m - 90, m + 90, m + 90)).resize((W, H), Image.BICUBIC)
+    return Image.composite(Image.new("RGB", (W, H), c2), Image.new("RGB", (W, H), c1), mask)
+
+
+def _wrap(d: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
+    lines, cur = [], ""
+    for word in text.split():
+        trial = f"{cur} {word}".strip()
+        if d.textlength(trial, font=font) <= max_w or not cur:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    return lines + ([cur] if cur else [])
+
+
+def _fit(d, text: str, weight: str, sizes: range, max_w: int, max_lines: int):
+    """Largest font size where the text fits in max_lines; the last line gets '...' if it never fits."""
+    for size in sizes:
+        font = _font(weight, size)
+        lines = _wrap(d, text, font, max_w)
+        if len(lines) <= max_lines and all(d.textlength(l, font=font) <= max_w for l in lines):
+            return font, lines
+    lines = lines[:max_lines]
+    while lines and d.textlength(lines[-1] + "...", font=font) > max_w and " " in lines[-1]:
+        lines[-1] = lines[-1].rsplit(" ", 1)[0]
+    lines[-1] += "..."
+    return font, lines
+
+
+def _icon(d: ImageDraw.ImageDraw, kind: str, cx: int, cy: int, s: int, bg) -> None:
+    """Big simple white icon (drawn, no image files)."""
+    w, soft = (255, 255, 255, 235), (255, 255, 255, 170)
+    if kind == "cap":
+        d.rounded_rectangle((cx - .55 * s, cy - .1 * s, cx + .55 * s, cy + .5 * s), radius=int(.18 * s), fill=soft)
+        d.polygon([(cx - s, cy - .25 * s), (cx, cy - .65 * s), (cx + s, cy - .25 * s), (cx, cy + .15 * s)], fill=w)
+        d.line([(cx + .78 * s, cy - .2 * s), (cx + .78 * s, cy + .5 * s)], fill=w, width=max(4, s // 18))
+        d.ellipse((cx + .7 * s, cy + .45 * s, cx + .86 * s, cy + .61 * s), fill=w)
+    elif kind == "building":
+        d.polygon([(cx - s, cy - .38 * s), (cx, cy - .85 * s), (cx + s, cy - .38 * s)], fill=w)
+        d.rectangle((cx - s, cy - .34 * s, cx + s, cy - .22 * s), fill=w)
+        for i in range(4):
+            x = cx - .78 * s + i * .52 * s
+            d.rectangle((x - .09 * s, cy - .14 * s, x + .09 * s, cy + .42 * s), fill=soft)
+        d.rectangle((cx - 1.08 * s, cy + .48 * s, cx + 1.08 * s, cy + .62 * s), fill=w)
+    elif kind == "laptop":
+        d.rounded_rectangle((cx - .8 * s, cy - .62 * s, cx + .8 * s, cy + .34 * s), radius=int(.08 * s),
+                            outline=w, width=max(6, s // 10))
+        d.polygon([(cx - s, cy + .42 * s), (cx + s, cy + .42 * s), (cx + .88 * s, cy + .58 * s),
+                   (cx - .88 * s, cy + .58 * s)], fill=w)
+    elif kind == "gear":
+        r_out, r_in = .8 * s, .62 * s
+        for k in range(8):
+            a = k * math.pi / 4
+            pts = []
+            for da, r in ((-.17, r_in), (-.12, r_out), (.12, r_out), (.17, r_in)):
+                pts.append((cx + r * math.cos(a + da), cy + r * math.sin(a + da)))
+            d.polygon(pts, fill=w)
+        d.ellipse((cx - r_in, cy - r_in, cx + r_in, cy + r_in), fill=w)
+        d.ellipse((cx - .28 * s, cy - .28 * s, cx + .28 * s, cy + .28 * s), fill=(0, 0, 0, 0))
+    else:  # briefcase
+        t = max(8, s // 9)
+        d.rounded_rectangle((cx - .36 * s, cy - .78 * s, cx + .36 * s, cy - .25 * s), radius=int(.14 * s),
+                            outline=w, width=t)
+        d.rounded_rectangle((cx - s, cy - .45 * s, cx + s, cy + .62 * s), radius=int(.14 * s), fill=w)
+        d.rectangle((cx - s, cy - .02 * s, cx + s, cy + .06 * s), fill=(*bg, 255))
+        d.rounded_rectangle((cx - .14 * s, cy - .1 * s, cx + .14 * s, cy + .14 * s), radius=6, fill=soft)
+
+
+def _logo_badge(logo: Image.Image, max_w: int = 300, max_h: int = 210) -> Image.Image:
+    """Logo on a white rounded card with a soft shadow (RGBA)."""
+    logo = logo.convert("RGBA")
+    scale = min(max_w / logo.width, max_h / logo.height, 3.0)
+    logo = logo.resize((max(1, round(logo.width * scale)), max(1, round(logo.height * scale))), Image.LANCZOS)
+    cw, ch = max(logo.width + 70, 240), max(logo.height + 70, 240)
+    sh = 30
+    out = Image.new("RGBA", (cw + 2 * sh, ch + 2 * sh), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", out.size, (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rounded_rectangle((sh, sh + 10, sh + cw, sh + ch + 10), radius=36, fill=(0, 0, 0, 110))
+    out = Image.alpha_composite(out, shadow.filter(ImageFilter.GaussianBlur(16)))
+    ImageDraw.Draw(out).rounded_rectangle((sh, sh, sh + cw, sh + ch), radius=36, fill="white")
+    out.alpha_composite(logo, (sh + (cw - logo.width) // 2, sh + (ch - logo.height) // 2))
+    return out
+
+
+def make_banner(out: Path, company: str, role: str, tag: str = "Freshers Jobs", extra: str = "",
+                site: str = "getupdated.in", chips: list[str] | None = None, deadline: str = "",
+                logo: Image.Image | None = None) -> Path:
+    kind = _kind(tag)
+    seed = zlib.crc32(f"{company}|{role}".encode())
+    c1, c2, accent = THEMES[kind][seed % len(THEMES[kind])]
+    img = _gradient(c1, c2).convert("RGBA")
+
+    # soft glows + dot grid for depth
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    g = ImageDraw.Draw(glow)
+    gx = 860 + (seed >> 4) % 200
+    g.ellipse((gx - 330, -260, gx + 330, 400), fill=(*accent, 85))
+    g.ellipse((-260, H - 330, 300 + (seed >> 8) % 160, H + 230), fill=(255, 255, 255, 40))
+    img = Image.alpha_composite(img, glow.filter(ImageFilter.GaussianBlur(110)))
+    deco = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    dd = ImageDraw.Draw(deco)
+    for y in range(40, H - 140, 30):
+        for x in range(W - 420, W - 20, 30):
+            dd.ellipse((x - 2, y - 2, x + 2, y + 2), fill=(255, 255, 255, 34))
+    cx, cy = 958, 318
+    dd.ellipse((cx - 190, cy - 190, cx + 190, cy + 190), fill=(255, 255, 255, 26))
+    dd.ellipse((cx - 232, cy - 232, cx + 232, cy + 232), outline=(255, 255, 255, 60), width=3)
+    if logo is None:
+        _icon(dd, ICON[kind], cx, cy + 10, 128, c2)
+    img = Image.alpha_composite(img, deco)
+    if logo is not None:
+        badge = _logo_badge(logo)
+        img.alpha_composite(badge, (cx - badge.width // 2, cy - badge.height // 2))
+
     d = ImageDraw.Draw(img)
-    # decorative circles
-    d.ellipse((W - 380, -180, W + 160, 360), outline=(165, 160, 255), width=3)
-    d.ellipse((-160, H - 260, 260, H + 160), outline=(165, 160, 255), width=3)
-
-    pad = 80
-    f_tag, f_company, f_role, f_extra, f_site = (
-        _font(FONT_CANDIDATES_BOLD, 30), _font(FONT_CANDIDATES_BOLD, 92),
-        _font(FONT_CANDIDATES_BOLD, 50), _font(FONT_CANDIDATES_REG, 34),
-        _font(FONT_CANDIDATES_BOLD, 32))
-
+    pad, col_w = 80, 620
     # tag pill
-    tag_text = tag.upper()
+    f_tag = _font("Bold", 26)
+    tag_text = (tag or "Jobs").upper()
     tw = d.textlength(tag_text, font=f_tag)
-    d.rounded_rectangle((pad, 90, pad + tw + 48, 146), radius=28, fill=(250, 204, 21))
-    d.text((pad + 24, 101), tag_text, font=f_tag, fill=(30, 27, 75))
+    d.rounded_rectangle((pad, 72, pad + tw + 52, 126), radius=27, fill=accent)
+    d.text((pad + 26, 99), tag_text, font=f_tag, fill=(17, 24, 39), anchor="lm")
 
-    y = 230
-    company_lines = textwrap.wrap(company, width=18)[:2]
-    for line in company_lines:
-        d.text((pad, y), line, font=f_company, fill="white")
-        y += 104
-    d.text((pad, y + 6), "is hiring", font=f_extra, fill=(224, 222, 255))
-    y += 70
-    for line in textwrap.wrap(role, width=36)[:2]:
+    # company / is hiring / role / extra
+    y = 160
+    f_co, co_lines = _fit(d, company, "ExtraBold", range(96, 71, -4), col_w, 1)  # one line if it stays big
+    if co_lines[-1].endswith("..."):
+        f_co, co_lines = _fit(d, company, "ExtraBold", range(88, 55, -4), col_w, 2)
+    for line in co_lines:
+        d.text((pad, y), line, font=f_co, fill="white")
+        y += int(f_co.size * 1.1)
+    f_hire = _font("SemiBold", 32)
+    y += 12
+    d.text((pad, y), "is hiring", font=f_hire, fill=accent)
+    y += 62
+    f_role, role_lines = _fit(d, role, "Bold", range(52, 31, -4), col_w + 20, 3 if len(co_lines) == 1 else 2)
+    for line in role_lines:
         d.text((pad, y), line, font=f_role, fill="white")
-        y += 62
-    if extra:
-        y += 14
-        for line in textwrap.wrap(extra, width=55)[:2]:
-            d.text((pad, y), line, font=f_extra, fill=(224, 222, 255))
-            y += 44
+        y += int(f_role.size * 1.22)
+    if extra and y < H - 290:
+        f_ex, ex_lines = _fit(d, extra, "Regular", range(30, 23, -2), col_w + 20, 1)
+        d.text((pad, y + 8), ex_lines[0], font=f_ex, fill=(226, 232, 240))
 
-    # footer bar
-    d.rectangle((0, H - 90, W, H), fill=(30, 27, 75))
-    d.text((pad, H - 68), site, font=f_site, fill="white")
-    cta = "Full details + Apply link inside"
-    d.text((W - pad - d.textlength(cta, font=f_extra), H - 66), cta, font=f_extra, fill=(250, 204, 21))
+    # key fact chips
+    f_chip = _font("SemiBold", 28)
+    x, chip_y = pad, H - 200
+    for chip in [c.strip() for c in (chips or []) if c and c.strip()][:3]:
+        cw = d.textlength(chip, font=f_chip) + 52
+        if x + cw > W - pad:
+            break
+        layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(layer).rounded_rectangle((x, chip_y, x + cw, chip_y + 62), radius=31,
+                                                fill=(255, 255, 255, 46), outline=(255, 255, 255, 110), width=2)
+        img = Image.alpha_composite(img, layer)
+        d = ImageDraw.Draw(img)
+        d.text((x + 26, chip_y + 31), chip, font=f_chip, fill="white", anchor="lm")
+        x += cw + 16
+
+    # footer: site + last date badge (or call to action)
+    foot = tuple(int(c * .45) for c in c1)
+    d.rectangle((0, H - 100, W, H), fill=foot)
+    d.ellipse((pad, H - 58, pad + 14, H - 44), fill=accent)
+    d.text((pad + 28, H - 50), site, font=_font("Bold", 32), fill="white", anchor="lm")
+    if deadline:
+        f_dl, f_dv = _font("SemiBold", 22), _font("Bold", 30)
+        label, val = "LAST DATE", deadline
+        bw = d.textlength(label, font=f_dl) + d.textlength(val, font=f_dv) + 70
+        d.rounded_rectangle((W - pad - bw, H - 80, W - pad, H - 20), radius=30, fill=(239, 68, 68))
+        d.text((W - pad - bw + 26, H - 50), label, font=f_dl, fill=(254, 226, 226), anchor="lm")
+        d.text((W - pad - 26, H - 50), val, font=f_dv, fill="white", anchor="rm")
+    else:
+        d.text((W - pad, H - 50), "Full details + apply link inside", font=_font("SemiBold", 28),
+               fill=accent, anchor="rm")
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out, "WEBP", quality=82, method=6)
+    img.convert("RGB").save(out, "WEBP", quality=85, method=6)
     return out
 
 
@@ -106,8 +252,9 @@ def _get_image(url: str):
     return img
 
 
-def _page_images(page_url: str) -> tuple[list[str], list[str]]:
-    """(share images, logo candidates) found on a page, best first."""
+def _page_logos(page_url: str) -> list[str]:
+    """Logo candidates on a page: the FIRST <img> logo (the site's own, in the header; later ones are
+    often partner / govt portal logos) and the apple-touch-icon."""
     from urllib.parse import urljoin
 
     import requests
@@ -115,63 +262,50 @@ def _page_images(page_url: str) -> tuple[list[str], list[str]]:
     r = requests.get(page_url, headers=HEADERS, timeout=20)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
-    base = r.url
-    share = [urljoin(base, m["content"]) for m in soup.find_all("meta", content=True)
-             if (m.get("property") or m.get("name") or "").lower() in ("og:image", "og:image:url", "twitter:image")]
-    logos = [urljoin(base, l["href"]) for l in soup.find_all("link", href=True)
-             if "apple-touch-icon" in " ".join(l.get("rel", [])).lower()]
+    base, logos = r.url, []
     for img in soup.find_all("img", src=True):
         hay = " ".join([img.get("src", ""), img.get("alt", ""), " ".join(img.get("class", [])), img.get("id", "")]).lower()
         if "logo" in hay:
             logos.append(urljoin(base, img["src"]))
-    return share, logos
+            break
+    logos += [urljoin(base, l["href"]) for l in soup.find_all("link", href=True)
+              if "apple-touch-icon" in " ".join(l.get("rel", [])).lower()]
+    return logos
 
 
-def _fit_cover(img: Image.Image) -> Image.Image:
-    img = img.convert("RGB")
-    scale = max(W / img.width, H / img.height)
-    img = img.resize((round(img.width * scale), round(img.height * scale)), Image.LANCZOS)
-    left, top = (img.width - W) // 2, (img.height - H) // 2
-    return img.crop((left, top, left + W, top + H))
+def _usable(img) -> bool:
+    return bool(img) and (min(img.width, img.height) >= 90 or (img.width >= 160 and img.height >= 40))
 
 
-def _logo_card(logo: Image.Image) -> Image.Image:
-    card = Image.new("RGB", (W, H), "white")
-    logo = logo.convert("RGBA")
-    scale = min(720 / logo.width, 460 / logo.height)
-    logo = logo.resize((max(1, round(logo.width * scale)), max(1, round(logo.height * scale))), Image.LANCZOS)
-    card.paste(logo, ((W - logo.width) // 2, (H - logo.height) // 2), logo)
-    return card
-
-
-def company_image(out: Path, page_urls: list[str]) -> bool:
-    """Save the company's own share image or logo as a 1200x800 WebP. Returns False if none found."""
-    logos_seen: list[str] = []
-    for page in [u for u in page_urls if u]:
+def company_logo(page_urls: list[str]) -> Image.Image | None:
+    """The company's logo for the banner: from its website / official page, else Google's site icon
+    service (by domain only). None if nothing good enough is found."""
+    from urllib.parse import urlparse
+    pages = [u for u in page_urls if u and u.startswith("http")]
+    for page in [u for u in pages if not u.lower().split("?")[0].endswith(".pdf")]:
         try:
-            share, logos = _page_images(page)
+            candidates = _page_logos(page)
         except Exception:  # noqa: BLE001
             continue
-        for url in share:
+        for url in candidates[:4]:
             try:
                 img = _get_image(url)
-                if img and img.width >= 600 and img.height >= 300:
-                    _fit_cover(img).save(out, "WEBP", quality=82, method=6)
-                    return True
+                if _usable(img):
+                    return img
             except Exception:  # noqa: BLE001
                 pass
-        logos_seen += logos
-    for url in logos_seen:
+    for dom in dict.fromkeys(urlparse(u).netloc for u in pages):
         try:
-            img = _get_image(url)
-            if img and min(img.width, img.height) >= 96:
-                _logo_card(img).save(out, "WEBP", quality=85, method=6)
-                return True
+            img = _get_image(f"https://www.google.com/s2/favicons?domain={dom}&sz=256")
+            if img and min(img.width, img.height) >= 120:
+                return img
         except Exception:  # noqa: BLE001
             pass
-    return False
+    return None
 
 
 if __name__ == "__main__":
-    # quick manual test: python banner.py out.webp "Company" "Role" "Tag" "extra"
-    make_banner(Path(sys.argv[1]), *sys.argv[2:6])
+    # quick manual test: python banner.py out.webp "Company" "Role" "Tag" "extra" "chip1|chip2" "12 Dec 2026"
+    a = sys.argv[1:] + [""] * 7
+    make_banner(Path(a[0]), a[1], a[2], a[3] or "Freshers Jobs", a[4], chips=[c for c in a[5].split("|") if c],
+                deadline=a[6])

@@ -22,7 +22,7 @@ import requests
 from bs4 import BeautifulSoup
 
 import rrb
-from banner import company_image, make_banner
+from banner import company_logo, make_banner
 from claude_cli import run_claude
 from common import (AUTO_DIR, CONFIG, DRAFTS_DIR, REPO_DIR, FileLock, existing_blog_slugs, get_job,
                     git_is_clean, log, now_iso, run, today_ist, update_job)
@@ -609,7 +609,7 @@ def small_count_mentions(meta: dict, body: str) -> list[str]:
     """Counts below 100 that slipped into the text (house rule: don't publish them)."""
     hay = " ".join([body, meta.get("slug", "").replace("-", " ")] +
                    [str(meta.get(k, "")) for k in ("h1", "seo_title", "card_title", "card_excerpt",
-                                                   "whatsapp_text", "meta_description", "og_title")] +
+                                                   "whatsapp_text", "meta_description", "og_title", "banner_chips")] +
                    [str(f) for f in meta.get("key_facts", [])] + [str(f) for f in meta.get("faqs", [])])
     return sorted({m.group(0) for m in SMALL_COUNT_RE.finditer(re.sub(r"<[^>]+>", " ", hay))})
 
@@ -705,6 +705,28 @@ def finish_with_link(job_id: str) -> dict:
     return finalize(job, draft_dir, meta, body)
 
 
+def banner_chips(meta: dict) -> list[str]:
+    """Up to 3 short facts for the banner: the writer's banner_chips, else built from the job data."""
+    chips = [str(c).strip() for c in meta.get("banner_chips") or [] if str(c).strip() and len(str(c)) <= 26]
+    if chips:
+        return [c for c in chips if not SMALL_COUNT_RE.search(c)][:3]
+    job = meta.get("job") or {}
+    if int(job.get("vacancies") or 0) >= 100:
+        chips.append(f"{int(job['vacancies']):,} posts")
+    chips += [p.strip() for p in str(meta.get("banner_extra") or "").split("•") if 0 < len(p.strip()) <= 26]
+    return chips[:3]
+
+
+def banner_deadline(meta: dict) -> str:
+    """'12 Dec 2026' from job.valid_through, '' if none or already past."""
+    from datetime import date
+    try:
+        d = date.fromisoformat(str((meta.get("job") or {}).get("valid_through") or "")[:10])
+    except ValueError:
+        return ""
+    return f"{d.day} {d:%b %Y}" if d >= today_ist() else ""
+
+
 def finalize(job: dict, draft_dir: Path, meta: dict, body: str) -> dict:
     job_id = draft_dir.name
     small = small_count_mentions(meta, body)
@@ -720,14 +742,14 @@ def finalize(job: dict, draft_dir: Path, meta: dict, body: str) -> dict:
     page = assemble(meta, body)
     validate_page(page)
     (draft_dir / "post.html").write_text(page, encoding="utf-8")
-    # Post image: the company's own share image / logo; generated banner only as a fallback.
+    # Post image: designed banner (colours/icon by post type, key facts, last date) with the company logo.
     img_pages = [meta.get("company_url"), meta.get("official_url")]
     if job.get("source_type") == "ats":
         img_pages.append(job["url"])
-    if not company_image(draft_dir / "banner.webp", img_pages):
-        log("writer: no company image found; using generated banner")
-        make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"],
-                    meta.get("banner_extra", ""))
+    logo = company_logo(img_pages)
+    log(f"writer: banner {'with company logo' if logo else 'with icon (no logo found)'}")
+    make_banner(draft_dir / "banner.webp", meta["company"], meta["role"], meta["tag"], meta.get("banner_extra", ""),
+                chips=banner_chips(meta), deadline=banner_deadline(meta), logo=logo)
     update_job(job_id, status="draft_ready", slug=meta["slug"], draft_title=meta["h1"],
                drafted_at=now_iso(), drafted_on=today_ist().isoformat())
     log(f"writer: draft ready {meta['slug']}")

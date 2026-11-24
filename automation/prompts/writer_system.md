@@ -104,6 +104,7 @@ No "Apply Here" buttons or links anywhere else.
  "tag": "Freshers Jobs | Internship | Apprenticeship | Work From Home | Govt Jobs | Karnataka Govt Jobs | Bank Jobs",
  "image_alt": "...", "image_caption": "...", "sitemap_image_title": "...",
  "company": "short org name", "role": "short role", "banner_extra": "<= 50 chars, e.g. 'B.E/B.Tech ECE • Bengaluru'",
+ "banner_chips": ["2-3 verified facts for the post image, each <= 24 chars, most attractive first, e.g. '₹30,000 stipend', '1,265 posts', '2025/2026 batch', 'Work from home'"],
  "official_url": "official notification/apply URL", "company_url": "official website",
  "job": {"title": "...", "description": "2-3 sentences", "employment_type": "FULL_TIME|INTERN|CONTRACTOR|TEMPORARY",
          "city": "...", "region": "Karnataka", "remote": false, "qualifications": "...",
