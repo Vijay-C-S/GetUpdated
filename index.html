@@ -401,16 +401,12 @@
             .hero-title { font-size: 1.85rem; line-height: 1.3 }
         }
     </style>
-    <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" as="style" onload="this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    </noscript>
 
     <style>
         .view-job-btn {
@@ -1015,7 +1011,7 @@
     </button>
 
     <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
     <script>
         // ── EmailJS Setup ──────────────────────────────────────────────────────
         // 1. Sign up free at https://emailjs.com
@@ -1026,8 +1022,10 @@
         // ──────────────────────────────────────────────────────────────────────
         window.EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
         window.EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
-        if (typeof emailjs !== 'undefined') {
-            emailjs.init('YOUR_PUBLIC_KEY');               // e.g. 'AbCdEfGhIjKlMnOp'
+        // Until all three are filled in, the form opens the visitor's email app instead.
+        window.EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'AbCdEfGhIjKlMnOp'
+        if (typeof emailjs !== 'undefined' && !/^YOUR_/.test(window.EMAILJS_PUBLIC_KEY)) {
+            emailjs.init(window.EMAILJS_PUBLIC_KEY);
         }
     </script>
     <script src="script.js" defer></script>

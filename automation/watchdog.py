@@ -219,11 +219,36 @@ def is_duplicate(title: str, jobs: dict, slugs: list[str]) -> str | None:
     return None
 
 
+FAIL_ALERT = 3  # consecutive failed scans (~6h at the 2h cron) before a source is reported broken
+
+
+def record_health(health: dict, key: str, error: str | None) -> str | None:
+    """Track consecutive failures per source; return a message when it crosses FAIL_ALERT or recovers.
+    Each broken source is reported once, not on every scan."""
+    h = health.setdefault(key, {"fails": 0})
+    if error is None:
+        was = h["fails"]
+        h["fails"] = 0
+        h.pop("error", None)
+        return f"✅ {key} works again" if was >= FAIL_ALERT else None
+    h["fails"] += 1
+    h["error"] = error[:200]
+    h["since"] = h.get("since") if h["fails"] > 1 else now_iso()
+    return f"⚠️ {key} failing for {h['fails']} scans: {error[:150]}" if h["fails"] == FAIL_ALERT else None
+
+
 def scan() -> int:
     sources = read_json(AUTO_DIR / "sources.json", [])
     src_state = read_json(SOURCES_STATE_FILE, {})
     slugs = existing_blog_slugs()
     new_count = 0
+    health = src_state.setdefault("_health", {})
+    alerts: list[str] = []
+
+    def track(key: str, error: str | None) -> None:
+        msg = record_health(health, key, error)
+        if msg:
+            alerts.append(msg)
 
     with FileLock("jobs", max_age=120, wait=60):
         jobs = load_jobs()
@@ -239,8 +264,10 @@ def scan() -> int:
                         slug, cname = (comp, comp.title()) if isinstance(comp, str) else (comp["slug"], comp["name"])
                         try:
                             items += parse_ats(src["provider"], slug, cname)
+                            track(f"{src['provider']}/{slug}", None)
                         except Exception as exc:  # noqa: BLE001
                             log(f"watchdog: {src['provider']}/{slug} failed: {exc}")
+                            track(f"{src['provider']}/{slug}", str(exc))
                 elif kind == "email":
                     from email_alerts import fetch_alerts
                     items = fetch_alerts(src)
@@ -252,7 +279,9 @@ def scan() -> int:
                     items = parse_feed(text) if kind == "rss" else parse_page(text, src["url"], src.get("link_pattern"))
             except Exception as exc:  # noqa: BLE001
                 log(f"watchdog: source '{name}' failed: {exc}")
+                track(name, str(exc))
                 continue
+            track(name, None)
 
             state = src_state.setdefault(name, {"seen": [], "initialized": False})
             seen = set(state["seen"])
@@ -291,6 +320,9 @@ def scan() -> int:
             new_count += added
         save_jobs(jobs)
     write_json(SOURCES_STATE_FILE, src_state)
+    if alerts:
+        import telegram_api as tg
+        tg.notify("🩺 Lead sources\n" + "\n".join(alerts[:30]))
     log(f"watchdog: done, {new_count} new candidate(s)")
     return new_count
 

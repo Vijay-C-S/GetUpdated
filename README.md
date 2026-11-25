@@ -1,132 +1,64 @@
-# GetUpdated - Modular Website Structure
+# GetUpdated
 
-## 📁 Folder Structure
+Static site for [getupdated.in](https://www.getupdated.in): job openings, government recruitment,
+and tech/AI news for freshers. Hosted on GitHub Pages (see `CNAME`); every push to `main` goes live.
+
+## Layout
 
 ```
 Get_Updated/
-├── index.html              # Main HTML file (use this for deployment)
-├── index-modular.html      # Modular HTML with comments (reference)
-├── script.js               # Combined JavaScript (use for simple deployment)
-├── styles.css              # Original combined CSS (backup)
-│
-├── css/                    # 📂 MODULAR CSS FILES
-│   ├── base.css           # Variables, reset, common styles
-│   ├── components.css     # Preloader, back-to-top, responsive base
-│   ├── navbar.css         # Navigation bar styles
-│   ├── hero.css           # Hero section styles
-│   ├── services.css       # Services section styles
-│   ├── news.css           # News/Tech section styles
-│   ├── jobs.css           # Jobs section styles
-│   ├── income.css         # Income ideas section styles
-│   ├── offers.css         # Offers section styles
-│   ├── contact.css        # Contact section styles
-│   └── footer.css         # Footer styles
-│
-├── js/                     # 📂 MODULAR JAVASCRIPT FILES
-│   ├── main.js            # Main entry point (ES6 modules)
-│   ├── navbar.js          # Navigation functionality
-│   ├── theme.js           # Dark/light theme toggle
-│   ├── hero.js            # Hero animations & stats
-│   ├── jobs.js            # Job filtering & bookmarks
-│   ├── offers.js          # Countdown timers
-│   ├── contact.js         # Contact form handling
-│   └── utils.js           # Utility functions
-│
-└── sections/               # 📂 HTML SECTION TEMPLATES
-    ├── navbar.html        # Navigation template
-    ├── hero.html          # Hero section template
-    ├── services.html      # Services section template
-    ├── news.html          # News section template
-    ├── jobs.html          # Jobs section template
-    ├── income.html        # Income ideas template
-    ├── offers.html        # Offers section template
-    ├── contact.html       # Contact section template
-    └── footer.html        # Footer template
+├── index.html, blogs.html, jobs.html, job-detail.html, tech-news.html, offers.html
+├── about.html, disclaimer.html, privacy-policy.html, terms-of-service.html, 404.html
+├── styles.css            # site-wide CSS (minified); pages also carry their own inline <style>
+├── blog-styles.css       # extra styles used by blog posts
+├── script.js             # site-wide JS (minified): nav, theme, job filters, contact form, WhatsApp button
+├── js/engagement-analytics.js   # used by jobs.html, job-detail.html, offers.html
+├── blogs/*.html          # one self-contained page per post
+├── images/               # post/banner images (.webp preferred)
+├── sitemap.xml, robots.txt, manifest.json, ads.txt
+├── *.txt (hex names)     # IndexNow key files - keep them
+├── google*.html          # Search Console verification - keep it
+├── automation/           # the job-blog bot (see automation/README.md)
+└── tools/update_heads.py # bulk-edit the <head> of many pages at once
 ```
 
-## 🔧 How to Update Each Section
+## Adding content
 
-### 📰 To Add a New News Article:
-1. Open `sections/news.html`
-2. Copy an existing `<article class="tech-card">` block
-3. Paste and modify the content
-4. Styles are in `css/news.css`
+Most job posts are written and published by the bot in `automation/`: it creates
+`blogs/<slug>.html` and `images/<slug>.webp`, adds cards to `index.html` and `blogs.html`, and adds
+the URL to `sitemap.xml`. See [automation/README.md](automation/README.md).
 
-### 💼 To Add a New Job Listing:
-1. Open `sections/jobs.html`
-2. Copy an existing `<div class="job-card">` block
-3. Update company logo class, job details, tags
-4. Set `data-type` for filtering (remote/fulltime/internship)
-5. Styles are in `css/jobs.css`
+To add a post by hand, copy a recent file in `blogs/`, then add:
+1. a card on `index.html` and `blogs.html` (copy an existing one),
+2. a `<url>` entry in `sitemap.xml`.
 
-### 💡 To Add a New Income Idea:
-1. Open `sections/income.html`
-2. Copy an existing `<div class="income-card">` block
-3. Change icon, title, description, earning potential
-4. Styles are in `css/income.css`
+## Changing something on every page
 
-### 🎁 To Add a New Offer:
-1. Open `sections/offers.html`
-2. Copy an existing `<div class="offer-card">` block
-3. Update badge, discount, image, countdown time
-4. Add `hot` class for highlighted deals
-5. Styles are in `css/offers.css`
+Pages don't share a layout file, so a change to the `<head>` (a script, a stylesheet, a meta tag)
+has to be made in every page. Use the helper rather than editing by hand:
 
-### 🎨 To Change Colors/Theme:
-1. Open `css/base.css`
-2. Modify the `:root` CSS variables
-3. Key variables:
-   - `--primary`: Main brand color
-   - `--secondary`: Accent color
-   - `--bg-primary`: Background color
-   - `--text-primary`: Text color
-
-### 📱 To Modify Responsive Breakpoints:
-1. Each CSS file has its own responsive styles at the bottom
-2. Common breakpoints:
-   - 1400px: Large desktop
-   - 1024px: Desktop/Laptop
-   - 900px: Tablet (hamburger menu appears)
-   - 768px: Mobile landscape
-   - 576px: Mobile portrait
-   - 375px: Small mobile
-
-## 🚀 Deployment Options
-
-### Option 1: Simple (Recommended for beginners)
-Use `index.html` with `script.js` - everything works out of the box.
-
-### Option 2: Modular CSS only
-Use `index-modular.html` which links to separate CSS files in `/css/` folder.
-
-### Option 3: Full Modular (Advanced)
-Use ES6 modules by changing the script tag to:
-```html
-<script type="module" src="js/main.js"></script>
+```bash
+python tools/update_heads.py --help
+python tools/update_heads.py replace 'old snippet' 'new snippet'           # dry run
+python tools/update_heads.py replace 'old snippet' 'new snippet' --write
 ```
-Note: Requires a web server (won't work with file:// protocol)
 
-## 📝 Quick Reference
+Also update `automation/templates/post_template.html` so future posts get the same change.
 
-| Section | HTML File | CSS File | JS File |
-|---------|-----------|----------|---------|
-| Navbar | sections/navbar.html | css/navbar.css | js/navbar.js |
-| Hero | sections/hero.html | css/hero.css | js/hero.js |
-| Services | sections/services.html | css/services.css | - |
-| News | sections/news.html | css/news.css | - |
-| Jobs | sections/jobs.html | css/jobs.css | js/jobs.js |
-| Income | sections/income.html | css/income.css | - |
-| Offers | sections/offers.html | css/offers.css | js/offers.js |
-| Contact | sections/contact.html | css/contact.css | js/contact.js |
-| Footer | sections/footer.html | css/footer.css | - |
+## Contact form
 
-## 💡 Tips
+The form on `index.html` sends through EmailJS. Fill in `EMAILJS_SERVICE_ID`,
+`EMAILJS_TEMPLATE_ID` and `EMAILJS_PUBLIC_KEY` near the bottom of `index.html` (template variables:
+`{{from_name}} {{from_email}} {{subject}} {{message}}`). Until all three are set, submitting the
+form opens the visitor's email app addressed to contact.us.getupdated@gmail.com.
 
-1. **Adding new sections**: Create new files in `/sections/`, `/css/`, and `/js/` folders
-2. **Testing changes**: Always test on multiple screen sizes
-3. **Backup**: Keep `styles.css` and `script.js` as backups
-4. **Icons**: Uses Font Awesome 6 - browse icons at fontawesome.com
-5. **Images**: Using Unsplash for placeholder images - replace with your own
+## Checks
 
----
-Made with ❤️ by GetUpdated Team
+- `seo-qa-check.ps1`: SEO checks across all pages (see `SEO_QA_CHECKLIST.md`).
+- `python -m pytest automation/tests`: tests for the bot's pure logic.
+
+## Note on `.htaccess`
+
+GitHub Pages ignores `.htaccess`, so its headers and CSP have no effect today. If the site
+ever moves to Apache, the CSP needs `https://cdn.jsdelivr.net` added to `script-src` (EmailJS
+loads from there).
