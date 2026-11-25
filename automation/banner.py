@@ -125,12 +125,23 @@ def _icon(d: ImageDraw.ImageDraw, kind: str, cx: int, cy: int, s: int, bg) -> No
         d.rounded_rectangle((cx - .14 * s, cy - .1 * s, cx + .14 * s, cy + .14 * s), radius=6, fill=soft)
 
 
-def _logo_badge(logo: Image.Image, max_w: int = 330, max_h: int = 230) -> Image.Image:
+def _trim(logo: Image.Image) -> Image.Image:
+    """Crop away transparent / near-white padding so the visible logo is centred and fills the card."""
+    flat = Image.new("RGBA", logo.size, "white")
+    flat.alpha_composite(logo)
+    ink = flat.convert("L").point(lambda v: 255 if v < 245 else 0)
+    box = ink.getbbox()
+    if not box or (box[2] - box[0]) < 8 or (box[3] - box[1]) < 8:
+        return logo
+    return logo.crop(box)
+
+
+def _logo_badge(logo: Image.Image, max_w: int = 380, max_h: int = 270) -> Image.Image:
     """Logo on a white rounded card with a soft shadow (RGBA)."""
-    logo = logo.convert("RGBA")
-    scale = min(max_w / logo.width, max_h / logo.height, 3.0)
+    logo = _trim(logo.convert("RGBA"))
+    scale = min(max_w / logo.width, max_h / logo.height, 4.0)
     logo = logo.resize((max(1, round(logo.width * scale)), max(1, round(logo.height * scale))), Image.LANCZOS)
-    cw, ch = max(logo.width + 70, 240), max(logo.height + 70, 240)
+    cw, ch = max(logo.width + 60, 280), max(logo.height + 60, 280)
     sh = 30
     out = Image.new("RGBA", (cw + 2 * sh, ch + 2 * sh), (0, 0, 0, 0))
     shadow = Image.new("RGBA", out.size, (0, 0, 0, 0))
