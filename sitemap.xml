@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -579,6 +579,16 @@
     <image:image>
       <image:loc>https://www.getupdated.in/images/iocl-pipelines-division-apprentice-recruitment-500-seats-diploma-graduate-12th-pass-2026.webp</image:loc>
       <image:title>IOCL Pipelines Apprentice Recruitment 2026</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/blogs/isomorph-ai-software-engineering-intern-hiring-freshers-bengaluru-2026.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.getupdated.in/images/isomorph-ai-software-engineering-intern-hiring-freshers-bengaluru-2026.webp</image:loc>
+      <image:title>Isomorph AI Software Engineering Intern 2026 Bengaluru</image:title>
     </image:image>
   </url>
   <url>
