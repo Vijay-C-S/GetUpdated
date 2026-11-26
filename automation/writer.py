@@ -354,7 +354,10 @@ def save_reply(draft_dir: Path, reply: str, need_meta: bool = True) -> None:
         meta = json.loads(raw[raw.find("{"):raw.rfind("}") + 1])
         (draft_dir / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     elif need_meta:
-        raise ValueError("writer reply has no ===META=== block: " + reply[:300])
+        log("writer: reply had no ===META=== block: " + reply[:1500])
+        raise ValueError("No job details found. The link has no readable job text "
+                         "(e.g. a Microsoft Form or login page), so there was nothing to write a post from. "
+                         "Send the job title/company or an official notification link.")
     if b:
         md = re.sub(r"^```\w*\s*|\s*```$", "", b.group(1).strip())
         (draft_dir / "body.md").write_text(md, encoding="utf-8")
