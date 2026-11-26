@@ -114,6 +114,28 @@ def official_links(page_html: str, base: str) -> list[tuple[str, str]]:
 
 
 LINKEDIN_JOB = re.compile(r"linkedin\.com/(?:comm/)?jobs/view/(?:[^/?#]*?-)?(\d{6,})", re.I)
+MS_FORM = re.compile(r"https?://(?:forms\.office\.com|forms\.cloud\.microsoft|forms\.microsoft\.com)/\S+", re.I)
+
+
+def ms_form_text(url: str) -> str:
+    """Microsoft Forms pages are a JS app (the HTML is just "Loading…"). The form's public startup JSON,
+    the same one the page itself loads, gives its title, description and question list. Short /r/ links
+    redirect to a URL that carries the form id."""
+    if "id=" not in url:
+        url = requests.get(url, headers=HEADERS, timeout=30, allow_redirects=True).url
+    fid = re.search(r"[?&]id=([^&#]+)", url)
+    if not fid:
+        raise ValueError(f"no form id in {url}")
+    host = urlparse(url).netloc or "forms.office.com"
+    r = requests.get(f"https://{host}/handlers/ResponsePageStartup.ashx",
+                     params={"id": fid.group(1), "mobile": "false"}, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    form = (r.json().get("data") or {}).get("form") or {}
+    if not form.get("title") and not form.get("description"):
+        raise ValueError("form is closed, private or empty")
+    qs = [q.get("title", "").strip() for q in form.get("questions") or [] if q.get("title")]
+    return (f"FORM TITLE: {form.get('title', '')}\n\nFORM DESCRIPTION:\n{form.get('description', '')}\n\n"
+            f"FORM ASKS FOR: {', '.join(qs)}")[:5000]
 
 
 def linkedin_posting(url: str) -> tuple[str, str, str] | None:
@@ -247,6 +269,13 @@ def _prefetch(job: dict) -> dict:
                 return pre
             except Exception as exc:  # noqa: BLE001
                 log(f"writer: LinkedIn posting fetch failed for {li_url}: {exc}")
+        if MS_FORM.match(job.get("url") or ""):
+            try:
+                pre["links"] = [(job["url"], "employer's registration / apply form (Microsoft Forms)")]
+                pre["excerpts"] = [(job["url"] + " (EMPLOYER'S APPLY FORM)", ms_form_text(job["url"]))]
+                return pre
+            except Exception as exc:  # noqa: BLE001
+                log(f"writer: Microsoft Form fetch failed for {job['url']}: {exc}")
         if not job.get("url"):
             return pre
         try:
