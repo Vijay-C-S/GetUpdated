@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-11-25</lastmod>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -189,6 +189,16 @@
     <image:image>
       <image:loc>https://www.getupdated.in/images/BlackMarch.webp</image:loc>
       <image:title>Black March Studios Web Dev Intern WFH 2026 | Apply Now</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/blogs/bluebex-software-engineer-intern-hiring-freshers-bengaluru-2026.html</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.getupdated.in/images/bluebex-software-engineer-intern-hiring-freshers-bengaluru-2026.webp</image:loc>
+      <image:title>Bluebex Software Engineer Intern Hiring 2026 Bengaluru</image:title>
     </image:image>
   </url>
   <url>
