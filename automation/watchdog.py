@@ -250,9 +250,10 @@ def scan() -> int:
         if msg:
             alerts.append(msg)
 
-    with FileLock("jobs", max_age=120, wait=60):
-        jobs = load_jobs()
-        for src in sources:
+    # Phase 1: network fetches (slow, minutes) happen WITHOUT the jobs lock so Publish/Telegram never wait on it.
+    fetched = []
+    for src in sources:
+        if True:
             if not src.get("enabled", True):
                 continue
             name, kind = src["name"], src.get("type", "rss")
@@ -282,7 +283,12 @@ def scan() -> int:
                 track(name, str(exc))
                 continue
             track(name, None)
+            fetched.append((src, name, kind, items))
 
+    # Phase 2: merge under the lock (fast, no network).
+    with FileLock("jobs", max_age=120, wait=60):
+        jobs = load_jobs()
+        for src, name, kind, items in fetched:
             state = src_state.setdefault(name, {"seen": [], "initialized": False})
             seen = set(state["seen"])
             baseline = kind == "page" and not state["initialized"]
