@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/blogs.html</loc>
-    <lastmod>2026-11-26</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://www.getupdated.in/</loc>
-    <lastmod>2026-11-26</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -1009,6 +1009,16 @@
     <image:image>
       <image:loc>https://www.getupdated.in/images/rork.webp</image:loc>
       <image:title>Rork Review 2026 — Build Apps from a Prompt | GetUpdated</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.getupdated.in/blogs/rrb-isolated-categories-recruitment-cen-09-2026-lab-assistant-welfare-inspector-2026.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.getupdated.in/images/rrb-isolated-categories-recruitment-cen-09-2026-lab-assistant-welfare-inspector-2026.webp</image:loc>
+      <image:title>RRB Isolated Categories CEN 09/2026: Apply by 4 Dec</image:title>
     </image:image>
   </url>
   <url>
